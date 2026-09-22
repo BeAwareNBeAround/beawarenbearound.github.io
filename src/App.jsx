@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { t } from '@lingui/core/macro';
 import { APP_LOCALES, activateLocale, i18n } from './i18n/setup';
-import { incrementCounter, readCounter } from './services/clickCounter';
 import { speak, stopSpeech } from './services/speech';
 import { useToyRecordings } from './hooks/useToyRecordings';
-import { getInstallAction, isIOS } from './services/install';
+import { getInstallId, getInstallAction, isIOS } from './services/install';
+import { ViewCounter } from './components/ViewCounter';
 
 const logoUrl = 'https://epilepsy.org.hk/wp-content/uploads/elementor/thumbs/EFHK-abb-Logo-Ver-%E5%9C%93%E5%BA%95-rsi4tzw9b949vi84j6y5gkdzbj2s5xn3mit7czgz2g.png';
 
@@ -20,7 +20,6 @@ function ContentPanel({ summary, children, className }) {
 export default function App() {
   const [language, setLanguage] = useState('zh-HK');
   const [mode, setMode] = useState('edu');
-  const [clicks, setClicks] = useState(readCounter);
   const educationStatus = () => t({ id: 'status.educationDefault', message: 'Education Mode: Click buttons for instructions.' });
   const toyStatus = () => t({ id: 'status.toyDefault', message: 'Toy Mode: Ready.' });
   const [status, setStatus] = useState(educationStatus);
@@ -75,7 +74,6 @@ export default function App() {
   }
 
   function activateAction(id) {
-    setClicks((current) => incrementCounter(current));
     if (mode !== 'edu') {
       if (recordMode) {
         const outcome = toyRecordings.record(id);
@@ -147,7 +145,14 @@ export default function App() {
           <div className="subtitle-primary">{labels.subtitle}</div>
           <div className="subtitle-secondary">{labels.secondarySubtitle}</div>
         </div>
-        <div className="counter-box"><span>{labels.clicks}</span> <span>{clicks.toLocaleString()}</span></div>
+        <ViewCounter
+          endpointUrl={import.meta.env.VITE_VISIT_COUNTER_URL}
+          targetUrl={window.location.href}
+          autoTrack={true}
+          installId={getInstallId()}
+          className="counter-box"
+          label={labels.clicks}
+        />
       </header>
 
       <section className="controls" aria-label={labels.mode}>

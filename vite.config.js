@@ -31,6 +31,11 @@ export default defineConfig({
       },
     }),
   ],
+  define: {
+    'import.meta.env.VITE_VISIT_COUNTER_URL': JSON.stringify(
+      'https://epilepsy.org.hk/counter/',
+    ),
+  },
   test: {
     environment: 'jsdom',
     setupFiles: './src/testSetup.js',
