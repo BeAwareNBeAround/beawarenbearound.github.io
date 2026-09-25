@@ -127,7 +127,7 @@ export const ViewCounter = ({
 
   return (
     <div className={`${className}`}>
-        <span>{label}</span>
+        <span>{label}</span>&nbsp;
         <span>{metrics.total_views.toLocaleString()}</span>
     </div>
   );
