@@ -7,44 +7,19 @@ import { useCallback, useEffect, useRef, useState } from 'react';
  */
 export const useClickCounter = ({ endpointUrl, targetUrl, installId }) => {
   const [count, setCount] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(null);
 
   // Prevents duplicate tracking calls in React 18 Development StrictMode
   const hasTrackedRef = useRef(false);
 
-  useEffect(() => {
-    if (!endpointUrl || !targetUrl) {
-      setLoading(false);
-      return undefined;
-    }
+  /**
+   * Read the click count without logging a visit (GET)
+   */
+  const fetchClickCount = useCallback(
+    async (signal) => {
+      setError(null);
 
-    const controller = new AbortController();
-    const { signal } = controller;
-
-    if (!hasTrackedRef.current) {
-      hasTrackedRef.current = true;
-      fetch(endpointUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        signal,
-        body: JSON.stringify({
-          url: targetUrl,
-          log: true,
-          install_id: installId,
-        }),
-      }).catch(() => {
-        // Fire-and-forget analytics: visit failures never surface.
-      });
-    }
-
-    setLoading(true);
-    setError(null);
-
-    (async () => {
       try {
         const query = new URLSearchParams({ url: targetUrl, action: 'click' });
         const response = await fetch(`${endpointUrl}?${query.toString()}`, {
@@ -68,12 +43,44 @@ export const useClickCounter = ({ endpointUrl, targetUrl, installId }) => {
           setError(err.message);
         }
       } finally {
-        setLoading(false);
+        setLoaded(true);
       }
+    },
+    [endpointUrl, targetUrl],
+  );
+
+  useEffect(() => {
+    if (!endpointUrl || !targetUrl) {
+      return undefined;
+    }
+
+    const controller = new AbortController();
+
+    if (!hasTrackedRef.current) {
+      hasTrackedRef.current = true;
+      fetch(endpointUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        signal: controller.signal,
+        body: JSON.stringify({
+          url: targetUrl,
+          log: true,
+          install_id: installId,
+        }),
+      }).catch(() => {
+        // Fire-and-forget analytics: visit failures never surface.
+      });
+    }
+
+    (async () => {
+      await fetchClickCount(controller.signal);
     })();
 
     return () => controller.abort();
-  }, [endpointUrl, targetUrl, installId]);
+  }, [endpointUrl, targetUrl, installId, fetchClickCount]);
 
   const trackClick = useCallback(
     async (buttonId) => {
@@ -105,6 +112,8 @@ export const useClickCounter = ({ endpointUrl, targetUrl, installId }) => {
     },
     [endpointUrl, targetUrl, installId],
   );
+
+  const loading = endpointUrl && targetUrl ? !loaded : false;
 
   return { count, loading, error, trackClick };
 };
