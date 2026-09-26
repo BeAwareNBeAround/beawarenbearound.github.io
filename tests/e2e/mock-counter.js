@@ -8,11 +8,12 @@ export const COUNTER_PATHNAME = '/counter/';
  *   - GET      -> 200 {status, metrics} (the initial count read)
  *   - POST with body.action === 'click' -> increments the total, returns metrics
  *   - POST without action (the mount visit) -> 200 {status} (no increment)
+ *   - POST with a missing or unparseable body -> 400 {status: 'error'}
  *
  * Every fulfilled response carries the CORS headers required for the
- * app's cross-origin `credentials: 'include'` fetches: the request's
- * Origin is echoed (a `*` origin is invalid for credentialed requests)
- * plus `access-control-allow-credentials: true`.
+ * app's cross-origin `credentials: 'include'` fetches: when the request
+ * carries an Origin header it is echoed (a `*` origin is invalid for
+ * credentialed requests) plus `access-control-allow-credentials: true`.
  *
  * @param {import('@playwright/test').Page} page
  * @param {{initialTotal?: number, initialUnique?: number}} [options]
@@ -28,10 +29,13 @@ export function mockCounterRoute(page, { initialTotal = 0, initialUnique = null 
   page.route(isCounterRequest, async (route) => {
     const request = route.request();
     const method = request.method().toUpperCase();
-    const corsHeaders = {
-      'access-control-allow-origin': request.headers()['origin'],
-      'access-control-allow-credentials': 'true',
-    };
+    const origin = request.headers()['origin'];
+    const corsHeaders = origin
+      ? {
+          'access-control-allow-origin': origin,
+          'access-control-allow-credentials': 'true',
+        }
+      : {};
 
     if (method === 'OPTIONS') {
       await route.fulfill({
@@ -49,7 +53,18 @@ export function mockCounterRoute(page, { initialTotal = 0, initialUnique = null 
     if (method === 'POST') {
       const raw = request.postData();
       if (raw) {
-        body = JSON.parse(raw);
+        try {
+          body = JSON.parse(raw);
+        } catch {
+          requests.push({ method, url: request.url(), body: { raw } });
+          await route.fulfill({
+            status: 400,
+            contentType: 'application/json',
+            headers: corsHeaders,
+            body: JSON.stringify({ status: 'error' }),
+          });
+          return;
+        }
         requests.push({ method, url: request.url(), body });
       }
     } else if (method === 'GET') {
@@ -83,7 +98,12 @@ export function mockCounterRoute(page, { initialTotal = 0, initialUnique = null 
       return;
     }
 
-    await route.abort();
+    await route.fulfill({
+      status: 400,
+      contentType: 'application/json',
+      headers: corsHeaders,
+      body: JSON.stringify({ status: 'error' }),
+    });
   });
 
   return {

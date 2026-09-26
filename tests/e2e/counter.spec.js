@@ -41,7 +41,7 @@ test('reads the initial count and increments it on each action click', async ({ 
   await expect(counter).toContainText(FORMATTED_TOTALS[2]);
 
   // Wire contract, mirroring the unit stub semantics.
-  expect(mock.requests.some((request) => request.method === 'GET' && request.url.includes('action=click'))).toBe(true);
+  expect(mock.requests.some((request) => request.method === 'GET' && new URL(request.url).searchParams.get('action') === 'click')).toBe(true);
   const visitPost = mock.requests.find((request) => request.method === 'POST' && request.body && request.body.action === undefined);
   expect(visitPost).toBeDefined();
   expect(visitPost.body.log).toBe(true);
