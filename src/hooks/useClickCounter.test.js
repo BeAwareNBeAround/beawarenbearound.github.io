@@ -194,4 +194,8 @@ test('StrictMode double-mount issues exactly one visit POST', async () => {
 
   const postCalls = fetchMock.mock.calls.filter(([, options]) => options && options.method === 'POST');
   expect(postCalls).toHaveLength(1);
+
+  const [visitUrl, visitOptions] = postCalls[0];
+  expect(visitUrl).toBe(ENDPOINT);
+  expect(visitOptions).not.toHaveProperty('signal');
 });

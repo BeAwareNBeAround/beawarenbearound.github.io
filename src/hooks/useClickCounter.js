@@ -64,7 +64,6 @@ export const useClickCounter = ({ endpointUrl, targetUrl, installId }) => {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        signal: controller.signal,
         body: JSON.stringify({
           url: targetUrl,
           log: true,
