@@ -4,7 +4,8 @@ import { APP_LOCALES, activateLocale, i18n } from './i18n/setup';
 import { speak, stopSpeech } from './services/speech';
 import { useToyRecordings } from './hooks/useToyRecordings';
 import { getInstallId, getInstallAction, isIOS } from './services/install';
-import { ViewCounter } from './components/ViewCounter';
+import { useClickCounter } from './hooks/useClickCounter';
+import { ClickCounter } from './components/ClickCounter';
 
 const logoUrl = 'https://epilepsy.org.hk/wp-content/uploads/elementor/thumbs/EFHK-abb-Logo-Ver-%E5%9C%93%E5%BA%95-rsi4tzw9b949vi84j6y5gkdzbj2s5xn3mit7czgz2g.png';
 
@@ -26,6 +27,7 @@ export default function App() {
   const [recordMode, setRecordMode] = useState(false);
   const [installPrompt, setInstallPrompt] = useState(null);
   const toyRecordings = useToyRecordings();
+  const { count, loading, error, trackClick } = useClickCounter({ endpointUrl: import.meta.env.VITE_VISIT_COUNTER_URL, targetUrl: window.location.href, installId: getInstallId() });
   const labels = {
     slogan: t({ id: 'header.slogan', message: 'STAY, SAFE, SIDE, HELP' }),
     subtitle: t({ id: 'header.subtitle', message: 'Acute Seizure Management Slogan' }),
@@ -74,6 +76,7 @@ export default function App() {
   }
 
   function activateAction(id) {
+    trackClick(id);
     if (mode !== 'edu') {
       if (recordMode) {
         const outcome = toyRecordings.record(id);
@@ -145,13 +148,12 @@ export default function App() {
           <div className="subtitle-primary">{labels.subtitle}</div>
           <div className="subtitle-secondary">{labels.secondarySubtitle}</div>
         </div>
-        <ViewCounter
-          endpointUrl={import.meta.env.VITE_VISIT_COUNTER_URL}
-          targetUrl={window.location.href}
-          autoTrack={true}
-          installId={getInstallId()}
-          className="counter-box"
+        <ClickCounter
+          count={count}
+          loading={loading}
+          error={error}
           label={labels.clicks}
+          className="counter-box"
         />
       </header>
 
