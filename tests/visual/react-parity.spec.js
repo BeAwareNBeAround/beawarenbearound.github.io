@@ -26,6 +26,7 @@ const languageStates = [
 
 test.describe('localized mobile layouts', () => {
   test.use({ viewport: { width: 375, height: 1200 } });
+  test.use({ locale: 'en-US' });
 
   for (const language of languageStates) {
     test(`preserves the approved ${language.selector} layout`, async ({ page }) => {
