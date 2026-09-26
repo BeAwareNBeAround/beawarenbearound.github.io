@@ -70,7 +70,7 @@ test('switches expanded setup, guidance, FAQ, and footer content between languag
   expect(screen.getByText('保持鎮定，記錄抽搐開始及持續的時間。')).toBeInTheDocument();
   expect(screen.getByText('留意發作時間，陪伴患者安全復原。')).toBeInTheDocument();
   expect(screen.getByRole('heading', { name: 'Q1: 為什麼教育模式沒有聲音？' })).toBeInTheDocument();
-  expect(screen.getByText('計數器顯示所有用戶按過應用程式動作掣的總次數。')).toBeInTheDocument();
+  expect(screen.getByText('計數器顯示所有用戶按過應用程式動作按鍵的總次數。')).toBeInTheDocument();
   expect(screen.getByRole('link', { name: '🔗 了解更多 Epilepsy Foundation HK' })).toBeInTheDocument();
 
   fireEvent.click(screen.getByRole('button', { name: 'EN' }));

@@ -366,7 +366,7 @@ msgstr "點擊顏色按鍵，手機會播放該步驟的急救指示。"
 #. js-lingui-explicit-id
 #: src/App.jsx:217
 msgid "faq.answer4"
-msgstr "計數器顯示所有用戶按過應用程式動作掣的總次數。"
+msgstr "計數器顯示所有用戶按過應用程式動作按鍵的總次數。"
 
 #. js-lingui-explicit-id
 #: src/App.jsx:211
