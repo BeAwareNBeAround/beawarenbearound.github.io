@@ -179,6 +179,45 @@ test('trackClick non-2xx response keeps the previous count and never sets error'
   expect(result.current.error).toBeNull();
 });
 
+test('trackClick issues no fetch when endpointUrl is missing', async () => {
+  const { fetchMock, result } = setupHook(async () => successResponse(100), { endpointUrl: '' });
+
+  await act(async () => {});
+  fetchMock.mockClear();
+
+  await act(async () => {
+    await result.current.trackClick(1);
+  });
+
+  expect(fetchMock).not.toHaveBeenCalled();
+});
+
+test('an aborted GET does not mark loaded, keeping the replacement GET in loading', async () => {
+  const abortError = () => Object.assign(new Error('Aborted'), { name: 'AbortError' });
+  const fetchMock = vi.fn((url, options) => {
+    if (options.method === 'GET') {
+      return new Promise((_resolve, reject) => {
+        options.signal.addEventListener('abort', () => reject(abortError()), { once: true });
+      });
+    }
+    return Promise.resolve(successResponse(1));
+  });
+  vi.stubGlobal('fetch', fetchMock);
+
+  const { result, rerender } = renderHook(
+    (props) => useClickCounter(props),
+    { initialProps: { endpointUrl: 'https://a.example/', targetUrl: TARGET, installId: INSTALL_ID } },
+  );
+
+  await act(async () => {});
+  expect(result.current.loading).toBe(true);
+
+  rerender({ endpointUrl: 'https://b.example/', targetUrl: TARGET, installId: INSTALL_ID });
+  await act(async () => {});
+
+  expect(result.current.loading).toBe(true);
+});
+
 test('StrictMode double-mount issues exactly one visit POST', async () => {
   const fetchMock = vi.fn(async () => successResponse(5));
   vi.stubGlobal('fetch', fetchMock);

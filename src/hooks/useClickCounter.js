@@ -43,7 +43,9 @@ export const useClickCounter = ({ endpointUrl, targetUrl, installId }) => {
           setError(err.message);
         }
       } finally {
-        setLoaded(true);
+        if (!signal.aborted) {
+          setLoaded(true);
+        }
       }
     },
     [endpointUrl, targetUrl],
@@ -83,6 +85,9 @@ export const useClickCounter = ({ endpointUrl, targetUrl, installId }) => {
 
   const trackClick = useCallback(
     async (buttonId) => {
+      if (!endpointUrl || !targetUrl) {
+        return;
+      }
       try {
         const response = await fetch(endpointUrl, {
           method: 'POST',
