@@ -214,7 +214,7 @@ export default function App() {
         <h3>{t({ id: 'faq.question3', message: 'Q3: Can I use the app offline?' })}</h3>
         <p>{t({ id: 'faq.answer3', message: 'Install this PWA or add it to your home screen after a successful first load.' })}</p>
         <h3>{t({ id: 'faq.question4', message: 'Q4: How does the global click counter work?' })}</h3>
-        <p>{t({ id: 'faq.answer4', message: 'The counter is currently a local demonstration counter stored on this device.' })}</p>
+        <p>{t({ id: 'faq.answer4', message: "The counter shows the total number of times the app's action buttons have been clicked, across all users." })}</p>
       </ContentPanel>
 
       <footer className="footer-linktree"><a href="https://linktr.ee/EpilepsyFoundationOfHongKong" target="_blank" rel="noopener noreferrer" className="linktree-btn">{t({ id: 'footer.linkLabel', message: '🔗 Learn more about Epilepsy Foundation HK' })}</a></footer>

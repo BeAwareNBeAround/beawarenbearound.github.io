@@ -366,7 +366,7 @@ msgstr "Tap a button to hear the clinical instruction for that step."
 #. js-lingui-explicit-id
 #: src/App.jsx:217
 msgid "faq.answer4"
-msgstr "The counter is currently a local demonstration counter stored on this device."
+msgstr "The counter shows the total number of times the app's action buttons have been clicked, across all users."
 
 #. js-lingui-explicit-id
 #: src/App.jsx:211

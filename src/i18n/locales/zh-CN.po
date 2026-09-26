@@ -366,7 +366,7 @@ msgstr "点击彩色按键，手机会播放该步骤的急救指示。"
 #. js-lingui-explicit-id
 #: src/App.jsx:217
 msgid "faq.answer4"
-msgstr "计数器目前在本机设备暂存，用作演示用途。"
+msgstr "计数器显示所有用户按过应用动作按钮的总次数。"
 
 #. js-lingui-explicit-id
 #: src/App.jsx:211
