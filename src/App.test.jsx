@@ -19,6 +19,7 @@ function stubCounter(initialTotal = 12544) {
   const requests = [];
   const stub = vi.fn(async (input, init = {}) => {
     const url = String(input);
+    expect(url).toMatch(/^https:\/\/epilepsy\.org\.hk\/counter\//);
     const method = (init.method || 'GET').toUpperCase();
     const body = init.body ? JSON.parse(init.body) : null;
     requests.push({ url, method, body });
