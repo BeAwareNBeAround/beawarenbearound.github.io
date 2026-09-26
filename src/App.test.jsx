@@ -14,24 +14,47 @@ vi.mock('./hooks/useToyRecordings', () => ({
   }),
 }));
 
-function renderApp(locale = 'zh-HK') {
-  activateLocale(locale);
-  return render(<I18nProvider i18n={i18n}><App /></I18nProvider>);
+function stubCounter(initialTotal = 12544) {
+  let total = initialTotal;
+  const requests = [];
+  const stub = vi.fn(async (input, init = {}) => {
+    const url = String(input);
+    const method = (init.method || 'GET').toUpperCase();
+    const body = init.body ? JSON.parse(init.body) : null;
+    requests.push({ url, method, body });
+    if (method === 'POST' && body && body.action === 'click') {
+      total += 1;
+    }
+    return {
+      ok: true,
+      status: 200,
+      json: async () => ({ status: 'success', metrics: { total_views: total, unique_views: total } }),
+    };
+  });
+  vi.stubGlobal('fetch', stub);
+  return { requests };
 }
 
-test('renders the application heading', async () => {
+function renderApp(locale = 'zh-HK') {
+  const counter = stubCounter();
+  activateLocale(locale);
+  return { counter, ...render(<I18nProvider i18n={i18n}><App /></I18nProvider>) };
+}
+
+test('renders the application heading', () => {
   renderApp();
 
   expect(screen.getByRole('heading', { name: "Be Aware n' Be Around" })).toBeInTheDocument();
 });
 
-test('switches the visible action labels to English', () => {
-  renderApp();
+test('switches the visible action labels to English', async () => {
+  const { counter } = renderApp();
 
   fireEvent.click(screen.getByRole('button', { name: 'EN' }));
 
-  expect(screen.getByRole('button', { name: 'STAY' })).toBeInTheDocument();
-  expect(screen.getByText('Global Clicks:')).toBeInTheDocument();
+  expect(await screen.findByText('Global Clicks:')).toBeInTheDocument();
+  expect(await screen.findByText('12,544')).toBeInTheDocument();
+  expect(counter.requests.some((request) => request.method === 'GET' && request.url.includes('action=click'))).toBe(true);
   expect(screen.getByRole('link', { name: '🔗 Learn more about Epilepsy Foundation HK' })).toBeInTheDocument();
 });
 
@@ -46,6 +69,7 @@ test('switches expanded setup, guidance, FAQ, and footer content between languag
   expect(screen.getByText('保持鎮定，記錄抽搐開始及持續的時間。')).toBeInTheDocument();
   expect(screen.getByText('留意發作時間，陪伴患者安全復原。')).toBeInTheDocument();
   expect(screen.getByRole('heading', { name: 'Q1: 為什麼教育模式沒有聲音？' })).toBeInTheDocument();
+  expect(screen.getByText('計數器顯示所有用戶按過應用程式動作掣的總次數。')).toBeInTheDocument();
   expect(screen.getByRole('link', { name: '🔗 了解更多 Epilepsy Foundation HK' })).toBeInTheDocument();
 
   fireEvent.click(screen.getByRole('button', { name: 'EN' }));
@@ -54,21 +78,41 @@ test('switches expanded setup, guidance, FAQ, and footer content between languag
   expect(screen.getByText('Stay calm and time the seizure.')).toBeInTheDocument();
   expect(screen.getByText('Be Aware of the time. Be Around for the safe recovery.')).toBeInTheDocument();
   expect(screen.getByRole('heading', { name: 'Q1: Why is text-to-speech not working?' })).toBeInTheDocument();
+  expect(screen.getByText("The counter shows the total number of times the app's action buttons have been clicked, across all users.")).toBeInTheDocument();
   expect(screen.getByRole('link', { name: '🔗 Learn more about Epilepsy Foundation HK' })).toBeInTheDocument();
 });
 
-test('renders the Traditional Chinese education status with its action identifier', () => {
+test('renders the Traditional Chinese education status with its action identifier', async () => {
   const speak = vi.spyOn(window.speechSynthesis, 'speak').mockImplementation(() => {});
   vi.spyOn(window.speechSynthesis, 'cancel').mockImplementation(() => {});
-  renderApp('en');
+  const { counter } = renderApp('en');
+
+  expect(await screen.findByText('12,544')).toBeInTheDocument();
 
   fireEvent.click(screen.getByRole('button', { name: '繁體' }));
 
   fireEvent.click(screen.getByRole('button', { name: '守' }));
 
-  expect(screen.getByText('12,544')).toBeInTheDocument();
+  const clickPost = counter.requests.find((request) => request.method === 'POST' && request.body && request.body.action === 'click');
+  expect(clickPost).toBeDefined();
+  expect(clickPost.body.action).toBe('click');
+  expect(clickPost.body.action_target).toBe('1');
   expect(speak).toHaveBeenCalledOnce();
   expect(screen.getByText('播放教育步驟 1...')).toBeInTheDocument();
+  expect(await screen.findByText('12,545')).toBeInTheDocument();
+});
+
+test('tracks the action click in Toy mode', async () => {
+  const { counter } = renderApp('en');
+
+  fireEvent.change(screen.getByRole('combobox'), { target: { value: 'toy' } });
+  fireEvent.click(screen.getByRole('button', { name: 'STAY' }));
+
+  const clickPost = counter.requests.find((request) => request.method === 'POST' && request.body && request.body.action === 'click');
+  expect(clickPost).toBeDefined();
+  expect(clickPost.body.action).toBe('click');
+  expect(clickPost.body.action_target).toBe('1');
+  expect(await screen.findByText('12,545')).toBeInTheDocument();
 });
 
 test('renders the English education status with its action identifier', () => {
