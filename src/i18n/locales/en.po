@@ -375,6 +375,11 @@ msgid "setup.educationInstructions"
 msgstr "Tap a button to hear the clinical instruction for that step."
 
 #. js-lingui-explicit-id
+#: src/App.jsx:23
+msgid "header.secondarySubtitle"
+msgstr "Tap the 4 buttons below to learn the steps"
+
+#. js-lingui-explicit-id
 #: src/App.jsx:190
 msgid "faq.answer4"
 msgstr "The counter shows the total number of times the app's action buttons have been clicked, across all users."
@@ -403,11 +408,6 @@ msgstr "Turn Record Mode on, tap a button to record for up to 60 seconds, then t
 #: src/App.jsx:180
 msgid "whatIs.positionText"
 msgstr "Turn the person gently onto their side to keep their airway clear."
-
-#. js-lingui-explicit-id
-#: src/App.jsx:23
-msgid "header.secondarySubtitle"
-msgstr "處理急性腦癇發作的口訣"
 
 #. js-lingui-explicit-id
 #: src/App.jsx:107

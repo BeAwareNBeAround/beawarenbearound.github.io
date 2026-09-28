@@ -20,7 +20,7 @@ export default function App() {
   const labels = {
     slogan: t({ id: 'header.slogan', message: 'STAY, SAFE, SIDE, HELP' }),
     subtitle: t({ id: 'header.subtitle', message: 'Acute Seizure Management Slogan' }),
-    secondarySubtitle: t({ id: 'header.secondarySubtitle', message: '處理急性腦癇發作的口訣' }),
+    secondarySubtitle: t({ id: 'header.secondarySubtitle', message: 'Tap the 4 buttons below to learn the steps' }),
     clicks: t({ id: 'counter.label', message: 'Global Clicks:' }),
     education: t({ id: 'mode.education', message: 'Education Mode' }),
     toy: t({ id: 'mode.toy', message: 'Toy Mode (Record/Play)' }),

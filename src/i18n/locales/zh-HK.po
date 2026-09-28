@@ -375,6 +375,11 @@ msgid "setup.educationInstructions"
 msgstr "點擊顏色按鍵，手機會播放該步驟的急救指示。"
 
 #. js-lingui-explicit-id
+#: src/App.jsx:23
+msgid "header.secondarySubtitle"
+msgstr "點按下面 4 個按鍵了解口訣"
+
+#. js-lingui-explicit-id
 #: src/App.jsx:190
 msgid "faq.answer4"
 msgstr "計數器顯示所有用戶按過應用程式動作按鍵的總次數。"
@@ -403,11 +408,6 @@ msgstr "開啟錄音模式後，點擊任何顏色按鍵錄製聲音（最長60�
 #: src/App.jsx:180
 msgid "whatIs.positionText"
 msgstr "將患者輕輕翻側，保持呼吸道暢通。"
-
-#. js-lingui-explicit-id
-#: src/App.jsx:23
-msgid "header.secondarySubtitle"
-msgstr "Acute Seizure Management Slogan"
 
 #. js-lingui-explicit-id
 #: src/App.jsx:107
