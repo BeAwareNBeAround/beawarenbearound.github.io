@@ -38,3 +38,5 @@ make test
 Education mode depends on the device's installed speech voices. Toy-mode recordings require microphone permission, are stored only in memory, and are discarded on refresh. The global click count is a device-local demonstration count, stored in browser local storage.
 
 Visual baselines are kept under `tests/visual/baselines/`; update them only after a human-approved visual change.
+
+Baselines are rendered by headless Chromium on the local machine, so the machine needs the same fonts as the approved captures: Noto Sans CJK (bundled), a color emoji font (e.g. Fedora's `google-noto-emoji-color-fonts` / Noto Color Emoji), and `dejavu-sans-fonts` (provides the ✕ close glyph). Without them, emoji render as tofu boxes and the captures drift. After a font or layout change, delete the snapshot PNGs and regenerate with `--update-snapshots`: the `maxDiffPixelRatio` tolerance (0.01) is too coarse for the suite to catch small rendering changes on its own.
