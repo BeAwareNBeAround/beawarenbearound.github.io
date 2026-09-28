@@ -7,6 +7,7 @@ const languageStates = [
     shortLabel: '教育模式',
     panelHeading: '如何安裝至手機',
     educationStatus: '播放教育步驟 1...',
+    closeButtonName: '關閉',
   },
   {
     selector: '简体',
@@ -14,6 +15,7 @@ const languageStates = [
     shortLabel: '教育模式',
     panelHeading: '如何安装至手机',
     educationStatus: '播放教育步骤 1...',
+    closeButtonName: '关闭',
   },
   {
     selector: 'EN',
@@ -21,6 +23,7 @@ const languageStates = [
     shortLabel: 'Education Mode',
     panelHeading: 'How to Install',
     educationStatus: 'Playing education step 1...',
+    closeButtonName: 'Close',
   },
 ];
 
@@ -44,12 +47,24 @@ for (const language of languageStates) {
 
     await page.getByRole('button', { name: language.selector, exact: true }).click();
     await expect(page.locator('#modeSelect')).toContainText(language.shortLabel);
-    await page.locator('.setup-guide summary').click();
+    await page.locator('.setup-guide').click();
+    await expect(page.locator('dialog[open]')).toHaveCount(1);
     await expect(page.getByRole('heading', { name: language.panelHeading })).toBeVisible();
+    await page.getByRole('button', { name: language.closeButtonName }).click();
+    await expect(page.locator('dialog[open]')).toHaveCount(0);
     await page.getByRole('button', { name: language.action, exact: true }).click();
     await expect(page.locator('.status')).toHaveText(language.educationStatus);
   });
 }
+
+test('closes the setup dialog on Escape', async ({ page }) => {
+  await page.goto('/');
+
+  await page.locator('.setup-guide').click();
+  await expect(page.locator('dialog[open]')).toHaveCount(1);
+  await page.keyboard.press('Escape');
+  await expect(page.locator('dialog[open]')).toHaveCount(0);
+});
 
 test('switches language and opens the toy controls', async ({ page }) => {
   await page.goto('/');
