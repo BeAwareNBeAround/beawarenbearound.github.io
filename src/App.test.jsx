@@ -4,16 +4,6 @@ import { I18nProvider } from '@lingui/react';
 import App from './App';
 import { activateLocale, i18n } from './i18n/setup';
 
-vi.mock('./hooks/useToyRecordings', () => ({
-  useToyRecordings: () => ({
-    cleanup: vi.fn(),
-    enable: vi.fn().mockResolvedValue(true),
-    play: vi.fn().mockReturnValue(false),
-    record: vi.fn().mockReturnValue('started'),
-    recordingId: null,
-  }),
-}));
-
 function stubCounter(initialTotal = 12544) {
   let total = initialTotal;
   const requests = [];
@@ -206,19 +196,6 @@ test('renders the Traditional Chinese education status with its action identifie
   expect(await screen.findByText('12,545')).toBeInTheDocument();
 });
 
-test('tracks the action click in Toy mode', async () => {
-  const { counter } = renderApp('en');
-
-  fireEvent.change(screen.getByRole('combobox'), { target: { value: 'toy' } });
-  fireEvent.click(screen.getByRole('button', { name: 'STAY' }));
-
-  const clickPost = counter.requests.find((request) => request.method === 'POST' && request.body && request.body.action === 'click');
-  expect(clickPost).toBeDefined();
-  expect(clickPost.body.action).toBe('click');
-  expect(clickPost.body.action_target).toBe('1');
-  expect(await screen.findByText('12,545')).toBeInTheDocument();
-});
-
 test('renders the English education status with its action identifier', () => {
   vi.spyOn(window.speechSynthesis, 'speak').mockImplementation(() => {});
   vi.spyOn(window.speechSynthesis, 'cancel').mockImplementation(() => {});
@@ -232,13 +209,4 @@ test('renders the English education status with its action identifier', () => {
   expect(screen.getByText('Playing education step 1...')).toBeInTheDocument();
 });
 
-test('renders the translated recording status with its action identifier', async () => {
-  renderApp('en');
 
-  fireEvent.change(screen.getByRole('combobox'), { target: { value: 'toy' } });
-  fireEvent.click(screen.getByRole('button', { name: 'Record Mode: OFF' }));
-  await screen.findByRole('button', { name: 'Record Mode: ON (Click a button)' });
-  fireEvent.click(screen.getByRole('button', { name: 'STAY' }));
-
-  expect(await screen.findByText('Recording on button 1... (Max 60s)')).toBeInTheDocument();
-});
