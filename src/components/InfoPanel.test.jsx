@@ -64,9 +64,12 @@ test('keeps the dialog open when inner content receives a pointer down', () => {
 });
 
 test('exposes the trigger label and the close label to assistive technology', () => {
-  renderPanel();
+  const { container } = renderPanel();
 
-  const dialog = document.querySelector('dialog');
+  const dialog = container.querySelector('dialog');
   expect(dialog).toHaveAttribute('aria-label', 'Guide');
+
+  fireEvent.click(screen.getByRole('button', { name: 'Guide' }));
+
   expect(screen.getByRole('button', { name: 'Close' })).toBeInTheDocument();
 });
