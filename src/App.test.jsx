@@ -38,6 +38,21 @@ test('renders the application heading', () => {
   expect(screen.getByRole('heading', { name: "Be Aware n' Be Around" })).toBeInTheDocument();
 });
 
+test('renders the secondary subtitle line in each locale', () => {
+  renderApp();
+
+  expect(document.querySelector('.subtitle-primary').textContent).toBe('處理急性腦癇發作的口訣');
+  expect(document.querySelector('.subtitle-secondary').textContent).toBe('點按下面 4 個按鍵了解口訣');
+
+  fireEvent.click(screen.getByRole('button', { name: '語言' }));
+  fireEvent.click(screen.getByRole('menuitem', { name: '简体' }));
+  expect(document.querySelector('.subtitle-secondary').textContent).toBe('点按下面 4 个按键了解口诀');
+
+  fireEvent.click(screen.getByRole('button', { name: '语言' }));
+  fireEvent.click(screen.getByRole('menuitem', { name: 'EN' }));
+  expect(document.querySelector('.subtitle-secondary').textContent).toBe('Tap the 4 buttons below to learn the steps');
+});
+
 test('keeps the language menu closed by default', () => {
   renderApp();
 
