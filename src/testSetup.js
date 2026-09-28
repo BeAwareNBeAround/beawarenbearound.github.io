@@ -27,4 +27,9 @@ HTMLMediaElement.prototype.play = vi.fn(() => Promise.resolve());
 // native lifecycle so components can use showModal()/show()/close().
 HTMLDialogElement.prototype.showModal = function showModal() { this.setAttribute('open', ''); };
 HTMLDialogElement.prototype.show = function show() { this.setAttribute('open', ''); };
-HTMLDialogElement.prototype.close = function close() { this.removeAttribute('open'); };
+HTMLDialogElement.prototype.close = function close() {
+  if (this.hasAttribute('open')) {
+    this.removeAttribute('open');
+    this.dispatchEvent(new Event('close'));
+  }
+};

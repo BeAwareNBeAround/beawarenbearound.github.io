@@ -42,6 +42,21 @@ test('closes the dialog via the close button', () => {
   expect(dialog).not.toHaveAttribute('open');
 });
 
+test('locks body scroll while the dialog is open and releases it on close', () => {
+  const { container } = renderPanel();
+  const dialog = container.querySelector('dialog');
+
+  expect(document.body).not.toHaveClass('dialog-open');
+  fireEvent.click(screen.getByRole('button', { name: 'Guide' }));
+  expect(dialog).toHaveAttribute('open');
+  expect(document.body).toHaveClass('dialog-open');
+
+  fireEvent.click(screen.getByRole('button', { name: 'Close' }));
+
+  expect(dialog).not.toHaveAttribute('open');
+  expect(document.body).not.toHaveClass('dialog-open');
+});
+
 test('closes the dialog when the backdrop receives a pointer down', () => {
   const { container } = renderPanel();
   const dialog = container.querySelector('dialog');
