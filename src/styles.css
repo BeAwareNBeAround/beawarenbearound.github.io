@@ -9,9 +9,11 @@ main { display: flex; flex-direction: column; align-items: center; padding: 20px
 .org-name { display: flex; flex-direction: column; text-align: left; justify-content: center; }
 .org-name-zh { color: var(--primary-brand); font-size: 19px; font-weight: 900; line-height: 1.2; margin-bottom: 2px; }
 .org-name-en { color: var(--primary-brand); font-size: 11px; font-weight: bold; line-height: 1.2; }
-.lang-selector { display: flex; flex-direction: column; gap: 5px; background: #e0e0e0; padding: 6px; border-radius: 12px; box-shadow: 0 2px 5px rgba(0,0,0,.1); flex-shrink: 0; }
-.lang-btn { border: 0; background: transparent; font-size: 13px; font-weight: bold; padding: 8px 12px; border-radius: 8px; cursor: pointer; color: #555; }
-.lang-btn.active { background: var(--primary-brand); color: #fff; }
+.lang-menu { position: relative; flex-shrink: 0; }
+.lang-menu-toggle { display: flex; align-items: center; justify-content: center; width: 54px; height: 54px; border: 0; background: #e0e0e0; color: var(--primary-brand); border-radius: 12px; box-shadow: 0 2px 5px rgba(0,0,0,.1); cursor: pointer; }
+.lang-menu-dropdown { position: absolute; top: 100%; right: 0; margin-top: 6px; display: flex; flex-direction: column; gap: 5px; background: #fff; padding: 6px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,.2); min-width: 108px; z-index: 10; }
+.lang-menu-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; border: 0; background: transparent; font-size: 13px; font-weight: bold; padding: 8px 12px; border-radius: 8px; cursor: pointer; color: #555; }
+.lang-menu-item.active { background: var(--primary-brand); color: #fff; }
 .header { width: 100%; max-width: 400px; margin-bottom: 15px; }
 .slogan-chars { font-size: 22px; font-weight: 800; color: var(--dark-orange); margin: 0 0 5px; letter-spacing: 2px; }
 .theme-title { color: var(--primary-brand); margin: 0 0 10px; font-size: 24px; }

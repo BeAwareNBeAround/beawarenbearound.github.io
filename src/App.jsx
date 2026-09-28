@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { t } from '@lingui/core/macro';
 import { APP_LOCALES, activateLocale, i18n } from './i18n/setup';
 import { speak, stopSpeech } from './services/speech';
@@ -12,6 +12,8 @@ const logoUrl = 'https://epilepsy.org.hk/wp-content/uploads/elementor/thumbs/EFH
 
 export default function App() {
   const [language, setLanguage] = useState('zh-HK');
+  const [langMenuOpen, setLangMenuOpen] = useState(false);
+  const langMenuRef = useRef(null);
   const [mode, setMode] = useState('edu');
   const educationStatus = () => t({ id: 'status.educationDefault', message: 'Education Mode: Click buttons for instructions.' });
   const toyStatus = () => t({ id: 'status.toyDefault', message: 'Toy Mode: Ready.' });
@@ -51,6 +53,28 @@ export default function App() {
     window.addEventListener('beforeinstallprompt', handlePrompt);
     return () => window.removeEventListener('beforeinstallprompt', handlePrompt);
   }, []);
+
+  useEffect(() => {
+    if (!langMenuOpen) {
+      return;
+    }
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setLangMenuOpen(false);
+      }
+    };
+    const handlePointerDown = (event) => {
+      if (langMenuRef.current && !langMenuRef.current.contains(event.target)) {
+        setLangMenuOpen(false);
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('pointerdown', handlePointerDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('pointerdown', handlePointerDown);
+    };
+  }, [langMenuOpen]);
 
   function changeLanguage(nextLanguage) {
     activateLocale(nextLanguage);
@@ -126,10 +150,20 @@ export default function App() {
             <div className="org-name-en">{t({ id: 'organization.name', message: 'Epilepsy Foundation of Hong Kong' })}</div>
           </div>
         </div>
-        <div className="lang-selector" aria-label={t({ id: 'language.selectorLabel', message: 'Language' })}>
-          {Object.entries(APP_LOCALES).map(([code, { selectorLabel }]) => (
-            <button key={code} className={`lang-btn ${language === code ? 'active' : ''}`} aria-pressed={language === code} onClick={() => changeLanguage(code)}>{selectorLabel}</button>
-          ))}
+        <div className="lang-menu" ref={langMenuRef}>
+          <button className="lang-menu-toggle" aria-label={t({ id: 'language.selectorLabel', message: 'Language' })} aria-haspopup="menu" aria-expanded={langMenuOpen} onClick={() => setLangMenuOpen(!langMenuOpen)}>
+            <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M2 12h20" /><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /></svg>
+          </button>
+          {langMenuOpen && (
+            <div className="lang-menu-dropdown" role="menu" aria-label={t({ id: 'language.selectorLabel', message: 'Language' })}>
+              {Object.entries(APP_LOCALES).map(([code, { selectorLabel }]) => (
+                <button key={code} role="menuitem" className={`lang-menu-item ${language === code ? 'active' : ''}`} aria-current={language === code ? 'true' : undefined} onClick={() => { changeLanguage(code); setLangMenuOpen(false); }}>
+                  {selectorLabel}
+                  {language === code && <span aria-hidden="true">✓</span>}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
