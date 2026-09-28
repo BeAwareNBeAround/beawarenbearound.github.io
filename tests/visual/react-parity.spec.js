@@ -21,9 +21,9 @@ function mockExternalRequests(page) {
 }
 
 const languageStates = [
-  { selector: '繁體', snapshot: 'zh-hk-375.png' },
-  { selector: '简体', snapshot: 'zh-cn-375.png' },
-  { selector: 'EN', snapshot: 'en-375.png' },
+  { selector: '繁體', snapshot: 'zh-hk-375.png', dialogSnapshot: 'faq-dialog-zh-hk-375.png' },
+  { selector: '简体', snapshot: 'zh-cn-375.png', dialogSnapshot: 'faq-dialog-zh-cn-375.png' },
+  { selector: 'EN', snapshot: 'en-375.png', dialogSnapshot: 'faq-dialog-en-375.png' },
 ];
 
 test.describe('localized mobile layouts', () => {
@@ -38,6 +38,15 @@ test.describe('localized mobile layouts', () => {
 
       await expect(page).toHaveScreenshot(language.snapshot, {
         fullPage: true,
+        animations: 'disabled',
+        mask: [page.locator('iframe')],
+        maxDiffPixelRatio: 0.01,
+      });
+
+      await page.locator('.faq-guide').click();
+      await expect(page.locator('dialog[open]')).toHaveCount(1);
+      await expect(page).toHaveScreenshot(language.dialogSnapshot, {
+        fullPage: false,
         animations: 'disabled',
         mask: [page.locator('iframe')],
         maxDiffPixelRatio: 0.01,
