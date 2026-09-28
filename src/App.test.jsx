@@ -208,5 +208,3 @@ test('renders the English education status with its action identifier', () => {
 
   expect(screen.getByText('Playing education step 1...')).toBeInTheDocument();
 });
-
-
