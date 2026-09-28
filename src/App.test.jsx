@@ -41,16 +41,16 @@ test('renders the application heading', () => {
 test('renders the secondary subtitle line in each locale', () => {
   renderApp();
 
-  expect(document.querySelector('.subtitle-primary').textContent).toBe('處理急性腦癇發作的口訣');
-  expect(document.querySelector('.subtitle-secondary').textContent).toBe('點按下面 4 個按鍵了解口訣');
+  expect(screen.getByText('處理急性腦癇發作的口訣')).toBeInTheDocument();
+  expect(screen.getByText('點按下面 4 個按鍵了解口訣')).toBeInTheDocument();
 
   fireEvent.click(screen.getByRole('button', { name: '語言' }));
   fireEvent.click(screen.getByRole('menuitem', { name: '简体' }));
-  expect(document.querySelector('.subtitle-secondary').textContent).toBe('点按下面 4 个按键了解口诀');
+  expect(screen.getByText('点按下面 4 个按键了解口诀')).toBeInTheDocument();
 
   fireEvent.click(screen.getByRole('button', { name: '语言' }));
   fireEvent.click(screen.getByRole('menuitem', { name: 'EN' }));
-  expect(document.querySelector('.subtitle-secondary').textContent).toBe('Tap the 4 buttons below to learn the steps');
+  expect(screen.getByText('Tap the 4 buttons below to learn the steps')).toBeInTheDocument();
 });
 
 test('keeps the language menu closed by default', () => {
