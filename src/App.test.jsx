@@ -48,10 +48,70 @@ test('renders the application heading', () => {
   expect(screen.getByRole('heading', { name: "Be Aware n' Be Around" })).toBeInTheDocument();
 });
 
+test('keeps the language menu closed by default', () => {
+  renderApp();
+
+  expect(screen.queryByRole('menuitem')).not.toBeInTheDocument();
+  expect(screen.getByRole('button', { name: '語言' })).toHaveAttribute('aria-expanded', 'false');
+});
+
+test('opens the language menu from the globe toggle', () => {
+  renderApp();
+
+  fireEvent.click(screen.getByRole('button', { name: '語言' }));
+
+  expect(screen.getByRole('menuitem', { name: '繁體' })).toBeInTheDocument();
+  expect(screen.getByRole('menuitem', { name: '简体' })).toBeInTheDocument();
+  expect(screen.getByRole('menuitem', { name: 'EN' })).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: '語言' })).toHaveAttribute('aria-expanded', 'true');
+});
+
+test('switches the language and closes the menu when a menu item is selected', async () => {
+  renderApp();
+
+  fireEvent.click(screen.getByRole('button', { name: '語言' }));
+  fireEvent.click(screen.getByRole('menuitem', { name: 'EN' }));
+
+  expect(screen.queryByRole('menuitem')).not.toBeInTheDocument();
+  expect(await screen.findByText('Global Clicks:')).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: 'Language' })).toHaveAttribute('aria-expanded', 'false');
+});
+
+test('closes the language menu on Escape', () => {
+  renderApp();
+
+  fireEvent.click(screen.getByRole('button', { name: '語言' }));
+  fireEvent.keyDown(document, { key: 'Escape' });
+
+  expect(screen.queryByRole('menuitem')).not.toBeInTheDocument();
+  expect(screen.getByRole('button', { name: '語言' })).toHaveAttribute('aria-expanded', 'false');
+});
+
+test('closes the language menu on a pointerdown outside the menu', () => {
+  renderApp();
+
+  fireEvent.click(screen.getByRole('button', { name: '語言' }));
+  fireEvent.pointerDown(document.body);
+
+  expect(screen.queryByRole('menuitem')).not.toBeInTheDocument();
+  expect(screen.getByRole('button', { name: '語言' })).toHaveAttribute('aria-expanded', 'false');
+});
+
+test('marks the active locale in the language menu', () => {
+  renderApp();
+
+  fireEvent.click(screen.getByRole('button', { name: '語言' }));
+
+  expect(screen.getByRole('menuitem', { name: '繁體' })).toHaveAttribute('aria-current', 'true');
+  expect(screen.getByRole('menuitem', { name: '简体' })).not.toHaveAttribute('aria-current');
+  expect(screen.getByRole('menuitem', { name: 'EN' })).not.toHaveAttribute('aria-current');
+});
+
 test('switches the visible action labels to English', async () => {
   const { counter } = renderApp();
 
-  fireEvent.click(screen.getByRole('button', { name: 'EN' }));
+  fireEvent.click(screen.getByRole('button', { name: '語言' }));
+  fireEvent.click(screen.getByRole('menuitem', { name: 'EN' }));
 
   expect(await screen.findByText('Global Clicks:')).toBeInTheDocument();
   expect(await screen.findByText('12,544')).toBeInTheDocument();
@@ -87,7 +147,8 @@ test('switches the setup, guidance, FAQ, and footer content between languages', 
   closeInfoPanel(faqPanel, '關閉');
   expect(screen.getByRole('link', { name: '🔗 了解更多 Epilepsy Foundation HK' })).toBeInTheDocument();
 
-  fireEvent.click(screen.getByRole('button', { name: 'EN' }));
+  fireEvent.click(screen.getByRole('button', { name: '語言' }));
+  fireEvent.click(screen.getByRole('menuitem', { name: 'EN' }));
 
   const englishSetupPanel = openInfoPanel('📲 Setup & Guide');
   expect(screen.getByRole('heading', { name: 'How to Install' })).toBeInTheDocument();
@@ -110,7 +171,8 @@ test('renders the Traditional Chinese education status with its action identifie
 
   expect(await screen.findByText('12,544')).toBeInTheDocument();
 
-  fireEvent.click(screen.getByRole('button', { name: '繁體' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Language' }));
+  fireEvent.click(screen.getByRole('menuitem', { name: '繁體' }));
 
   fireEvent.click(screen.getByRole('button', { name: '守' }));
 
@@ -141,7 +203,8 @@ test('renders the English education status with its action identifier', () => {
   vi.spyOn(window.speechSynthesis, 'cancel').mockImplementation(() => {});
   renderApp();
 
-  fireEvent.click(screen.getByRole('button', { name: 'EN' }));
+  fireEvent.click(screen.getByRole('button', { name: '語言' }));
+  fireEvent.click(screen.getByRole('menuitem', { name: 'EN' }));
 
   fireEvent.click(screen.getByRole('button', { name: 'STAY' }));
 
