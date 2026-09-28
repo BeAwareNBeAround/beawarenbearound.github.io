@@ -45,7 +45,8 @@ for (const language of languageStates) {
     });
     await page.goto('/');
 
-    await page.getByRole('button', { name: language.selector, exact: true }).click();
+    await page.getByRole('button', { name: '語言' }).click();
+    await page.getByRole('menuitem', { name: language.selector, exact: true }).click();
     await expect(page.locator('#modeSelect')).toContainText(language.shortLabel);
     await page.locator('.setup-guide').click();
     await expect(page.locator('dialog[open]')).toHaveCount(1);
@@ -69,7 +70,8 @@ test('closes the setup dialog on Escape', async ({ page }) => {
 test('switches language and opens the toy controls', async ({ page }) => {
   await page.goto('/');
 
-  await page.getByRole('button', { name: 'EN' }).click();
+  await page.getByRole('button', { name: '語言' }).click();
+  await page.getByRole('menuitem', { name: 'EN' }).click();
   await expect(page.getByRole('button', { name: 'STAY' })).toBeVisible();
 
   await page.locator('#modeSelect').selectOption('toy');

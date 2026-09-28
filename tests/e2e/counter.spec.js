@@ -33,7 +33,8 @@ test('reads the initial count and increments it on each action click', async ({ 
 
   // Each action-button click POSTs action:'click' and the header follows
   // the response's metrics.total_views.
-  await page.getByRole('button', { name: 'EN' }).click();
+  await page.getByRole('button', { name: '語言' }).click();
+  await page.getByRole('menuitem', { name: 'EN' }).click();
   await page.getByRole('button', { name: 'STAY', exact: true }).click();
   await expect(counter).toContainText(FORMATTED_TOTALS[1]);
 
