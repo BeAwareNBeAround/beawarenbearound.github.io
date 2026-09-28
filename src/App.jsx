@@ -6,17 +6,9 @@ import { useToyRecordings } from './hooks/useToyRecordings';
 import { getInstallId, getInstallAction, isIOS } from './services/install';
 import { useClickCounter } from './hooks/useClickCounter';
 import { ClickCounter } from './components/ClickCounter';
+import { InfoPanel } from './components/InfoPanel';
 
 const logoUrl = 'https://epilepsy.org.hk/wp-content/uploads/elementor/thumbs/EFHK-abb-Logo-Ver-%E5%9C%93%E5%BA%95-rsi4tzw9b949vi84j6y5gkdzbj2s5xn3mit7czgz2g.png';
-
-function ContentPanel({ summary, children, className }) {
-  return (
-    <details className={className}>
-      <summary>{summary}</summary>
-      <div className="content">{children}</div>
-    </details>
-  );
-}
 
 export default function App() {
   const [language, setLanguage] = useState('zh-HK');
@@ -45,10 +37,10 @@ export default function App() {
       t({ id: 'action.help', message: 'HELP' }),
     ],
     guideTitle: t({ id: 'guide.title', message: 'Seizure First Aid Guide' }),
-    setup: t({ id: 'setup.summary', message: '📲 Setup & Guide ▼' }),
+    setup: t({ id: 'setup.summary', message: '📲 Setup & Guide' }),
     install: t({ id: 'install.button', message: '📥 Install App' }),
-    whatIs: t({ id: 'whatIs.summary', message: "💡 What is Be Aware n' Be Around? ▼" }),
-    faq: t({ id: 'faq.summary', message: '❓ Frequently Asked Questions (FAQ) ▼' }),
+    whatIs: t({ id: 'whatIs.summary', message: "💡 What is Be Aware n' Be Around?" }),
+    faq: t({ id: 'faq.summary', message: '❓ Frequently Asked Questions (FAQ)' }),
   };
 
   useEffect(() => {
@@ -188,16 +180,16 @@ export default function App() {
       </section>
 
       <div className="install-row">
-        <ContentPanel className="setup-guide" summary={labels.setup}>
+        <InfoPanel className="setup-guide" summary={labels.setup}>
           <h3>{t({ id: 'setup.installHeading', message: 'How to Install' })}</h3>
           <ul><li><strong>{t({ id: 'setup.iosLabel', message: 'iPhone (iOS):' })}</strong> {t({ id: 'setup.iosInstructions', message: 'Open in Safari, tap Share, then select Add to Home Screen.' })}</li><li><strong>{t({ id: 'setup.androidLabel', message: 'Android:' })}</strong> {t({ id: 'setup.androidInstructions', message: 'Open in Chrome, use the menu, then select Add to Home screen.' })}</li></ul>
           <h3>{t({ id: 'setup.operateHeading', message: 'How to Operate' })}</h3>
           <ul><li><strong>{labels.education}:</strong> {t({ id: 'setup.educationInstructions', message: 'Tap a button to hear the clinical instruction for that step.' })}</li><li><strong>{labels.toy}:</strong> {t({ id: 'setup.toyInstructions', message: 'Turn Record Mode on, tap a button to record for up to 60 seconds, then turn it off to play recordings.' })}</li></ul>
-        </ContentPanel>
+        </InfoPanel>
         <button className="install-btn-small" onClick={installApp}>{labels.install}</button>
       </div>
 
-      <ContentPanel className="what-is-guide" summary={labels.whatIs}>
+      <InfoPanel className="what-is-guide" summary={labels.whatIs}>
         <p>{t({ id: 'whatIs.tagline1', message: 'Be Aware of the time. Be Around for the safe recovery.' })}</p>
         <p>{t({ id: 'whatIs.tagline2', message: "Be Aware: Don't restrain. Be Around: Protect and remain." })}</p>
         <p>{t({ id: 'whatIs.tagline3', message: 'Aware of what to do, Around when it matters most.' })}</p>
@@ -205,8 +197,8 @@ export default function App() {
         <ul><li><strong>{t({ id: 'whatIs.recognizeLabel', message: 'Recognize & Time:' })}</strong> {t({ id: 'whatIs.recognizeText', message: 'Note when the seizure starts; call emergency services if it exceeds 5 minutes.' })}</li><li><strong>{t({ id: 'whatIs.dontsLabel', message: "Know the Don'ts:" })}</strong> {t({ id: 'whatIs.dontsText', message: "Never restrain movement or place anything in the person's mouth." })}</li><li><strong>{t({ id: 'whatIs.environmentLabel', message: 'Assess Environment:' })}</strong> {t({ id: 'whatIs.environmentText', message: 'Spot physical hazards such as sharp corners, water, or stairs.' })}</li></ul>
         <h3>{t({ id: 'whatIs.aroundHeading', message: 'Be Around (Physical Protection & Care)' })}</h3>
         <ul><li><strong>{t({ id: 'whatIs.secureLabel', message: 'Secure the Surroundings:' })}</strong> {t({ id: 'whatIs.secureText', message: 'Clear hard objects and cushion their head.' })}</li><li><strong>{t({ id: 'whatIs.positionLabel', message: 'Position safely:' })}</strong> {t({ id: 'whatIs.positionText', message: 'Turn the person gently onto their side to keep their airway clear.' })}</li><li><strong>{t({ id: 'whatIs.supportLabel', message: 'Provide Support:' })}</strong> {t({ id: 'whatIs.supportText', message: 'Stay until the person is fully alert and offer calm reassurance.' })}</li></ul>
-      </ContentPanel>
-      <ContentPanel className="faq-guide" summary={labels.faq}>
+      </InfoPanel>
+      <InfoPanel className="faq-guide" summary={labels.faq}>
         <h3>{t({ id: 'faq.question1', message: 'Q1: Why is text-to-speech not working?' })}</h3>
         <p>{t({ id: 'faq.answer1', message: "This app uses your phone's built-in text-to-speech engine. Download the required voice package, disable silent mode, and raise media volume." })}</p>
         <h3>{t({ id: 'faq.question2', message: 'Q2: What if voice recording fails?' })}</h3>
@@ -215,7 +207,7 @@ export default function App() {
         <p>{t({ id: 'faq.answer3', message: 'Install this PWA or add it to your home screen after a successful first load.' })}</p>
         <h3>{t({ id: 'faq.question4', message: 'Q4: How does the global click counter work?' })}</h3>
         <p>{t({ id: 'faq.answer4', message: "The counter shows the total number of times the app's action buttons have been clicked, across all users." })}</p>
-      </ContentPanel>
+      </InfoPanel>
 
       <footer className="footer-linktree"><a href="https://linktr.ee/EpilepsyFoundationOfHongKong" target="_blank" rel="noopener noreferrer" className="linktree-btn">{t({ id: 'footer.linkLabel', message: '🔗 Learn more about Epilepsy Foundation HK' })}</a></footer>
     </main>
