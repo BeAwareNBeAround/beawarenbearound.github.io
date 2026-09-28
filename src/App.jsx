@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { t } from '@lingui/core/macro';
 import { APP_LOCALES, activateLocale, i18n } from './i18n/setup';
-import { speak, stopSpeech } from './services/speech';
-import { useToyRecordings } from './hooks/useToyRecordings';
+import { speak } from './services/speech';
 import { getInstallId, getInstallAction, isIOS } from './services/install';
 import { useClickCounter } from './hooks/useClickCounter';
 import { ClickCounter } from './components/ClickCounter';
@@ -14,24 +13,17 @@ export default function App() {
   const [language, setLanguage] = useState('zh-HK');
   const [langMenuOpen, setLangMenuOpen] = useState(false);
   const langMenuRef = useRef(null);
-  const [mode, setMode] = useState('edu');
   const educationStatus = () => t({ id: 'status.educationDefault', message: 'Education Mode: Click buttons for instructions.' });
-  const toyStatus = () => t({ id: 'status.toyDefault', message: 'Toy Mode: Ready.' });
   const [status, setStatus] = useState(educationStatus);
-  const [recordMode, setRecordMode] = useState(false);
   const [installPrompt, setInstallPrompt] = useState(null);
-  const toyRecordings = useToyRecordings();
   const { count, loading, error, trackClick } = useClickCounter({ endpointUrl: import.meta.env.VITE_VISIT_COUNTER_URL, targetUrl: window.location.href, installId: getInstallId() });
   const labels = {
     slogan: t({ id: 'header.slogan', message: 'STAY, SAFE, SIDE, HELP' }),
     subtitle: t({ id: 'header.subtitle', message: 'Acute Seizure Management Slogan' }),
     secondarySubtitle: t({ id: 'header.secondarySubtitle', message: '處理急性腦癇發作的口訣' }),
     clicks: t({ id: 'counter.label', message: 'Global Clicks:' }),
-    mode: t({ id: 'mode.label', message: 'App Mode:' }),
     education: t({ id: 'mode.education', message: 'Education Mode' }),
     toy: t({ id: 'mode.toy', message: 'Toy Mode (Record/Play)' }),
-    recordOff: t({ id: 'record.off', message: 'Record Mode: OFF' }),
-    recordOn: t({ id: 'record.on', message: 'Record Mode: ON (Click a button)' }),
     buttons: [
       t({ id: 'action.stay', message: 'STAY' }),
       t({ id: 'action.safe', message: 'SAFE' }),
@@ -79,30 +71,11 @@ export default function App() {
   function changeLanguage(nextLanguage) {
     activateLocale(nextLanguage);
     setLanguage(nextLanguage);
-    setStatus(mode === 'edu' ? educationStatus() : toyStatus());
-  }
-
-  function changeMode(event) {
-    const nextMode = event.target.value;
-    stopSpeech();
-    toyRecordings.cleanup();
-    setRecordMode(false);
-    setMode(nextMode);
-    setStatus(nextMode === 'edu' ? educationStatus() : toyStatus());
+    setStatus(educationStatus());
   }
 
   function activateAction(id) {
     trackClick(id);
-    if (mode !== 'edu') {
-      if (recordMode) {
-        const outcome = toyRecordings.record(id);
-        setStatus(outcome === 'busy' ? t({ id: 'status.recordingBusy', message: 'Please stop the current recording first!' }) : outcome === 'started' ? i18n._({ id: 'status.recording', message: 'Recording on button {id}... (Max 60s)' }, { id }) : toyStatus());
-      } else {
-        setStatus(toyRecordings.play(id) ? i18n._({ id: 'status.playingRecording', message: 'Playing button {id}...' }, { id }) : t({ id: 'status.noRecording', message: 'No audio recorded yet.' }));
-      }
-      return;
-    }
-
     const steps = [
       t({ id: 'education.step1', message: 'STAY. Stay calm and time the seizure.' }),
       t({ id: 'education.step2', message: 'SAFE. Observe and keep the person safe. Clear hard objects and cushion their head.' }),
@@ -111,21 +84,6 @@ export default function App() {
     ];
     const didSpeak = speak(steps[id - 1], APP_LOCALES[language].speechLocale);
     setStatus(didSpeak ? i18n._({ id: 'status.playingEducation', message: 'Playing education step {id}...' }, { id }) : educationStatus());
-  }
-
-  async function toggleRecordMode() {
-    if (recordMode) {
-      toyRecordings.cleanup();
-      setRecordMode(false);
-      setStatus(t({ id: 'status.playbackMode', message: 'Playback mode active.' }));
-      return;
-    }
-    if (await toyRecordings.enable()) {
-      setRecordMode(true);
-      setStatus(t({ id: 'status.readyToRecord', message: 'Ready to record.' }));
-    } else {
-      setStatus(t({ id: 'status.microphoneRequired', message: 'Microphone permission required.' }));
-    }
   }
 
   async function installApp() {
@@ -183,19 +141,8 @@ export default function App() {
         />
       </header>
 
-      <section className="controls" aria-label={labels.mode}>
-        <div className="toggle-group">
-          <label htmlFor="modeSelect">{labels.mode}</label>
-          <select id="modeSelect" value={mode} onChange={changeMode}>
-            <option value="edu">{labels.education}</option>
-            <option value="toy">{labels.toy}</option>
-          </select>
-        </div>
-        {mode === 'toy' && <button className={`record-toggle ${recordMode ? 'active' : ''}`} onClick={toggleRecordMode}>{recordMode ? labels.recordOn : labels.recordOff}</button>}
-      </section>
-
       <section className="grid" aria-label={t({ id: 'actions.ariaLabel', message: 'First aid actions' })}>
-        {labels.buttons.map((label, index) => <button key={label} className={`btn-toy button-${index + 1} ${toyRecordings.recordingId === index + 1 ? 'recording-pulse' : ''}`} onClick={() => activateAction(index + 1)}>{label}</button>)}
+        {labels.buttons.map((label, index) => <button key={label} className={`btn-toy button-${index + 1}`} onClick={() => activateAction(index + 1)}>{label}</button>)}
       </section>
 
       <p className="status" aria-live="polite">{status}</p>
