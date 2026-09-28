@@ -97,6 +97,27 @@ test('closes the language menu on a pointerdown outside the menu', () => {
   expect(screen.getByRole('button', { name: '語言' })).toHaveAttribute('aria-expanded', 'false');
 });
 
+test('closes the language menu when the globe toggle is clicked again', () => {
+  renderApp();
+
+  fireEvent.click(screen.getByRole('button', { name: '語言' }));
+  expect(screen.getByRole('menuitem', { name: 'EN' })).toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', { name: '語言' }));
+
+  expect(screen.queryByRole('menuitem')).not.toBeInTheDocument();
+  expect(screen.getByRole('button', { name: '語言' })).toHaveAttribute('aria-expanded', 'false');
+});
+
+test('keeps the language menu open on a pointerdown inside the menu', () => {
+  renderApp();
+
+  fireEvent.click(screen.getByRole('button', { name: '語言' }));
+  fireEvent.pointerDown(screen.getByRole('menuitem', { name: 'EN' }));
+
+  expect(screen.getByRole('menuitem', { name: 'EN' })).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: '語言' })).toHaveAttribute('aria-expanded', 'true');
+});
+
 test('marks the active locale in the language menu', () => {
   renderApp();
 
