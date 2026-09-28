@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { expect, test, vi } from 'vitest';
 import { I18nProvider } from '@lingui/react';
 import App from './App';
@@ -59,27 +59,47 @@ test('switches the visible action labels to English', async () => {
   expect(screen.getByRole('link', { name: '🔗 Learn more about Epilepsy Foundation HK' })).toBeInTheDocument();
 });
 
-test('switches expanded setup, guidance, FAQ, and footer content between languages', () => {
+test('switches the setup, guidance, FAQ, and footer content between languages', () => {
   renderApp();
 
-  fireEvent.click(screen.getByText('📲 安裝及使用指南 ▼'));
-  fireEvent.click(screen.getByText("💡 什麼是 Be Aware n' Be Around? ▼"));
-  fireEvent.click(screen.getByText('❓ 常見問題 (FAQ) ▼'));
+  function openInfoPanel(summary) {
+    fireEvent.click(screen.getByRole('button', { name: summary }));
+    const dialog = screen.getByRole('dialog', { name: summary });
+    expect(dialog).toHaveAttribute('open');
+    return dialog;
+  }
 
+  function closeInfoPanel(dialog, closeLabel) {
+    fireEvent.click(within(dialog).getByRole('button', { name: closeLabel }));
+    expect(dialog).not.toHaveAttribute('open');
+  }
+
+  const setupPanel = openInfoPanel('📲 安裝及使用指南');
   expect(screen.getByRole('heading', { name: '如何安裝至手機' })).toBeInTheDocument();
   expect(screen.getByText('保持鎮定，記錄抽搐開始及持續的時間。')).toBeInTheDocument();
+  closeInfoPanel(setupPanel, '關閉');
+  const whatIsPanel = openInfoPanel("💡 什麼是 Be Aware n' Be Around?");
   expect(screen.getByText('留意發作時間，陪伴患者安全復原。')).toBeInTheDocument();
+  closeInfoPanel(whatIsPanel, '關閉');
+  const faqPanel = openInfoPanel('❓ 常見問題 (FAQ)');
   expect(screen.getByRole('heading', { name: 'Q1: 為什麼教育模式沒有聲音？' })).toBeInTheDocument();
   expect(screen.getByText('計數器顯示所有用戶按過應用程式動作按鍵的總次數。')).toBeInTheDocument();
+  closeInfoPanel(faqPanel, '關閉');
   expect(screen.getByRole('link', { name: '🔗 了解更多 Epilepsy Foundation HK' })).toBeInTheDocument();
 
   fireEvent.click(screen.getByRole('button', { name: 'EN' }));
 
+  const englishSetupPanel = openInfoPanel('📲 Setup & Guide');
   expect(screen.getByRole('heading', { name: 'How to Install' })).toBeInTheDocument();
   expect(screen.getByText('Stay calm and time the seizure.')).toBeInTheDocument();
+  closeInfoPanel(englishSetupPanel, 'Close');
+  const englishWhatIsPanel = openInfoPanel("💡 What is Be Aware n' Be Around?");
   expect(screen.getByText('Be Aware of the time. Be Around for the safe recovery.')).toBeInTheDocument();
+  closeInfoPanel(englishWhatIsPanel, 'Close');
+  const englishFaqPanel = openInfoPanel('❓ Frequently Asked Questions (FAQ)');
   expect(screen.getByRole('heading', { name: 'Q1: Why is text-to-speech not working?' })).toBeInTheDocument();
   expect(screen.getByText("The counter shows the total number of times the app's action buttons have been clicked, across all users.")).toBeInTheDocument();
+  closeInfoPanel(englishFaqPanel, 'Close');
   expect(screen.getByRole('link', { name: '🔗 Learn more about Epilepsy Foundation HK' })).toBeInTheDocument();
 });
 
