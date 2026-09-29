@@ -190,6 +190,34 @@ test('switches the setup, guidance, FAQ, and footer content between languages', 
   expect(screen.getByRole('link', { name: '🔗 Learn more about Epilepsy Foundation HK' })).toBeInTheDocument();
 });
 
+test('does not describe the unreachable toy mode in the setup or FAQ panels', () => {
+  renderApp();
+
+  function openInfoPanel(summary) {
+    fireEvent.click(screen.getByRole('button', { name: summary }));
+    const dialog = screen.getByRole('dialog', { name: summary });
+    expect(dialog).toHaveAttribute('open');
+    return dialog;
+  }
+
+  function closeInfoPanel(dialog) {
+    fireEvent.click(within(dialog).getByRole('button', { name: '關閉' }));
+    expect(dialog).not.toHaveAttribute('open');
+  }
+
+  const setupPanel = openInfoPanel('📲 安裝及使用指南');
+  expect(within(setupPanel).queryByText('玩具模式 (錄音/播放):')).not.toBeInTheDocument();
+  expect(within(setupPanel).queryByText('開啟錄音模式後，點擊任何顏色按鍵錄製聲音（最長60秒），關閉後點擊按鍵即可播放。')).not.toBeInTheDocument();
+  expect(within(setupPanel).getByText('點擊顏色按鍵，手機會播放該步驟的急救指示。')).toBeInTheDocument();
+  closeInfoPanel(setupPanel);
+
+  const faqPanel = openInfoPanel('❓ 常見問題 (FAQ)');
+  expect(within(faqPanel).queryByRole('heading', { name: 'Q2: 玩具模式錄音失敗怎麼辦？' })).not.toBeInTheDocument();
+  expect(within(faqPanel).queryByText('錄音功能需要麥克風權限。請允許瀏覽器存取麥克風，並確保裝置未處於靜音模式。')).not.toBeInTheDocument();
+  expect(within(faqPanel).getByRole('heading', { name: 'Q1: 為什麼教育模式沒有聲音？' })).toBeInTheDocument();
+  closeInfoPanel(faqPanel);
+});
+
 test('renders the Traditional Chinese education status with its action identifier', async () => {
   const speak = vi.spyOn(window.speechSynthesis, 'speak').mockImplementation(() => {});
   vi.spyOn(window.speechSynthesis, 'cancel').mockImplementation(() => {});
