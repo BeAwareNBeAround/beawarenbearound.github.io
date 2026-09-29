@@ -23,7 +23,6 @@ export default function App() {
     secondarySubtitle: t({ id: 'header.secondarySubtitle', message: 'Tap the 4 buttons below to learn the steps' }),
     clicks: t({ id: 'counter.label', message: 'Global Clicks:' }),
     education: t({ id: 'mode.education', message: 'Education Mode' }),
-    toy: t({ id: 'mode.toy', message: 'Toy Mode (Record/Play)' }),
     buttons: [
       t({ id: 'action.stay', message: 'STAY' }),
       t({ id: 'action.safe', message: 'SAFE' }),
@@ -165,7 +164,7 @@ export default function App() {
           <h3>{t({ id: 'setup.installHeading', message: 'How to Install' })}</h3>
           <ul><li><strong>{t({ id: 'setup.iosLabel', message: 'iPhone (iOS):' })}</strong> {t({ id: 'setup.iosInstructions', message: 'Open in Safari, tap Share, then select Add to Home Screen.' })}</li><li><strong>{t({ id: 'setup.androidLabel', message: 'Android:' })}</strong> {t({ id: 'setup.androidInstructions', message: 'Open in Chrome, use the menu, then select Add to Home screen.' })}</li></ul>
           <h3>{t({ id: 'setup.operateHeading', message: 'How to Operate' })}</h3>
-          <ul><li><strong>{labels.education}:</strong> {t({ id: 'setup.educationInstructions', message: 'Tap a button to hear the clinical instruction for that step.' })}</li><li><strong>{labels.toy}:</strong> {t({ id: 'setup.toyInstructions', message: 'Turn Record Mode on, tap a button to record for up to 60 seconds, then turn it off to play recordings.' })}</li></ul>
+          <ul><li><strong>{labels.education}:</strong> {t({ id: 'setup.educationInstructions', message: 'Tap a button to hear the clinical instruction for that step.' })}</li></ul>
         </InfoPanel>
         <button className="install-btn-small" onClick={installApp}>{labels.install}</button>
       </div>
@@ -182,8 +181,6 @@ export default function App() {
       <InfoPanel className="faq-guide" summary={labels.faq}>
         <h3>{t({ id: 'faq.question1', message: 'Q1: Why is text-to-speech not working?' })}</h3>
         <p>{t({ id: 'faq.answer1', message: "This app uses your phone's built-in text-to-speech engine. Download the required voice package, disable silent mode, and raise media volume." })}</p>
-        <h3>{t({ id: 'faq.question2', message: 'Q2: What if voice recording fails?' })}</h3>
-        <p>{t({ id: 'faq.answer2', message: 'Recording needs microphone permission. Allow browser microphone access and ensure the device is not muted.' })}</p>
         <h3>{t({ id: 'faq.question3', message: 'Q3: Can I use the app offline?' })}</h3>
         <p>{t({ id: 'faq.answer3', message: 'Install this PWA or add it to your home screen after a successful first load.' })}</p>
         <h3>{t({ id: 'faq.question4', message: 'Q4: How does the global click counter work?' })}</h3>
