@@ -213,6 +213,25 @@ test('next while playing continues playing the neighboring track from zero', () 
   expect(result.current.phase).toBe('loading');
   expect(result.current.currentTime).toBe(0);
   expect(audio.src).toBe('./resources/side-zh-HK.mp3');
+
+  act(() => { audio.emit('playing'); });
+  expect(result.current.phase).toBe('playing');
+});
+
+test('previous while playing continues playing the neighboring track from zero', () => {
+  const { result } = renderPlayer();
+  const audio = selectAndPlay(result, 3);
+  act(() => { audio.currentTime = 5; audio.emit('timeupdate'); });
+
+  act(() => { result.current.previous(); });
+
+  expect(result.current.selectedId).toBe(2);
+  expect(result.current.phase).toBe('loading');
+  expect(result.current.currentTime).toBe(0);
+  expect(audio.src).toBe('./resources/save-zh-HK.mp3');
+
+  act(() => { audio.emit('playing'); });
+  expect(result.current.phase).toBe('playing');
 });
 
 test('next while paused leaves the neighboring track paused', () => {
@@ -414,6 +433,40 @@ test('play after a locale change loads the new locale recording from zero', () =
   expect(result.current.phase).toBe('loading');
   expect(result.current.currentTime).toBe(0);
   expect(latestAudio().src).toBe('./resources/save-en.mp3');
+});
+
+test('a stale pending play resolved after a locale change cannot resurrect playback', async () => {
+  const { result, rerender } = renderPlayer();
+  act(() => { result.current.selectTrack(1); });
+  const audio = latestAudio();
+  const playCallsBefore = audio.play.mock.calls.length;
+
+  rerender({ locale: 'zh-CN' });
+  expect(result.current.phase).toBe('idle');
+
+  await act(async () => { audio.resolvePlay(); });
+
+  expect(result.current.phase).toBe('idle');
+  expect(result.current.selectedId).toBe(1);
+  expect(result.current.currentTime).toBe(0);
+  expect(audio.play).toHaveBeenCalledTimes(playCallsBefore);
+});
+
+test('a stale pending play rejected after a locale change cannot resurrect playback', async () => {
+  const { result, rerender } = renderPlayer();
+  act(() => { result.current.selectTrack(1); });
+  const audio = latestAudio();
+  const playCallsBefore = audio.play.mock.calls.length;
+
+  rerender({ locale: 'zh-CN' });
+
+  await act(async () => { audio.rejectPlay(new Error('interrupted')); });
+
+  expect(result.current.phase).toBe('idle');
+  expect(result.current.selectedId).toBe(1);
+  expect(result.current.currentTime).toBe(0);
+  expect(audio.play).toHaveBeenCalledTimes(playCallsBefore);
+  expect(audio.src).toBe('./resources/stay-zh-HK.mp3');
 });
 
 test('unmount pauses playback and detaches the media listeners', () => {
