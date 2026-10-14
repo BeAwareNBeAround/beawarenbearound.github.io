@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { expect, test } from '@playwright/test';
 import { mockCounterRoute } from '../e2e/mock-counter.js';
+import { mockPlaylistPlayer } from '../e2e/mock-playlist-player.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // Pattern route (must track logoUrl in src/App.jsx): keeps serving the
@@ -66,6 +67,57 @@ test.describe('localized mobile layouts', () => {
         animations: 'disabled',
         maxDiffPixelRatio: 0.01,
       });
+    });
+  }
+});
+
+// The playlist replaced the static guide paragraphs, so the interactive card
+// states are review material too. The deterministic media stand-in fixes the
+// reported duration/position, so the transport row renders identically on
+// every run instead of capturing whatever a real recording had decoded to.
+const playlistStates = [
+  { selector: '繁體', prefix: 'zh-hk', pause: '暫停', play: '播放', settings: '播放設定', repeatAll: '全部重複', speed: '速度 1.5×' },
+  { selector: '简体', prefix: 'zh-cn', pause: '暂停', play: '播放', settings: '播放设置', repeatAll: '全部重复', speed: '速度 1.5×' },
+  { selector: 'EN', prefix: 'en', pause: 'Pause', play: 'Play', settings: 'Settings', repeatAll: 'Repeat all', speed: 'Speed 1.5×' },
+];
+
+test.describe('playlist card states', () => {
+  test.use({ viewport: { width: 375, height: 1200 } });
+  test.use({ locale: 'en-US' });
+
+  for (const state of playlistStates) {
+    test(`captures the ${state.selector} selected, playing, and settings card`, async ({ page }) => {
+      const media = await mockPlaylistPlayer(page);
+      mockExternalRequests(page);
+      await page.goto('/');
+      await page.getByRole('button', { name: '語言' }).click();
+      await page.getByRole('menuitem', { name: state.selector, exact: true }).click();
+      await maskVideoEmbed(page);
+
+      const screenshotOptions = { fullPage: true, animations: 'disabled', maxDiffPixelRatio: 0.01 };
+
+      // Playing: a selected row, the transport row mid-track.
+      await page.locator('.playlist-row-2').click();
+      await media.fire('playing');
+      await media.setDuration(42);
+      await media.setTime(13);
+      await expect(page.locator('.playlist-seek .playlist-time')).toHaveText(['0:13', '0:42']);
+      await expect(page).toHaveScreenshot(`${state.prefix}-playing-375.png`, screenshotOptions);
+
+      // Selected: the same track paused, so the selected mark shows without the
+      // playing badge or the upper-button highlight.
+      await page.getByRole('button', { name: state.pause, exact: true }).click();
+      await expect(page.locator('.playlist-playing-badge')).toHaveCount(0);
+      await expect(page).toHaveScreenshot(`${state.prefix}-selected-375.png`, screenshotOptions);
+
+      // Settings: repeat and speed choices open over the card.
+      await page.getByRole('button', { name: state.play, exact: true }).click();
+      await media.fire('playing');
+      await page.getByRole('button', { name: state.settings, exact: true }).click();
+      await page.getByRole('button', { name: state.repeatAll, exact: true }).click();
+      await page.getByRole('button', { name: state.speed, exact: true }).click();
+      await expect(page.locator('#playlist-settings-panel')).toBeVisible();
+      await expect(page).toHaveScreenshot(`${state.prefix}-settings-375.png`, screenshotOptions);
     });
   }
 });

@@ -1,11 +1,12 @@
 import { expect, test } from '@playwright/test';
-import { mockAudioRecordingRoutes } from './mock-audio-recording.js';
+import { mockPlaylistPlayer } from './mock-playlist-player.js';
 
 const languageStates = [
   {
     selector: '繁體',
     action: '守',
     panelHeading: '如何安裝至手機',
+    loadingStatus: '載入中…',
     educationStatus: '播放教育步驟 1...',
     closeButtonName: '關閉',
   },
@@ -13,6 +14,7 @@ const languageStates = [
     selector: '简体',
     action: '守',
     panelHeading: '如何安装至手机',
+    loadingStatus: '加载中…',
     educationStatus: '播放教育步骤 1...',
     closeButtonName: '关闭',
   },
@@ -20,6 +22,7 @@ const languageStates = [
     selector: 'EN',
     action: 'STAY',
     panelHeading: 'How to Install',
+    loadingStatus: 'Loading…',
     educationStatus: 'Playing education step 1...',
     closeButtonName: 'Close',
   },
@@ -27,7 +30,10 @@ const languageStates = [
 
 for (const language of languageStates) {
   test(`renders localized education content and status for ${language.selector}`, async ({ page }) => {
-    mockAudioRecordingRoutes(page);
+    // The deterministic media stand-in keeps the phase assertions reproducible:
+    // the playing status arrives when the test reports the media event, not
+    // when a fixture recording happens to decode.
+    const media = await mockPlaylistPlayer(page);
     await page.goto('/');
 
     await page.getByRole('button', { name: '語言' }).click();
@@ -38,6 +44,8 @@ for (const language of languageStates) {
     await page.getByRole('button', { name: language.closeButtonName }).click();
     await expect(page.locator('dialog[open]')).toHaveCount(0);
     await page.getByRole('button', { name: language.action, exact: true }).click();
+    await expect(page.locator('.status')).toHaveText(language.loadingStatus);
+    await media.fire('playing');
     await expect(page.locator('.status')).toHaveText(language.educationStatus);
   });
 }
