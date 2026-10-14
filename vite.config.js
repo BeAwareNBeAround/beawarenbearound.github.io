@@ -16,8 +16,9 @@ export default defineConfig({
     babel({ plugins: ['@lingui/babel-plugin-lingui-macro'] }),
     VitePWA({
       registerType: 'autoUpdate',
-      // Default globPatterns omit audio: precache the mock action recordings
-      // so Education Mode keeps working offline.
+      // Default globPatterns omit audio: precache the action recordings
+      // (placeholder until the real recordings arrive) so Education Mode
+      // keeps working offline.
       includeAssets: ['resources/*.mp3'],
       manifest: {
         name: "香港腦癇基金會 - 守望相助 (EFHK Be Aware n' Be Around)",

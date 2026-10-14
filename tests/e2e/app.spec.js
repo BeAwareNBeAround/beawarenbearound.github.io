@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { mockAudioRoutes } from './mock-audio.js';
+import { mockAudioRecordingRoutes } from './mock-audio-recording.js';
 
 const languageStates = [
   {
@@ -27,7 +27,7 @@ const languageStates = [
 
 for (const language of languageStates) {
   test(`renders localized education content and status for ${language.selector}`, async ({ page }) => {
-    mockAudioRoutes(page);
+    mockAudioRecordingRoutes(page);
     await page.goto('/');
 
     await page.getByRole('button', { name: '語言' }).click();
