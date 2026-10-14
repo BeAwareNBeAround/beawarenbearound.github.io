@@ -1,13 +1,18 @@
-import { fireEvent, render, screen, within } from '@testing-library/react';
-import { beforeEach, expect, test, vi } from 'vitest';
+import { StrictMode } from 'react';
+import { act, fireEvent, render, screen, within } from '@testing-library/react';
+import { expect, test, vi } from 'vitest';
 import { I18nProvider } from '@lingui/react';
 import App from './App';
 import { activateLocale, i18n } from './i18n/setup';
-import { __resetAudioPlayer } from './services/audio';
 
-beforeEach(() => {
-  __resetAudioPlayer();
-});
+// zh-HK guide copy from the compiled catalogs; used to address the playlist
+// rows (row accessible name = label + instruction).
+const INSTRUCTIONS_ZH_HK = [
+  '保持鎮定，記錄抽搐開始及持續的時間。',
+  '觀察並保護患者。移開附近危險物品，用軟物墊著患者頭部。',
+  '將患者輕輕翻側，保持呼吸道暢通。切勿強行將任何物品塞入患者口中。',
+  '尋求協助。陪伴患者直至清醒，若超過五分鐘請召喚救護車。',
+];
 
 function stubCounter(initialTotal = 12544) {
   let total = initialTotal;
@@ -31,11 +36,28 @@ function stubCounter(initialTotal = 12544) {
   return { requests };
 }
 
-function renderApp(locale = 'zh-HK') {
+function renderApp(locale = 'zh-HK', Wrapper) {
   const counter = stubCounter();
   activateLocale(locale);
-  return { counter, ...render(<I18nProvider i18n={i18n}><App /></I18nProvider>) };
+  const app = <I18nProvider i18n={i18n}><App /></I18nProvider>;
+  return { counter, ...render(Wrapper ? <Wrapper>{app}</Wrapper> : app) };
 }
+
+// Media lifecycle events must run inside act() so React state settles before
+// assertions; the hook's Audio element is the single MockAudio instance.
+const audio = () => window.MockAudioInstances.at(-1);
+const emit = (instance, type) => act(() => { instance.emit(type); });
+const settle = (thunk) => act(async () => { thunk(); });
+
+const upperButton = (name) => screen.getByRole('button', { name, exact: true });
+// The page-level status line; the card's own .playlist-status mirrors
+// loading/error copy, so phase assertions target the page line explicitly.
+const statusLine = () => document.querySelector('.status');
+const playlistRow = (index) => screen.getByRole('button', { name: `${['守', '望', '相', '助'][index]} ${INSTRUCTIONS_ZH_HK[index]}` });
+// Locale-independent row access for after-locale-switch checks.
+const playlistRowEl = (index) => document.querySelector(`.playlist-row-${index + 1}`);
+const rowBadge = (index) => playlistRowEl(index).querySelector('.playlist-playing-badge');
+const clickPosts = (counter) => counter.requests.filter((request) => request.method === 'POST' && request.body && request.body.action === 'click');
 
 test('renders the application heading', () => {
   renderApp();
@@ -43,16 +65,18 @@ test('renders the application heading', () => {
   expect(screen.getByRole('heading', { name: "Be Aware n' Be Around" })).toBeInTheDocument();
 });
 
-test('places the instruction box before the video container', () => {
+test('places the playlist guide before the video container', () => {
   renderApp();
 
-  const instructionBox = document.querySelector('.instruction-box');
+  const guide = document.querySelector('.instruction-box');
+  const playlistCard = document.querySelector('.playlist-card');
   const youtubeContainer = document.querySelector('.youtube-container');
 
-  expect(instructionBox).not.toBeNull();
+  expect(guide).not.toBeNull();
+  expect(playlistCard).not.toBeNull();
   expect(youtubeContainer).not.toBeNull();
   expect(
-    instructionBox.compareDocumentPosition(youtubeContainer) & Node.DOCUMENT_POSITION_FOLLOWING,
+    guide.compareDocumentPosition(youtubeContainer) & Node.DOCUMENT_POSITION_FOLLOWING,
   ).toBeTruthy();
 });
 
@@ -236,24 +260,233 @@ test('does not describe the unreachable toy mode in the setup or FAQ panels', ()
   closeInfoPanel(faqPanel);
 });
 
-test('renders the Traditional Chinese education status with its action identifier', async () => {
-  const { counter } = renderApp('en');
+test('replaces the static guide paragraphs with the four-row playlist under the retained heading', () => {
+  renderApp();
 
-  expect(await screen.findByText('12,544')).toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: '守望相助 急救指南' })).toBeInTheDocument();
+  expect(document.querySelectorAll('.instruction-box > p')).toHaveLength(0);
+  for (let index = 0; index < 4; index += 1) {
+    expect(playlistRow(index)).toBeInTheDocument();
+  }
+});
 
-  fireEvent.click(screen.getByRole('button', { name: 'Language' }));
-  fireEvent.click(screen.getByRole('menuitem', { name: '繁體' }));
+test('an upper button click selects its recording, sends exactly one counter event, and highlights only after playback actually starts', async () => {
+  const { counter } = renderApp();
 
-  fireEvent.click(screen.getByRole('button', { name: '守' }));
+  fireEvent.click(upperButton('守'));
 
-  const clickPost = counter.requests.find((request) => request.method === 'POST' && request.body && request.body.action === 'click');
-  expect(clickPost).toBeDefined();
-  expect(clickPost.body.action).toBe('click');
-  expect(clickPost.body.action_target).toBe('1');
-  const played = window.MockAudioInstances.at(-1);
-  expect(played.src).toBe('./resources/stay-zh-HK.mp3');
+  // The request is loading: no playing highlight or success announcement yet.
+  expect(audio().src).toBe('./resources/stay-zh-HK.mp3');
+  expect(upperButton('守')).not.toHaveClass('playing');
+  expect(rowBadge(0)).toBeNull();
+  expect(screen.queryByText('播放教育步驟 1...')).not.toBeInTheDocument();
+
+  emit(audio(), 'playing');
+
+  expect(upperButton('守')).toHaveClass('playing');
+  expect(rowBadge(0)).not.toBeNull();
+  expect(playlistRow(0)).toHaveAttribute('aria-pressed', 'true');
   expect(screen.getByText('播放教育步驟 1...')).toBeInTheDocument();
   expect(await screen.findByText('12,545')).toBeInTheDocument();
+  expect(clickPosts(counter)).toHaveLength(1);
+  expect(clickPosts(counter)[0].body.action_target).toBe('1');
+});
+
+test('a playlist row click selects its recording, sends exactly one counter event, and highlights the matching upper button while playing', async () => {
+  const { counter } = renderApp();
+
+  fireEvent.click(playlistRow(2));
+
+  expect(audio().src).toBe('./resources/side-zh-HK.mp3');
+  expect(upperButton('相')).not.toHaveClass('playing');
+
+  emit(audio(), 'playing');
+
+  expect(upperButton('相')).toHaveClass('playing');
+  expect(rowBadge(2)).not.toBeNull();
+  expect(screen.getByText('播放教育步驟 3...')).toBeInTheDocument();
+  expect(await screen.findByText('12,545')).toBeInTheDocument();
+  expect(clickPosts(counter)).toHaveLength(1);
+  expect(clickPosts(counter)[0].body.action_target).toBe('3');
+});
+
+test('selecting a second track pauses the first, keeps a single player, and moves both highlights', () => {
+  renderApp();
+
+  fireEvent.click(upperButton('守'));
+  emit(audio(), 'playing');
+  expect(upperButton('守')).toHaveClass('playing');
+  const firstAudio = audio();
+  const pauseCallsBefore = firstAudio.pause.mock.calls.length;
+
+  fireEvent.click(playlistRow(1));
+
+  expect(firstAudio.pause).toHaveBeenCalledTimes(pauseCallsBefore + 1);
+  expect(window.MockAudioInstances).toHaveLength(1);
+  expect(firstAudio.src).toBe('./resources/save-zh-HK.mp3');
+  expect(upperButton('守')).not.toHaveClass('playing');
+  expect(rowBadge(0)).toBeNull();
+  expect(upperButton('望')).not.toHaveClass('playing');
+
+  emit(firstAudio, 'playing');
+
+  expect(upperButton('望')).toHaveClass('playing');
+  expect(rowBadge(1)).not.toBeNull();
+  expect(rowBadge(0)).toBeNull();
+});
+
+test('pause and end clear both playing highlights while the playlist selection remains', () => {
+  renderApp();
+
+  fireEvent.click(upperButton('守'));
+  emit(audio(), 'playing');
+  expect(upperButton('守')).toHaveClass('playing');
+
+  fireEvent.click(screen.getByRole('button', { name: '暫停' }));
+
+  expect(upperButton('守')).not.toHaveClass('playing');
+  expect(rowBadge(0)).toBeNull();
+  expect(playlistRow(0)).toHaveAttribute('aria-pressed', 'true');
+
+  // Restart, then let the track end with repeat off.
+  fireEvent.click(upperButton('守'));
+  emit(audio(), 'playing');
+  expect(upperButton('守')).toHaveClass('playing');
+
+  emit(audio(), 'ended');
+
+  expect(upperButton('守')).not.toHaveClass('playing');
+  expect(rowBadge(0)).toBeNull();
+  expect(playlistRow(0)).toHaveAttribute('aria-pressed', 'true');
+  expect(screen.getByText('教育步驟已完成。')).toBeInTheDocument();
+});
+
+test('loading and failed playback show localized status without announcing playback success', async () => {
+  const { counter } = renderApp();
+
+  fireEvent.click(playlistRow(0));
+
+  expect(statusLine()).toHaveTextContent('載入中…');
+  expect(screen.queryByText('播放教育步驟 1...')).not.toBeInTheDocument();
+
+  await settle(() => audio().rejectPlay(new Error('blocked')));
+
+  expect(statusLine()).toHaveTextContent('播放失敗，請按播放重試。');
+  expect(screen.queryByText('播放教育步驟 1...')).not.toBeInTheDocument();
+  expect(upperButton('守')).not.toHaveClass('playing');
+  expect(rowBadge(0)).toBeNull();
+  // A failed play still counts its initiating click exactly once.
+  expect(clickPosts(counter)).toHaveLength(1);
+});
+
+test('loading and error statuses are localized in English', async () => {
+  renderApp();
+
+  fireEvent.click(screen.getByRole('button', { name: '語言' }));
+  fireEvent.click(screen.getByRole('menuitem', { name: 'EN' }));
+
+  fireEvent.click(screen.getByRole('button', { name: 'SIDE', exact: true }));
+
+  expect(statusLine()).toHaveTextContent('Loading…');
+
+  await settle(() => audio().rejectPlay(new Error('blocked')));
+
+  expect(statusLine()).toHaveTextContent('Playback failed. Press play to try again.');
+});
+
+test('repeat all advances from an upper-button selection and repeat one restarts a row selection, without extra counter events', async () => {
+  const { counter } = renderApp();
+
+  fireEvent.click(screen.getByRole('button', { name: /播放設定/ }));
+  fireEvent.click(screen.getByRole('button', { name: '全部重複' }));
+  fireEvent.click(screen.getByRole('button', { name: /播放設定/ }));
+
+  fireEvent.click(upperButton('助'));
+  emit(audio(), 'playing');
+  expect(upperButton('助')).toHaveClass('playing');
+
+  emit(audio(), 'ended');
+
+  expect(audio().src).toBe('./resources/stay-zh-HK.mp3');
+  expect(upperButton('助')).not.toHaveClass('playing');
+  emit(audio(), 'playing');
+  expect(upperButton('守')).toHaveClass('playing');
+  expect(playlistRow(0)).toHaveAttribute('aria-pressed', 'true');
+
+  fireEvent.click(screen.getByRole('button', { name: /播放設定/ }));
+  fireEvent.click(screen.getByRole('button', { name: '單曲重複' }));
+
+  fireEvent.click(playlistRow(1));
+  emit(audio(), 'playing');
+
+  emit(audio(), 'ended');
+
+  expect(audio().src).toBe('./resources/save-zh-HK.mp3');
+  expect(playlistRow(1)).toHaveAttribute('aria-pressed', 'true');
+  emit(audio(), 'playing');
+  expect(upperButton('望')).toHaveClass('playing');
+
+  // Only the two counted selections sent click events; advancement and repeat did not.
+  expect(clickPosts(counter)).toHaveLength(2);
+  expect(clickPosts(counter).map((request) => request.body.action_target)).toEqual(['4', '2']);
+});
+
+test('switching language stops playback, keeps the selection, and the next play uses the new locale recording', () => {
+  renderApp();
+
+  fireEvent.click(upperButton('望'));
+  emit(audio(), 'playing');
+  expect(upperButton('望')).toHaveClass('playing');
+
+  fireEvent.click(screen.getByRole('button', { name: '語言' }));
+  fireEvent.click(screen.getByRole('menuitem', { name: 'EN' }));
+
+  expect(audio().pause).toHaveBeenCalled();
+  expect(upperButton('SAFE')).not.toHaveClass('playing');
+  expect(rowBadge(1)).toBeNull();
+  expect(playlistRowEl(1)).toHaveAttribute('aria-pressed', 'true');
+  expect(screen.getByText('Education Mode: Click buttons for instructions.')).toBeInTheDocument();
+
+  fireEvent.click(screen.getByRole('button', { name: 'Play' }));
+
+  expect(audio().src).toBe('./resources/save-en.mp3');
+});
+
+test('StrictMode does not duplicate click requests or media elements', async () => {
+  const { counter } = renderApp('zh-HK', StrictMode);
+
+  fireEvent.click(upperButton('守'));
+  emit(audio(), 'playing');
+
+  expect(window.MockAudioInstances).toHaveLength(1);
+  expect(upperButton('守')).toHaveClass('playing');
+  expect(await screen.findByText('12,545')).toBeInTheDocument();
+  expect(clickPosts(counter)).toHaveLength(1);
+});
+
+test('transport controls, settings, seeking, and Play from initial idle send no counter click events', () => {
+  const { counter } = renderApp();
+
+  // Play with no selection starts track 1 without a click event.
+  fireEvent.click(screen.getByRole('button', { name: '播放' }));
+  emit(audio(), 'playing');
+  expect(audio().src).toBe('./resources/stay-zh-HK.mp3');
+
+  fireEvent.click(screen.getByRole('button', { name: '下一段' }));
+  emit(audio(), 'playing');
+  expect(audio().src).toBe('./resources/save-zh-HK.mp3');
+
+  fireEvent.click(screen.getByRole('button', { name: '上一段' }));
+
+  act(() => { audio().duration = 30; audio().emit('durationchange'); });
+  fireEvent.change(screen.getByRole('slider', { name: '播放位置' }), { target: { value: '5' } });
+  expect(screen.getByRole('slider', { name: '播放位置' })).toHaveValue('5');
+
+  fireEvent.click(screen.getByRole('button', { name: /播放設定/ }));
+  fireEvent.click(screen.getByRole('button', { name: '不重複' }));
+  fireEvent.click(screen.getByRole('button', { name: '速度 1.25×' }));
+
+  expect(clickPosts(counter)).toHaveLength(0);
 });
 
 test('renders the English education status with its action identifier', () => {
@@ -262,9 +495,11 @@ test('renders the English education status with its action identifier', () => {
   fireEvent.click(screen.getByRole('button', { name: '語言' }));
   fireEvent.click(screen.getByRole('menuitem', { name: 'EN' }));
 
-  fireEvent.click(screen.getByRole('button', { name: 'STAY' }));
+  fireEvent.click(screen.getByRole('button', { name: 'STAY', exact: true }));
 
-  const played = window.MockAudioInstances.at(-1);
-  expect(played.src).toBe('./resources/stay-en.mp3');
+  emit(audio(), 'playing');
+
+  expect(audio().src).toBe('./resources/stay-en.mp3');
   expect(screen.getByText('Playing education step 1...')).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: 'STAY', exact: true })).toHaveClass('playing');
 });

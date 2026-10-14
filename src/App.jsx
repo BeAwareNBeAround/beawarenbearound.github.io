@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { t } from '@lingui/core/macro';
 import { APP_LOCALES, activateLocale, i18n } from './i18n/setup';
-import { playActionAudio } from './services/audio';
 import { getInstallId, getInstallAction, isIOS } from './services/install';
 import { useClickCounter } from './hooks/useClickCounter';
+import { usePlaylistPlayer } from './hooks/usePlaylistPlayer';
 import { ClickCounter } from './components/ClickCounter';
+import { FirstAidPlaylist } from './components/FirstAidPlaylist';
 import { InfoPanel } from './components/InfoPanel';
 
 const logoUrl = 'https://epilepsy.org.hk/wp-content/uploads/elementor/thumbs/EFHK-abb-Logo-Ver-%E5%9C%93%E5%BA%95-rsi4tzw9b949vi84j6y5gkdzbj2s5xn3mit7czgz2g.png';
@@ -13,8 +14,7 @@ export default function App() {
   const [language, setLanguage] = useState('zh-HK');
   const [langMenuOpen, setLangMenuOpen] = useState(false);
   const langMenuRef = useRef(null);
-  const educationStatus = () => t({ id: 'status.educationDefault', message: 'Education Mode: Click buttons for instructions.' });
-  const [status, setStatus] = useState(educationStatus);
+  const player = usePlaylistPlayer({ locale: language });
   const [installPrompt, setInstallPrompt] = useState(null);
   const { count, loading, error, trackClick } = useClickCounter({ endpointUrl: import.meta.env.VITE_VISIT_COUNTER_URL, targetUrl: window.location.href, installId: getInstallId() });
   const labels = {
@@ -35,6 +35,31 @@ export default function App() {
     whatIs: t({ id: 'whatIs.summary', message: "💡 What is Be Aware n' Be Around?" }),
     faq: t({ id: 'faq.summary', message: '❓ Frequently Asked Questions (FAQ)' }),
   };
+
+  // The four playlist records reuse the unchanged guide copy; the same
+  // translated labels appear on the upper buttons, so both entry points
+  // address identical tracks.
+  const guideSteps = [
+    t({ id: 'guide.step1', message: 'Stay calm and time the seizure.' }),
+    t({ id: 'guide.step2', message: 'Observe and keep the person safe. Clear hard objects and cushion their head.' }),
+    t({ id: 'guide.step3', message: 'Gently roll the person onto their side. Never put anything in their mouth.' }),
+    t({ id: 'guide.step4', message: 'Seek help. Stay with them until fully conscious, and call an ambulance if over 5 minutes.' }),
+  ];
+  const tracks = labels.buttons.map((label, index) => ({ id: index + 1, label, instruction: guideSteps[index] }));
+
+  // The status line reports the player's actual phase; loading and error copy
+  // reuse the playlist's translated keys so both surfaces agree.
+  const statusText = player.phase === 'loading'
+    ? t({ id: 'playlist.loading', message: 'Loading…' })
+    : player.phase === 'playing'
+      ? i18n._({ id: 'status.playingEducation', message: 'Playing education step {id}...' }, { id: player.selectedId })
+      : player.phase === 'paused'
+        ? t({ id: 'status.paused', message: 'Education playback paused.' })
+        : player.phase === 'ended'
+          ? t({ id: 'status.ended', message: 'Education step finished.' })
+          : player.phase === 'error'
+            ? t({ id: 'playlist.error', message: 'Playback failed. Press play to try again.' })
+            : t({ id: 'status.educationDefault', message: 'Education Mode: Click buttons for instructions.' });
 
   useEffect(() => {
     const handlePrompt = (event) => {
@@ -70,13 +95,14 @@ export default function App() {
   function changeLanguage(nextLanguage) {
     activateLocale(nextLanguage);
     setLanguage(nextLanguage);
-    setStatus(educationStatus());
   }
 
-  function activateAction(id) {
+  // The single counted selection path shared by the upper buttons and the
+  // playlist rows: one click event per initiating click, then the shared
+  // player starts the requested track (transport controls never count).
+  function selectInstruction(id) {
     trackClick(id);
-    const didPlay = playActionAudio(id, language);
-    setStatus(didPlay ? i18n._({ id: 'status.playingEducation', message: 'Playing education step {id}...' }, { id }) : educationStatus());
+    player.selectTrack(id);
   }
 
   async function installApp() {
@@ -135,17 +161,14 @@ export default function App() {
       </header>
 
       <section className="grid" aria-label={t({ id: 'actions.ariaLabel', message: 'First aid actions' })}>
-        {labels.buttons.map((label, index) => <button key={label} className={`btn-toy button-${index + 1}`} onClick={() => activateAction(index + 1)}>{label}</button>)}
+        {labels.buttons.map((label, index) => <button key={label} className={`btn-toy button-${index + 1}${player.phase === 'playing' && player.selectedId === index + 1 ? ' playing' : ''}`} onClick={() => selectInstruction(index + 1)}>{label}</button>)}
       </section>
 
-      <p className="status" aria-live="polite">{status}</p>
+      <p className="status" aria-live="polite">{statusText}</p>
 
       <section className="instruction-box">
         <h2>{labels.guideTitle}</h2>
-        <p><strong>{labels.buttons[0]}:</strong> {t({ id: 'guide.step1', message: 'Stay calm and time the seizure.' })}</p>
-        <p><strong>{labels.buttons[1]}:</strong> {t({ id: 'guide.step2', message: 'Observe and keep the person safe. Clear hard objects and cushion their head.' })}</p>
-        <p><strong>{labels.buttons[2]}:</strong> {t({ id: 'guide.step3', message: 'Gently roll the person onto their side. Never put anything in their mouth.' })}</p>
-        <p><strong>{labels.buttons[3]}:</strong> {t({ id: 'guide.step4', message: 'Seek help. Stay with them until fully conscious, and call an ambulance if over 5 minutes.' })}</p>
+        <FirstAidPlaylist tracks={tracks} player={player} onSelectTrack={selectInstruction} />
       </section>
 
       <section className="youtube-container">
