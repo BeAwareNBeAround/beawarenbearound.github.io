@@ -221,7 +221,10 @@ export function FirstAidPlaylist({ tracks, player, onSelectTrack, volumeSupporte
         )}
       </div>
 
-      <p className="playlist-status" role="status">{statusText}</p>
+      {/* Visual echo of the player state only: the embedding page's .status
+          live region is the single announcement path, so this line carries
+          no live role and never announces the same text a second time. */}
+      <p className="playlist-status">{statusText}</p>
     </section>
   );
 }

@@ -264,7 +264,12 @@ test('loading and error states surface an inline status and never a modal', () =
   const { container, rerenderWith } = renderPlaylist();
 
   rerenderWith({ phase: 'loading' });
+  const cardStatus = container.querySelector('.playlist-status');
   expect(screen.getByText('Loading…')).toBeInTheDocument();
+  // The embedding page's .status live region is the single announcement
+  // path; the card line stays visually present but must not announce again.
+  expect(cardStatus).not.toHaveAttribute('role', 'status');
+  expect(cardStatus).not.toHaveAttribute('aria-live');
 
   rerenderWith({ phase: 'error' });
   expect(screen.getByText('Playback failed. Press play to try again.')).toBeInTheDocument();
