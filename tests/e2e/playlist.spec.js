@@ -382,8 +382,10 @@ test.describe('deterministic playback', () => {
     await expect(page.locator('.playlist-seek .playlist-time')).toHaveText(['0:00', '0:00']);
     await expect(page.locator('.playlist-seek-range')).toBeDisabled();
 
-    await setRepeat(page, zhCN, 'all');
+    // Settings retention is asserted without clicking anything: a click would
+    // re-apply the mode and hide a locale-change reset.
     await openSettings(page, zhCN);
+    await expect(page.getByRole('button', { name: zhCN.repeatAll, exact: true })).toHaveAttribute('aria-pressed', 'true');
     await expect(page.getByRole('button', { name: '速度 1.5×', exact: true })).toHaveAttribute('aria-pressed', 'true');
     await page.keyboard.press('Escape');
     await expect(page.locator('#playlist-settings-panel')).toHaveCount(0);
@@ -391,6 +393,12 @@ test.describe('deterministic playback', () => {
     await playButton(page, zhCN).click();
     await expect(status(page)).toHaveText(zhCN.loading);
     expect((await media.state()).src).toBe(new URL('/resources/save-zh-CN.mp3', page.url()).href);
+
+    // The retained mode also still behaves: the end of the track advances.
+    await media.fire('playing');
+    await media.fire('ended');
+    await expect(status(page)).toHaveText(zhCN.loading);
+    expect((await media.state()).src).toBe(new URL('/resources/side-zh-CN.mp3', page.url()).href);
   });
 
   test('a media error shows the translated failure and a retry recovers', async ({ page }) => {
