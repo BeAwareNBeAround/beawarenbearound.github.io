@@ -361,6 +361,27 @@ test('pause and end clear both playing highlights while the playlist selection r
   expect(screen.getByText('教育步驟已完成。')).toBeInTheDocument();
 });
 
+test('an upper action button reports pressed only while its own recording is playing', () => {
+  renderApp();
+
+  // Idle: nothing pressed.
+  expect(upperButton('守')).toHaveAttribute('aria-pressed', 'false');
+
+  // Loading: selected but playback has not started, so still not pressed.
+  fireEvent.click(upperButton('守'));
+  expect(upperButton('守')).toHaveAttribute('aria-pressed', 'false');
+
+  emit(audio(), 'playing');
+  expect(upperButton('守')).toHaveAttribute('aria-pressed', 'true');
+  expect(upperButton('望')).toHaveAttribute('aria-pressed', 'false');
+
+  // Paused: the upper button follows playback, while the row keeps its
+  // selection semantics.
+  fireEvent.click(screen.getByRole('button', { name: '暫停' }));
+  expect(upperButton('守')).toHaveAttribute('aria-pressed', 'false');
+  expect(playlistRow(0)).toHaveAttribute('aria-pressed', 'true');
+});
+
 test('loading and failed playback show localized status without announcing playback success', async () => {
   const { counter } = renderApp();
 

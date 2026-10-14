@@ -1,6 +1,5 @@
 import { expect, test } from '@playwright/test';
 import { mockCounterRoute } from './mock-counter.js';
-import { mockAudioRecordingRoutes } from './mock-audio-recording.js';
 import { mockPlaylistPlayer } from './mock-playlist-player.js';
 
 const INITIAL_TOTAL = 12544;
@@ -10,8 +9,6 @@ test.use({ locale: 'en-US' });
 
 test('reads the initial count and increments it on each action click', async ({ page }) => {
   const mock = mockCounterRoute(page, { initialTotal: INITIAL_TOTAL });
-
-  mockAudioRecordingRoutes(page);
 
   await page.goto('/');
 
@@ -69,6 +66,9 @@ test('playlist rows count once while transport, settings, and automatic advancem
   await page.getByRole('button', { name: 'Mute', exact: true }).click();
 
   // Automatic advancement (repeat all reaching the end) never counts either.
+  // Resume first: a real browser only ends a track that is actually playing, so
+  // firing ended while paused would simulate a sequence browsers never produce.
+  await media.fire('playing');
   await media.fire('ended');
   await expect(page.locator('.status')).toHaveText('Loading…');
   await media.fire('playing');

@@ -14,9 +14,10 @@
  * resolved absolute URL, and a `play()` promise that settles when the test
  * says playback starts (or refuses).
  *
- * Suites that only need recording *routes* (no media-event timing) should keep
- * using `mock-audio-recording.js` instead; real decoding/duration coverage
- * stays with the non-mocked tests in playlist.spec.js.
+ * Suites that only need recording *routes* (no media-event timing) use
+ * `mock-audio-recording.js`, which only takes effect in runs without the
+ * precaching service worker; real decoding/duration coverage stays with the
+ * non-mocked tests in playlist.spec.js.
  *
  * @param {import('@playwright/test').Page} page
  * @returns {Promise<{
@@ -67,7 +68,12 @@ export async function mockPlaylistPlayer(page) {
 
       emit(type) {
         this.eventLog.push(type);
-        for (const handler of [...(this._listeners.get(type) ?? [])]) handler({ type });
+        // Handlers may read event.target/currentTarget (real media events always
+        // carry the element), so hand out a real Event bound to this stand-in.
+        const event = new Event(type);
+        Object.defineProperty(event, 'target', { value: this });
+        Object.defineProperty(event, 'currentTarget', { value: this });
+        for (const handler of [...(this._listeners.get(type) ?? [])]) handler(event);
       }
 
       play() {

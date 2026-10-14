@@ -18,7 +18,9 @@ const resolveSource = (source) => new URL(source, document.baseURI).href;
 // Phase transitions are event-driven: media events (playing, pause, ended,
 // waiting, error, timeupdate, durationchange) and the play promise outcome
 // drive the phase; no polling. loadTokenRef/expectedSrcRef guard against
-// stale play rejections and late events from an interrupted source.
+// stale play rejections and late events from an interrupted source, and the
+// pause handler also requires the element to report itself paused so a queued
+// pause from the outgoing source cannot pause the track just selected.
 export function usePlaylistPlayer({ locale }) {
   const [selectedId, setSelectedId] = useState(null);
   const [phase, setPhase] = useState('idle');
@@ -68,6 +70,13 @@ export function usePlaylistPlayer({ locale }) {
         if (phaseRef.current === 'loading' || phaseRef.current === 'paused' || phaseRef.current === 'playing') applyPhase('playing');
       }],
       ['pause', () => {
+        // Stale-source guard, like every other listener. A real browser queues
+        // media events, so the pause() that startTrack/loadTrack issue on the
+        // outgoing source can be delivered after requestPlay has already set
+        // loading on the new source; by then the element reports itself playing
+        // again, so a pause that does not match the commanded source or the
+        // element's own paused flag belongs to an interrupted source.
+        if (!isCurrentSource() || !audio.paused) return;
         if (phaseRef.current === 'playing' || phaseRef.current === 'loading') applyPhase('paused');
       }],
       ['ended', () => {

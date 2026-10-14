@@ -71,7 +71,8 @@ class MockAudio {
     this.dispatchEvent(new Event(type));
   }
 
-  // Test helpers: settle every pending play() promise (oldest first).
+  // Test helpers: settle every pending play() promise (oldest first). For
+  // per-call control (race tests), settle one entry of playDeferreds instead.
   resolvePlay() {
     for (const deferred of this.playDeferreds.splice(0)) deferred.resolve();
   }

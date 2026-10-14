@@ -302,6 +302,47 @@ test('late events cannot advance an interrupted track', () => {
   expect(result.current.phase).toBe('loading');
 });
 
+test('a pause event queued by the previous source cannot pause the newly selected track', () => {
+  const { result } = renderPlayer();
+  const audio = selectAndPlay(result, 1);
+  expect(result.current.phase).toBe('playing');
+
+  act(() => { result.current.selectTrack(2); });
+  expect(result.current.phase).toBe('loading');
+
+  // Real browsers queue media events: the pause() startTrack issued on the old
+  // source can be delivered after requestPlay already set loading, while the
+  // element is playing the new source (paused is false again).
+  expect(audio.paused).toBe(false);
+  act(() => { audio.emit('pause'); });
+
+  expect(result.current.phase).toBe('loading');
+  expect(result.current.selectedId).toBe(2);
+});
+
+test('a pause event for an invalidated source is dropped', () => {
+  const { result, rerender } = renderPlayer();
+  const audio = selectAndPlay(result, 1);
+  expect(result.current.phase).toBe('playing');
+
+  rerender({ locale: 'en' });
+  expect(result.current.phase).toBe('idle');
+
+  act(() => { audio.emit('pause'); });
+
+  expect(result.current.phase).toBe('idle');
+});
+
+test('a browser-initiated pause still pauses the current source', () => {
+  const { result } = renderPlayer();
+  const audio = selectAndPlay(result, 1);
+
+  // The element paused itself (media session, audio focus): it reports paused.
+  act(() => { audio.pause(); audio.emit('pause'); });
+
+  expect(result.current.phase).toBe('paused');
+});
+
 test('pausing during loading stays paused when the pending play resolves', async () => {
   const { result } = renderPlayer();
   act(() => { result.current.selectTrack(1); });

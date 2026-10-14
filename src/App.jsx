@@ -115,6 +115,12 @@ export default function App() {
     window.alert(t({ id: 'install.fallbackAlert', message: "To install, use your browser's Add to Home Screen option." }));
   }
 
+  // The upper buttons report the player's playback state: pressed only while
+  // that same track is the one actually playing, the same condition that drives
+  // the playing highlight and the row badge (a paused selection stays
+  // unpressed, unlike the row, which reports selection).
+  const isPlayingButton = (id) => player.phase === 'playing' && player.selectedId === id;
+
   return (
     <main>
       <div className="top-bar">
@@ -161,7 +167,7 @@ export default function App() {
       </header>
 
       <section className="grid" aria-label={t({ id: 'actions.ariaLabel', message: 'First aid actions' })}>
-        {labels.buttons.map((label, index) => <button key={label} className={`btn-toy button-${index + 1}${player.phase === 'playing' && player.selectedId === index + 1 ? ' playing' : ''}`} onClick={() => selectInstruction(index + 1)}>{label}</button>)}
+        {labels.buttons.map((label, index) => <button key={label} className={`btn-toy button-${index + 1}${isPlayingButton(index + 1) ? ' playing' : ''}`} aria-pressed={isPlayingButton(index + 1)} onClick={() => selectInstruction(index + 1)}>{label}</button>)}
       </section>
 
       <p className="status" aria-live="polite">{statusText}</p>
