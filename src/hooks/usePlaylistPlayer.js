@@ -5,6 +5,11 @@ const TRACK_IDS = [1, 2, 3, 4];
 const REPEAT_MODES = ['off', 'all', 'one'];
 const PLAYBACK_RATES = [0.75, 1, 1.25, 1.5];
 
+// HTMLMediaElement.src reflects the resolved absolute URL, while the hook
+// tracks the relative recording path; compare resolved forms so real
+// browsers and jsdom agree about which source an event belongs to.
+const resolveSource = (source) => new URL(source, document.baseURI).href;
+
 // Page-owned player state for the four first-aid recordings. The hook owns
 // one lazily created Audio element and never calls the click counter; the
 // App routes counted clicks through selectTrack and calls transport
@@ -55,7 +60,7 @@ export function usePlaylistPlayer({ locale }) {
     // dropped, as are events after a locale change invalidated it.
     const isCurrentSource = () => {
       const expectedSource = expectedSrcRef.current;
-      return Boolean(expectedSource) && audio.src === expectedSource;
+      return Boolean(expectedSource) && resolveSource(audio.src) === resolveSource(expectedSource);
     };
     const listeners = [
       ['playing', () => {

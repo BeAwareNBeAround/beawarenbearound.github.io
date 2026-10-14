@@ -405,6 +405,24 @@ test('non-finite durations never enable seeking', () => {
   expect(audio.currentTime).toBe(0);
 });
 
+test('source events survive the browser reflecting src as an absolute URL', () => {
+  const { result } = renderPlayer();
+  act(() => { result.current.selectTrack(1); });
+  const audio = latestAudio();
+  // Real HTMLMediaElement.src getters return the resolved absolute URL;
+  // emulate that so the relative-vs-absolute comparison is locked in.
+  audio.src = new URL('./resources/stay-zh-HK.mp3', document.baseURI).href;
+
+  act(() => { audio.emit('playing'); });
+  expect(result.current.phase).toBe('playing');
+
+  act(() => { audio.currentTime = 3; audio.emit('timeupdate'); });
+  expect(result.current.currentTime).toBe(3);
+
+  act(() => { audio.emit('ended'); });
+  expect(result.current.phase).toBe('ended');
+});
+
 test('locale change stops playback, resets position, and keeps selection and settings', () => {
   const { result, rerender } = renderPlayer();
   act(() => { result.current.setRepeatMode('all'); });
