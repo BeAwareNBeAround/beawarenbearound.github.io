@@ -173,8 +173,8 @@ export default function App() {
         <ul><li><strong>{t({ id: 'whatIs.secureLabel', message: 'Secure the Surroundings:' })}</strong> {t({ id: 'whatIs.secureText', message: 'Clear hard objects and cushion their head.' })}</li><li><strong>{t({ id: 'whatIs.positionLabel', message: 'Position safely:' })}</strong> {t({ id: 'whatIs.positionText', message: 'Turn the person gently onto their side to keep their airway clear.' })}</li><li><strong>{t({ id: 'whatIs.supportLabel', message: 'Provide Support:' })}</strong> {t({ id: 'whatIs.supportText', message: 'Stay until the person is fully alert and offer calm reassurance.' })}</li></ul>
       </InfoPanel>
       <InfoPanel className="faq-guide" summary={labels.faq}>
-        <h3>{t({ id: 'faq.question1', message: 'Q1: Why is text-to-speech not working?' })}</h3>
-        <p>{t({ id: 'faq.answer1', message: "This app uses your phone's built-in text-to-speech engine. Download the required voice package, disable silent mode, and raise media volume." })}</p>
+        <h3>{t({ id: 'faq.question1', message: 'Q1: Why is there no sound in Education Mode?' })}</h3>
+        <p>{t({ id: 'faq.answer1', message: 'Action buttons play recorded audio. Check the media volume, disable silent mode, and refresh the page if the audio fails to load.' })}</p>
         <h3>{t({ id: 'faq.question3', message: 'Q3: Can I use the app offline?' })}</h3>
         <p>{t({ id: 'faq.answer3', message: 'Install this PWA or add it to your home screen after a successful first load.' })}</p>
         <h3>{t({ id: 'faq.question4', message: 'Q4: How does the global click counter work?' })}</h3>

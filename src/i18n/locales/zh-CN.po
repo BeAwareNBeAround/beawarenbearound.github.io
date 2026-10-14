@@ -139,6 +139,11 @@ msgid "footer.linkLabel"
 msgstr "🔗 了解更多 Epilepsy Foundation HK"
 
 #. js-lingui-explicit-id
+#: src/App.jsx:177
+msgid "faq.answer1"
+msgstr "点击按键会播放预录的语音。请检查媒体音量、关闭静音模式；若音频未能加载，请刷新页面。"
+
+#. js-lingui-explicit-id
 #: src/App.jsx:145
 msgid "video.title"
 msgstr "急性癫痫发作处理动画"
@@ -393,11 +398,6 @@ msgstr "点按下面 4 个按键了解口诀"
 #: src/App.jsx:181
 msgid "faq.answer4"
 msgstr "计数器显示所有用户点击过应用动作按钮的总次数。"
-
-#. js-lingui-explicit-id
-#: src/App.jsx:177
-msgid "faq.answer1"
-msgstr "本应用程序使用手机内置的语音引擎。请下载对应语言包，关闭静音模式并调高媒体音量。"
 
 #. js-lingui-explicit-id
 #: src/App.jsx:89

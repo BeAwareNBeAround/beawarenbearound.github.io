@@ -139,6 +139,11 @@ msgid "footer.linkLabel"
 msgstr "🔗 Learn more about Epilepsy Foundation HK"
 
 #. js-lingui-explicit-id
+#: src/App.jsx:177
+msgid "faq.answer1"
+msgstr "Action buttons play recorded audio. Check the media volume, disable silent mode, and refresh the page if the audio fails to load."
+
+#. js-lingui-explicit-id
 #: src/App.jsx:145
 msgid "video.title"
 msgstr "Acute Seizure Animation"
@@ -312,7 +317,7 @@ msgstr "Provide Support:"
 #. js-lingui-explicit-id
 #: src/App.jsx:176
 msgid "faq.question1"
-msgstr "Q1: Why is text-to-speech not working?"
+msgstr "Q1: Why is there no sound in Education Mode?"
 
 #. js-lingui-explicit-id
 #: src/App.jsx:178
@@ -393,11 +398,6 @@ msgstr "Tap the 4 buttons below to learn the steps"
 #: src/App.jsx:181
 msgid "faq.answer4"
 msgstr "The counter shows the total number of times the app's action buttons have been clicked, across all users."
-
-#. js-lingui-explicit-id
-#: src/App.jsx:177
-msgid "faq.answer1"
-msgstr "This app uses your phone's built-in text-to-speech engine. Download the required voice package, disable silent mode, and raise media volume."
 
 #. js-lingui-explicit-id
 #: src/App.jsx:89

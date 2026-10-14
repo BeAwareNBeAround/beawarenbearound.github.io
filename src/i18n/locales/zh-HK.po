@@ -139,6 +139,11 @@ msgid "footer.linkLabel"
 msgstr "🔗 了解更多 Epilepsy Foundation HK"
 
 #. js-lingui-explicit-id
+#: src/App.jsx:177
+msgid "faq.answer1"
+msgstr "點擊按鍵會播放預錄的語音。請檢查媒體音量、關閉靜音模式；若音訊未能載入，請重新整理頁面。"
+
+#. js-lingui-explicit-id
 #: src/App.jsx:145
 msgid "video.title"
 msgstr "急性腦癇發作處理動畫"
@@ -393,11 +398,6 @@ msgstr "點按下面 4 個按鍵了解口訣"
 #: src/App.jsx:181
 msgid "faq.answer4"
 msgstr "計數器顯示所有用戶按過應用程式動作按鍵的總次數。"
-
-#. js-lingui-explicit-id
-#: src/App.jsx:177
-msgid "faq.answer1"
-msgstr "本應用程式使用手機內置的語音引擎。請下載對應語言包，關閉靜音模式並調高媒體音量。"
 
 #. js-lingui-explicit-id
 #: src/App.jsx:89

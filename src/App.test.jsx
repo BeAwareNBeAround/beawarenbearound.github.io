@@ -189,7 +189,7 @@ test('switches the setup, guidance, FAQ, and footer content between languages', 
   expect(screen.getByText('Be Aware of the time. Be Around for the safe recovery.')).toBeInTheDocument();
   closeInfoPanel(englishWhatIsPanel, 'Close');
   const englishFaqPanel = openInfoPanel('❓ Frequently Asked Questions (FAQ)');
-  expect(screen.getByRole('heading', { name: 'Q1: Why is text-to-speech not working?' })).toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: 'Q1: Why is there no sound in Education Mode?' })).toBeInTheDocument();
   expect(screen.getByText("The counter shows the total number of times the app's action buttons have been clicked, across all users.")).toBeInTheDocument();
   closeInfoPanel(englishFaqPanel, 'Close');
   expect(screen.getByRole('link', { name: '🔗 Learn more about Epilepsy Foundation HK' })).toBeInTheDocument();
