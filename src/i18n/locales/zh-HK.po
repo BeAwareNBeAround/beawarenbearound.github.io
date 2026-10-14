@@ -89,7 +89,27 @@ msgstr ""
 #~ msgstr "開啟錄音模式後，點擊任何顏色按鍵錄製聲音（最長60秒），關閉後點擊按鍵即可播放。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:150
+#: src/App.jsx:82
+#~ msgid "education.step4"
+#~ msgstr "助。尋求協助。陪伴患者直至清醒，若超過五分鐘請召喚救護車。"
+
+#. js-lingui-explicit-id
+#: src/App.jsx:80
+#~ msgid "education.step2"
+#~ msgstr "望。觀察並保護患者。移開附近危險物品，用軟物墊著患者頭部。"
+
+#. js-lingui-explicit-id
+#: src/App.jsx:81
+#~ msgid "education.step3"
+#~ msgstr "相。將患者輕輕翻側，保持呼吸道暢通。切勿強行將任何物品塞入患者口中。"
+
+#. js-lingui-explicit-id
+#: src/App.jsx:79
+#~ msgid "education.step1"
+#~ msgstr "守。保持鎮定，記錄抽搐開始及持續的時間。"
+
+#. js-lingui-explicit-id
+#: src/App.jsx:144
 msgid "video.label"
 msgstr "▶️ 急性腦癇發作處理動畫"
 
@@ -114,12 +134,12 @@ msgid "setup.summary"
 msgstr "📲 安裝及使用指南"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:190
+#: src/App.jsx:184
 msgid "footer.linkLabel"
 msgstr "🔗 了解更多 Epilepsy Foundation HK"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:151
+#: src/App.jsx:145
 msgid "video.title"
 msgstr "急性腦癇發作處理動畫"
 
@@ -129,47 +149,47 @@ msgid "header.subtitle"
 msgstr "處理急性腦癇發作的口訣"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:165
+#: src/App.jsx:159
 msgid "setup.androidLabel"
 msgstr "Android："
 
 #. js-lingui-explicit-id
-#: src/App.jsx:177
+#: src/App.jsx:171
 msgid "whatIs.environmentLabel"
 msgstr "評估環境："
 
 #. js-lingui-explicit-id
-#: src/App.jsx:175
+#: src/App.jsx:169
 msgid "whatIs.tagline3"
 msgstr "知道該做什麼，在最需要時陪伴左右。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:178
+#: src/App.jsx:172
 msgid "whatIs.aroundHeading"
 msgstr "Be Around（實際保護與照顧）"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:176
+#: src/App.jsx:170
 msgid "whatIs.awareHeading"
 msgstr "Be Aware（保持警覺與急救知識）"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:129
+#: src/App.jsx:123
 msgid "app.title"
 msgstr "Be Aware n' Be Around"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:173
+#: src/App.jsx:167
 msgid "whatIs.tagline1"
 msgstr "留意發作時間，陪伴患者安全復原。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:174
+#: src/App.jsx:168
 msgid "whatIs.tagline2"
 msgstr "Be Aware：不要壓制。Be Around：保護並陪伴。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:179
+#: src/App.jsx:173
 msgid "whatIs.secureText"
 msgstr "移開硬物，並在患者頭下墊上軟物。"
 
@@ -189,22 +209,22 @@ msgid "status.educationDefault"
 msgstr "教育模式：請點擊按鍵聆聽指示。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:103
+#: src/App.jsx:97
 msgid "organization.logoAlt"
 msgstr "香港腦癇基金會"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:107
+#: src/App.jsx:101
 msgid "organization.name"
 msgstr "Epilepsy Foundation of Hong Kong"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:143
+#: src/App.jsx:137
 msgid "actions.ariaLabel"
 msgstr "急救行動"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:158
+#: src/App.jsx:152
 msgid "guide.step3"
 msgstr "將患者輕輕翻側，保持呼吸道暢通。切勿強行將任何物品塞入患者口中。"
 
@@ -219,98 +239,93 @@ msgid "action.help"
 msgstr "助"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:82
-msgid "education.step4"
-msgstr "助。尋求協助。陪伴患者直至清醒，若超過五分鐘請召喚救護車。"
-
-#. js-lingui-explicit-id
-#: src/App.jsx:164
+#: src/App.jsx:158
 msgid "setup.installHeading"
 msgstr "如何安裝至手機"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:166
+#: src/App.jsx:160
 msgid "setup.operateHeading"
 msgstr "如何操作"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:185
+#: src/App.jsx:179
 msgid "faq.answer3"
 msgstr "首次成功載入後，安裝此 PWA 或加入主畫面即可離線使用。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:165
+#: src/App.jsx:159
 msgid "setup.iosLabel"
 msgstr "iPhone (iOS)："
 
 #. js-lingui-explicit-id
-#: src/App.jsx:177
+#: src/App.jsx:171
 msgid "whatIs.dontsLabel"
 msgstr "了解不要做什麼："
 
 #. js-lingui-explicit-id
-#: src/App.jsx:111
-#: src/App.jsx:115
+#: src/App.jsx:105
+#: src/App.jsx:109
 msgid "language.selectorLabel"
 msgstr "語言"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:177
+#: src/App.jsx:171
 msgid "whatIs.dontsText"
 msgstr "切勿壓制患者的動作或把任何物品放入口中。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:177
+#: src/App.jsx:171
 msgid "whatIs.recognizeText"
 msgstr "記下發作開始時間；如超過五分鐘，請召喚緊急服務。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:157
+#: src/App.jsx:151
 msgid "guide.step2"
 msgstr "觀察並保護患者。移開附近危險物品，用軟物墊著患者頭部。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:165
+#: src/App.jsx:159
 msgid "setup.androidInstructions"
 msgstr "使用 Chrome 瀏覽器開啟，點擊右上角選單，然後選擇「加到主畫面」。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:165
+#: src/App.jsx:159
 msgid "setup.iosInstructions"
 msgstr "使用 Safari 瀏覽器開啟此網頁，點擊「分享」圖示，然後選擇「加入主畫面」。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:85
+#: src/App.jsx:79
 msgid "status.playingEducation"
 msgstr "播放教育步驟 {id}..."
 
 #. js-lingui-explicit-id
-#: src/App.jsx:179
+#: src/App.jsx:173
 msgid "whatIs.positionLabel"
 msgstr "安全擺位："
 
 #. js-lingui-explicit-id
-#: src/App.jsx:179
+#: src/App.jsx:173
 msgid "whatIs.supportLabel"
 msgstr "提供支持："
 
 #. js-lingui-explicit-id
-#: src/App.jsx:182
+#: src/App.jsx:176
 msgid "faq.question1"
 msgstr "Q1: 為什麼教育模式沒有聲音？"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:184
+#: src/App.jsx:178
 msgid "faq.question3"
 msgstr "Q3: 如何確保離線時也能使用？"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:186
+#: src/App.jsx:180
 msgid "faq.question4"
 msgstr "Q4: 為什麼點擊次數沒有立即更新？"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:177
+#: src/App.jsx:171
 msgid "whatIs.recognizeLabel"
 msgstr "辨認與計時："
 
@@ -320,17 +335,12 @@ msgid "action.safe"
 msgstr "望"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:80
-msgid "education.step2"
-msgstr "望。觀察並保護患者。移開附近危險物品，用軟物墊著患者頭部。"
-
-#. js-lingui-explicit-id
-#: src/App.jsx:179
+#: src/App.jsx:173
 msgid "whatIs.secureLabel"
 msgstr "清理周邊環境："
 
 #. js-lingui-explicit-id
-#: src/App.jsx:159
+#: src/App.jsx:153
 msgid "guide.step4"
 msgstr "尋求協助。陪伴患者直至清醒，若超過五分鐘請召喚救護車。"
 
@@ -345,12 +355,7 @@ msgid "action.side"
 msgstr "相"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:81
-msgid "education.step3"
-msgstr "相。將患者輕輕翻側，保持呼吸道暢通。切勿強行將任何物品塞入患者口中。"
-
-#. js-lingui-explicit-id
-#: src/App.jsx:177
+#: src/App.jsx:171
 msgid "whatIs.environmentText"
 msgstr "留意尖角、水域或樓梯等實際危險。"
 
@@ -360,12 +365,12 @@ msgid "action.stay"
 msgstr "守"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:156
+#: src/App.jsx:150
 msgid "guide.step1"
 msgstr "保持鎮定，記錄抽搐開始及持續的時間。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:179
+#: src/App.jsx:173
 msgid "whatIs.supportText"
 msgstr "陪伴患者直至完全清醒，並給予平靜的安慰。"
 
@@ -375,12 +380,7 @@ msgid "header.slogan"
 msgstr "守、望、相、助"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:79
-msgid "education.step1"
-msgstr "守。保持鎮定，記錄抽搐開始及持續的時間。"
-
-#. js-lingui-explicit-id
-#: src/App.jsx:167
+#: src/App.jsx:161
 msgid "setup.educationInstructions"
 msgstr "點擊顏色按鍵，手機會播放該步驟的急救指示。"
 
@@ -390,26 +390,26 @@ msgid "header.secondarySubtitle"
 msgstr "點按下面 4 個按鍵了解口訣"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:187
+#: src/App.jsx:181
 msgid "faq.answer4"
 msgstr "計數器顯示所有用戶按過應用程式動作按鍵的總次數。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:183
+#: src/App.jsx:177
 msgid "faq.answer1"
 msgstr "本應用程式使用手機內置的語音引擎。請下載對應語言包，關閉靜音模式並調高媒體音量。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:95
+#: src/App.jsx:89
 msgid "install.fallbackAlert"
 msgstr "請使用瀏覽器的「加入主畫面」選項安裝。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:179
+#: src/App.jsx:173
 msgid "whatIs.positionText"
 msgstr "將患者輕輕翻側，保持呼吸道暢通。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:106
+#: src/App.jsx:100
 msgid "organization.nameChinese"
 msgstr "香港腦癇基金會"

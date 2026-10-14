@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { t } from '@lingui/core/macro';
 import { APP_LOCALES, activateLocale, i18n } from './i18n/setup';
-import { speak } from './services/speech';
+import { playActionAudio } from './services/audio';
 import { getInstallId, getInstallAction, isIOS } from './services/install';
 import { useClickCounter } from './hooks/useClickCounter';
 import { ClickCounter } from './components/ClickCounter';
@@ -75,14 +75,8 @@ export default function App() {
 
   function activateAction(id) {
     trackClick(id);
-    const steps = [
-      t({ id: 'education.step1', message: 'STAY. Stay calm and time the seizure.' }),
-      t({ id: 'education.step2', message: 'SAFE. Observe and keep the person safe. Clear hard objects and cushion their head.' }),
-      t({ id: 'education.step3', message: 'SIDE. Gently roll the person onto their side. Never put anything in their mouth.' }),
-      t({ id: 'education.step4', message: 'HELP. Seek help. Stay with them until fully conscious, and call an ambulance if it lasts over five minutes.' }),
-    ];
-    const didSpeak = speak(steps[id - 1], APP_LOCALES[language].speechLocale);
-    setStatus(didSpeak ? i18n._({ id: 'status.playingEducation', message: 'Playing education step {id}...' }, { id }) : educationStatus());
+    const didPlay = playActionAudio(id, language);
+    setStatus(didPlay ? i18n._({ id: 'status.playingEducation', message: 'Playing education step {id}...' }, { id }) : educationStatus());
   }
 
   async function installApp() {

@@ -1,8 +1,13 @@
 import { fireEvent, render, screen, within } from '@testing-library/react';
-import { expect, test, vi } from 'vitest';
+import { beforeEach, expect, test, vi } from 'vitest';
 import { I18nProvider } from '@lingui/react';
 import App from './App';
 import { activateLocale, i18n } from './i18n/setup';
+import { __resetAudioPlayer } from './services/audio';
+
+beforeEach(() => {
+  __resetAudioPlayer();
+});
 
 function stubCounter(initialTotal = 12544) {
   let total = initialTotal;
@@ -219,8 +224,6 @@ test('does not describe the unreachable toy mode in the setup or FAQ panels', ()
 });
 
 test('renders the Traditional Chinese education status with its action identifier', async () => {
-  const speak = vi.spyOn(window.speechSynthesis, 'speak').mockImplementation(() => {});
-  vi.spyOn(window.speechSynthesis, 'cancel').mockImplementation(() => {});
   const { counter } = renderApp('en');
 
   expect(await screen.findByText('12,544')).toBeInTheDocument();
@@ -234,14 +237,13 @@ test('renders the Traditional Chinese education status with its action identifie
   expect(clickPost).toBeDefined();
   expect(clickPost.body.action).toBe('click');
   expect(clickPost.body.action_target).toBe('1');
-  expect(speak).toHaveBeenCalledOnce();
+  const played = window.MockAudioInstances.at(-1);
+  expect(played.src).toBe('./resources/stay-zh-HK.mp3');
   expect(screen.getByText('播放教育步驟 1...')).toBeInTheDocument();
   expect(await screen.findByText('12,545')).toBeInTheDocument();
 });
 
 test('renders the English education status with its action identifier', () => {
-  vi.spyOn(window.speechSynthesis, 'speak').mockImplementation(() => {});
-  vi.spyOn(window.speechSynthesis, 'cancel').mockImplementation(() => {});
   renderApp();
 
   fireEvent.click(screen.getByRole('button', { name: '語言' }));
@@ -249,5 +251,7 @@ test('renders the English education status with its action identifier', () => {
 
   fireEvent.click(screen.getByRole('button', { name: 'STAY' }));
 
+  const played = window.MockAudioInstances.at(-1);
+  expect(played.src).toBe('./resources/stay-en.mp3');
   expect(screen.getByText('Playing education step 1...')).toBeInTheDocument();
 });

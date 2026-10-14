@@ -5,10 +5,10 @@ test('starts in Traditional Chinese', () => {
   expect(i18n.locale).toBe('zh-HK');
 });
 
-test('maps selector locales to speech locales', () => {
-  expect(APP_LOCALES['zh-HK'].speechLocale).toBe('zh-HK');
-  expect(APP_LOCALES['zh-CN'].speechLocale).toBe('zh-CN');
-  expect(APP_LOCALES.en.speechLocale).toBe('en-US');
+test('maps selector labels for every supported locale', () => {
+  expect(APP_LOCALES['zh-HK'].selectorLabel).toBe('繁體');
+  expect(APP_LOCALES['zh-CN'].selectorLabel).toBe('简体');
+  expect(APP_LOCALES.en.selectorLabel).toBe('EN');
 });
 
 test('activates a supported local catalog', () => {

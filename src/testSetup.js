@@ -9,19 +9,24 @@ afterEach(() => {
   localStorage.clear();
 });
 
-Object.defineProperty(window, 'speechSynthesis', {
-  value: { cancel: vi.fn(), speak: vi.fn() },
-  configurable: true,
-});
-
-window.SpeechSynthesisUtterance = class SpeechSynthesisUtterance {
-  constructor(text) {
-    this.text = text;
+// Mock HTMLAudioElement: services/hooks construct `new Audio(...)`; tests
+// inspect the recorded instances (src, play/pause calls) via
+// window.MockAudioInstances. Defined permanently (not vi.stubGlobal) so the
+// mock survives the per-test global restoration in afterEach.
+class MockAudio {
+  constructor(src) {
+    this.src = src ?? '';
+    this.play = vi.fn(() => Promise.resolve());
+    this.pause = vi.fn();
+    window.MockAudioInstances.push(this);
   }
-};
+}
+window.MockAudioInstances = [];
+Object.defineProperty(window, 'Audio', { value: MockAudio, configurable: true });
 
-HTMLMediaElement.prototype.pause = vi.fn();
-HTMLMediaElement.prototype.play = vi.fn(() => Promise.resolve());
+afterEach(() => {
+  window.MockAudioInstances = [];
+});
 
 // jsdom only implements the <dialog> `open` attribute reflection; mirror the
 // native lifecycle so components can use showModal()/show()/close().
