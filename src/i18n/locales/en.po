@@ -229,6 +229,11 @@ msgid "actions.ariaLabel"
 msgstr "First aid actions"
 
 #. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:61
+msgid "playlist.cardLabel"
+msgstr "First aid audio guide"
+
+#. js-lingui-explicit-id
 #: src/App.jsx:147
 msgid "guide.step3"
 msgstr "Gently roll the person onto their side. Never put anything in their mouth."
@@ -275,9 +280,24 @@ msgid "language.selectorLabel"
 msgstr "Language"
 
 #. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:55
+msgid "playlist.loading"
+msgstr "Loading…"
+
+#. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:191
+msgid "playlist.mute"
+msgstr "Mute"
+
+#. js-lingui-explicit-id
 #: src/App.jsx:171
 msgid "whatIs.dontsText"
 msgstr "Never restrain movement or place anything in the person's mouth."
+
+#. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:104
+msgid "playlist.next"
+msgstr "Next"
 
 #. js-lingui-explicit-id
 #: src/App.jsx:171
@@ -300,6 +320,26 @@ msgid "setup.iosInstructions"
 msgstr "Open in Safari, tap Share, then select Add to Home Screen."
 
 #. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:99
+msgid "playlist.pause"
+msgstr "Pause"
+
+#. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:99
+msgid "playlist.play"
+msgstr "Play"
+
+#. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:57
+msgid "playlist.error"
+msgstr "Playback failed. Press play to try again."
+
+#. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:53
+msgid "playlist.seek"
+msgstr "Playback position"
+
+#. js-lingui-explicit-id
 #: src/App.jsx:79
 msgid "status.playingEducation"
 msgstr "Playing education step {id}..."
@@ -308,6 +348,11 @@ msgstr "Playing education step {id}..."
 #: src/App.jsx:173
 msgid "whatIs.positionLabel"
 msgstr "Position safely:"
+
+#. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:92
+msgid "playlist.previous"
+msgstr "Previous"
 
 #. js-lingui-explicit-id
 #: src/App.jsx:173
@@ -335,6 +380,27 @@ msgid "whatIs.recognizeLabel"
 msgstr "Recognize & Time:"
 
 #. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:143
+#: src/components/FirstAidPlaylist.jsx:144
+msgid "playlist.repeat"
+msgstr "Repeat"
+
+#. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:148
+msgid "playlist.repeatAll"
+msgstr "Repeat all"
+
+#. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:147
+msgid "playlist.repeatOff"
+msgstr "Repeat off"
+
+#. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:149
+msgid "playlist.repeatOne"
+msgstr "Repeat one"
+
+#. js-lingui-explicit-id
 #: src/App.jsx:28
 msgid "action.safe"
 msgstr "SAFE"
@@ -355,9 +421,21 @@ msgid "guide.title"
 msgstr "Seizure First Aid Guide"
 
 #. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:123
+#: src/components/FirstAidPlaylist.jsx:126
+msgid "playlist.settings"
+msgstr "Settings"
+
+#. js-lingui-explicit-id
 #: src/App.jsx:29
 msgid "action.side"
 msgstr "SIDE"
+
+#. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:127
+#: src/components/FirstAidPlaylist.jsx:128
+msgid "playlist.speed"
+msgstr "Speed"
 
 #. js-lingui-explicit-id
 #: src/App.jsx:171
@@ -408,6 +486,21 @@ msgstr "To install, use your browser's Add to Home Screen option."
 #: src/App.jsx:173
 msgid "whatIs.positionText"
 msgstr "Turn the person gently onto their side to keep their airway clear."
+
+#. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:190
+msgid "playlist.unmute"
+msgstr "Unmute"
+
+#. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:210
+msgid "playlist.deviceVolume"
+msgstr "Use your device's volume buttons to adjust the volume."
+
+#. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:204
+msgid "playlist.volume"
+msgstr "Volume"
 
 #. js-lingui-explicit-id
 #: src/App.jsx:100

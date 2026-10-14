@@ -229,6 +229,11 @@ msgid "actions.ariaLabel"
 msgstr "急救行動"
 
 #. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:61
+msgid "playlist.cardLabel"
+msgstr "急救語音指引"
+
+#. js-lingui-explicit-id
 #: src/App.jsx:147
 msgid "guide.step3"
 msgstr "將患者輕輕翻側，保持呼吸道暢通。切勿強行將任何物品塞入患者口中。"
@@ -275,9 +280,24 @@ msgid "language.selectorLabel"
 msgstr "語言"
 
 #. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:55
+msgid "playlist.loading"
+msgstr "載入中…"
+
+#. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:191
+msgid "playlist.mute"
+msgstr "靜音"
+
+#. js-lingui-explicit-id
 #: src/App.jsx:171
 msgid "whatIs.dontsText"
 msgstr "切勿壓制患者的動作或把任何物品放入口中。"
+
+#. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:104
+msgid "playlist.next"
+msgstr "下一段"
 
 #. js-lingui-explicit-id
 #: src/App.jsx:171
@@ -300,6 +320,26 @@ msgid "setup.iosInstructions"
 msgstr "使用 Safari 瀏覽器開啟此網頁，點擊「分享」圖示，然後選擇「加入主畫面」。"
 
 #. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:99
+msgid "playlist.pause"
+msgstr "暫停"
+
+#. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:99
+msgid "playlist.play"
+msgstr "播放"
+
+#. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:57
+msgid "playlist.error"
+msgstr "播放失敗，請按播放重試。"
+
+#. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:53
+msgid "playlist.seek"
+msgstr "播放位置"
+
+#. js-lingui-explicit-id
 #: src/App.jsx:79
 msgid "status.playingEducation"
 msgstr "播放教育步驟 {id}..."
@@ -308,6 +348,11 @@ msgstr "播放教育步驟 {id}..."
 #: src/App.jsx:173
 msgid "whatIs.positionLabel"
 msgstr "安全擺位："
+
+#. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:92
+msgid "playlist.previous"
+msgstr "上一段"
 
 #. js-lingui-explicit-id
 #: src/App.jsx:173
@@ -335,6 +380,27 @@ msgid "whatIs.recognizeLabel"
 msgstr "辨認與計時："
 
 #. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:143
+#: src/components/FirstAidPlaylist.jsx:144
+msgid "playlist.repeat"
+msgstr "重複播放"
+
+#. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:148
+msgid "playlist.repeatAll"
+msgstr "全部重複"
+
+#. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:147
+msgid "playlist.repeatOff"
+msgstr "不重複"
+
+#. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:149
+msgid "playlist.repeatOne"
+msgstr "單曲重複"
+
+#. js-lingui-explicit-id
 #: src/App.jsx:28
 msgid "action.safe"
 msgstr "望"
@@ -355,9 +421,21 @@ msgid "guide.title"
 msgstr "守望相助 急救指南"
 
 #. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:123
+#: src/components/FirstAidPlaylist.jsx:126
+msgid "playlist.settings"
+msgstr "播放設定"
+
+#. js-lingui-explicit-id
 #: src/App.jsx:29
 msgid "action.side"
 msgstr "相"
+
+#. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:127
+#: src/components/FirstAidPlaylist.jsx:128
+msgid "playlist.speed"
+msgstr "速度"
 
 #. js-lingui-explicit-id
 #: src/App.jsx:171
@@ -408,6 +486,21 @@ msgstr "請使用瀏覽器的「加入主畫面」選項安裝。"
 #: src/App.jsx:173
 msgid "whatIs.positionText"
 msgstr "將患者輕輕翻側，保持呼吸道暢通。"
+
+#. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:190
+msgid "playlist.unmute"
+msgstr "取消靜音"
+
+#. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:210
+msgid "playlist.deviceVolume"
+msgstr "請使用裝置的音量按鍵調整音量。"
+
+#. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:204
+msgid "playlist.volume"
+msgstr "音量"
 
 #. js-lingui-explicit-id
 #: src/App.jsx:100
