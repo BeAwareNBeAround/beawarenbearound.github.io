@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { t } from '@lingui/core/macro';
+import { i18n } from '../i18n/setup';
 import { isIOS } from '../services/install';
 import './FirstAidPlaylist.css';
 
@@ -17,7 +18,15 @@ function formatTime(seconds) {
 // counted onSelectTrack callback; transport and settings controls call the
 // player commands directly and never count clicks. The component creates no
 // Audio, touches no storage, and resolves no source paths itself.
-export function FirstAidPlaylist({ tracks, player, onSelectTrack }) {
+//
+// volumeSupported gates the in-app volume controls. Some devices restrict
+// browser-controlled media volume — iOS Safari silently ignores
+// HTMLMediaElement volume/muted assignment — and on those a slider would
+// falsely appear to adjust sound. There is no DOM capability query for this,
+// so the default gate keys on that known restricted platform; the gate is
+// injectable so real-device verification (or a future capability signal from
+// the player) can override the heuristic without hard-coding OS identity.
+export function FirstAidPlaylist({ tracks, player, onSelectTrack, volumeSupported = !isIOS() }) {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const settingsRef = useRef(null);
   const settingsButtonRef = useRef(null);
@@ -27,7 +36,6 @@ export function FirstAidPlaylist({ tracks, player, onSelectTrack }) {
   // While a track is loading or playing, the play button offers pause; the
   // row-level "now playing" badge is only for the audible phase.
   const isBusy = player.phase === 'playing' || player.phase === 'loading';
-  const volumeSupported = !isIOS();
 
   // Escape and outside pointer-down close the settings panel; Escape also
   // returns focus to the toggle (same pattern as the app language menu).
@@ -133,6 +141,7 @@ export function FirstAidPlaylist({ tracks, player, onSelectTrack }) {
                       type="button"
                       className="playlist-choice"
                       aria-pressed={player.playbackRate === rate}
+                      aria-label={i18n._({ id: 'playlist.speedOption', message: 'Speed {rate}×' }, { rate })}
                       onClick={() => player.setPlaybackRate(rate)}
                     >
                       {rate}×

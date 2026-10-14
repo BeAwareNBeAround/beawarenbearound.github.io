@@ -36,17 +36,17 @@ function createStubPlayer(overrides = {}) {
   };
 }
 
-function renderPlaylist({ locale = 'en', tracks = TRACKS, player = createStubPlayer(), onSelectTrack = vi.fn() } = {}) {
+function renderPlaylist({ locale = 'en', tracks = TRACKS, player = createStubPlayer(), onSelectTrack = vi.fn(), volumeSupported } = {}) {
   activateLocale(locale);
   const view = render(
     <I18nProvider i18n={i18n}>
-      <FirstAidPlaylist tracks={tracks} player={player} onSelectTrack={onSelectTrack} />
+      <FirstAidPlaylist tracks={tracks} player={player} onSelectTrack={onSelectTrack} volumeSupported={volumeSupported} />
     </I18nProvider>,
   );
   const rerenderWith = (overrides = {}) => {
     view.rerender(
       <I18nProvider i18n={i18n}>
-        <FirstAidPlaylist tracks={tracks} player={{ ...player, ...overrides }} onSelectTrack={onSelectTrack} />
+        <FirstAidPlaylist tracks={tracks} player={{ ...player, ...overrides }} onSelectTrack={onSelectTrack} volumeSupported={volumeSupported} />
       </I18nProvider>,
     );
   };
@@ -201,11 +201,11 @@ test('settings exposes speed and repeat choices, defaulting to 1x and repeat off
   fireEvent.click(screen.getByRole('button', { name: 'Settings' }));
 
   const speedGroup = screen.getByRole('group', { name: 'Speed' });
-  for (const label of ['0.75×', '1×', '1.25×', '1.5×']) {
+  for (const label of ['Speed 0.75×', 'Speed 1×', 'Speed 1.25×', 'Speed 1.5×']) {
     expect(within(speedGroup).getByRole('button', { name: label })).toBeInTheDocument();
   }
-  expect(within(speedGroup).getByRole('button', { name: '1×' })).toHaveAttribute('aria-pressed', 'true');
-  expect(within(speedGroup).getByRole('button', { name: '0.75×' })).toHaveAttribute('aria-pressed', 'false');
+  expect(within(speedGroup).getByRole('button', { name: 'Speed 1×' })).toHaveAttribute('aria-pressed', 'true');
+  expect(within(speedGroup).getByRole('button', { name: 'Speed 0.75×' })).toHaveAttribute('aria-pressed', 'false');
 
   const repeatGroup = screen.getByRole('group', { name: 'Repeat' });
   for (const label of ['Repeat off', 'Repeat all', 'Repeat one']) {
@@ -218,7 +218,7 @@ test('choosing a speed or repeat mode calls the exact command and updates the pr
   const { player, rerenderWith } = renderPlaylist();
 
   fireEvent.click(screen.getByRole('button', { name: 'Settings' }));
-  fireEvent.click(within(screen.getByRole('group', { name: 'Speed' })).getByRole('button', { name: '1.25×' }));
+  fireEvent.click(within(screen.getByRole('group', { name: 'Speed' })).getByRole('button', { name: 'Speed 1.25×' }));
   expect(player.setPlaybackRate).toHaveBeenCalledTimes(1);
   expect(player.setPlaybackRate).toHaveBeenCalledWith(1.25);
 
@@ -230,8 +230,8 @@ test('choosing a speed or repeat mode calls the exact command and updates the pr
   // The panel stays open so several settings can be adjusted together.
   rerenderWith({ playbackRate: 1.25, repeatMode: 'one' });
   const speedGroup = screen.getByRole('group', { name: 'Speed' });
-  expect(within(speedGroup).getByRole('button', { name: '1×' })).toHaveAttribute('aria-pressed', 'false');
-  expect(within(speedGroup).getByRole('button', { name: '1.25×' })).toHaveAttribute('aria-pressed', 'true');
+  expect(within(speedGroup).getByRole('button', { name: 'Speed 1×' })).toHaveAttribute('aria-pressed', 'false');
+  expect(within(speedGroup).getByRole('button', { name: 'Speed 1.25×' })).toHaveAttribute('aria-pressed', 'true');
   expect(within(repeatGroup).getByRole('button', { name: 'Repeat off' })).toHaveAttribute('aria-pressed', 'false');
   expect(within(repeatGroup).getByRole('button', { name: 'Repeat one' })).toHaveAttribute('aria-pressed', 'true');
 });
@@ -294,6 +294,35 @@ test('unsupported device volume falls back to guidance instead of pretending to 
   }
 });
 
+test('an explicit volumeSupported=false forces the fallback without any platform sniffing', () => {
+  const { player } = renderPlaylist({ volumeSupported: false });
+
+  expect(screen.queryByRole('slider', { name: 'Volume' })).not.toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: 'Mute' })).not.toBeInTheDocument();
+  expect(screen.getByText("Use your device's volume buttons to adjust the volume.")).toBeInTheDocument();
+  expect(player.setVolume).not.toHaveBeenCalled();
+  expect(player.setMuted).not.toHaveBeenCalled();
+});
+
+test('an explicit volumeSupported=true overrides the restricted-platform heuristic', () => {
+  const originalUserAgent = window.navigator.userAgent;
+  Object.defineProperty(window.navigator, 'userAgent', {
+    value: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1',
+    configurable: true,
+  });
+  try {
+    const { player } = renderPlaylist({ volumeSupported: true });
+
+    expect(screen.getByRole('slider', { name: 'Volume' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Mute' })).toBeInTheDocument();
+    expect(screen.queryByText("Use your device's volume buttons to adjust the volume.")).not.toBeInTheDocument();
+    expect(player.setVolume).not.toHaveBeenCalled();
+    expect(player.setMuted).not.toHaveBeenCalled();
+  } finally {
+    Object.defineProperty(window.navigator, 'userAgent', { value: originalUserAgent, configurable: true });
+  }
+});
+
 test('control labels, loading, and repeat choices are translated in zh-HK', () => {
   renderPlaylist({ locale: 'zh-HK', player: createStubPlayer({ phase: 'loading' }) });
 
@@ -304,6 +333,8 @@ test('control labels, loading, and repeat choices are translated in zh-HK', () =
   expect(screen.getByText('載入中…')).toBeInTheDocument();
 
   fireEvent.click(screen.getByRole('button', { name: '播放設定' }));
+  const speedGroup = screen.getByRole('group', { name: '速度' });
+  expect(within(speedGroup).getByRole('button', { name: '速度 0.75×' })).toBeInTheDocument();
   const repeatGroup = screen.getByRole('group', { name: '重複播放' });
   expect(within(repeatGroup).getByRole('button', { name: '不重複' })).toBeInTheDocument();
   expect(within(repeatGroup).getByRole('button', { name: '全部重複' })).toBeInTheDocument();
@@ -320,4 +351,7 @@ test('control labels, pause, and error are translated in zh-CN', () => {
 
   rerenderWith({ phase: 'error' });
   expect(screen.getByText('播放失败，请按播放重试。')).toBeInTheDocument();
+
+  fireEvent.click(screen.getByRole('button', { name: '播放设置' }));
+  expect(within(screen.getByRole('group', { name: '速度' })).getByRole('button', { name: '速度 1×' })).toBeInTheDocument();
 });
