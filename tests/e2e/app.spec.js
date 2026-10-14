@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { mockAudioRoutes } from './mock-audio.js';
 
 const languageStates = [
   {
@@ -26,20 +27,7 @@ const languageStates = [
 
 for (const language of languageStates) {
   test(`renders localized education content and status for ${language.selector}`, async ({ page }) => {
-    await page.addInitScript(() => {
-      Object.defineProperty(window, 'speechSynthesis', {
-        configurable: true,
-        value: { cancel() {}, speak() {} },
-      });
-      Object.defineProperty(window, 'SpeechSynthesisUtterance', {
-        configurable: true,
-        value: class {
-          constructor(text) {
-            this.text = text;
-          }
-        },
-      });
-    });
+    mockAudioRoutes(page);
     await page.goto('/');
 
     await page.getByRole('button', { name: '語言' }).click();

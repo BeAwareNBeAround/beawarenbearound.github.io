@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { mockCounterRoute } from './mock-counter.js';
+import { mockAudioRoutes } from './mock-audio.js';
 
 const INITIAL_TOTAL = 12544;
 const FORMATTED_TOTALS = [INITIAL_TOTAL, INITIAL_TOTAL + 1, INITIAL_TOTAL + 2].map((n) => n.toLocaleString('en-US'));
@@ -9,20 +10,7 @@ test.use({ locale: 'en-US' });
 test('reads the initial count and increments it on each action click', async ({ page }) => {
   const mock = mockCounterRoute(page, { initialTotal: INITIAL_TOTAL });
 
-  await page.addInitScript(() => {
-    Object.defineProperty(window, 'speechSynthesis', {
-      configurable: true,
-      value: { cancel() {}, speak() {} },
-    });
-    Object.defineProperty(window, 'SpeechSynthesisUtterance', {
-      configurable: true,
-      value: class {
-        constructor(text) {
-          this.text = text;
-        }
-      },
-    });
-  });
+  mockAudioRoutes(page);
 
   await page.goto('/');
 
