@@ -43,6 +43,19 @@ test('renders the application heading', () => {
   expect(screen.getByRole('heading', { name: "Be Aware n' Be Around" })).toBeInTheDocument();
 });
 
+test('places the instruction box before the video container', () => {
+  renderApp();
+
+  const instructionBox = document.querySelector('.instruction-box');
+  const youtubeContainer = document.querySelector('.youtube-container');
+
+  expect(instructionBox).not.toBeNull();
+  expect(youtubeContainer).not.toBeNull();
+  expect(
+    instructionBox.compareDocumentPosition(youtubeContainer) & Node.DOCUMENT_POSITION_FOLLOWING,
+  ).toBeTruthy();
+});
+
 test('renders the secondary subtitle line in each locale', () => {
   renderApp();
 

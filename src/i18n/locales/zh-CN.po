@@ -109,7 +109,7 @@ msgstr ""
 #~ msgstr "守。保持镇定，记录抽搐开始及持续的时间。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:144
+#: src/App.jsx:152
 msgid "video.label"
 msgstr "▶️ 急性癫痫发作处理动画"
 
@@ -144,7 +144,7 @@ msgid "faq.answer1"
 msgstr "点击按键会播放预录的语音。请检查媒体音量、关闭静音模式；若音频未能加载，请刷新页面。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:145
+#: src/App.jsx:153
 msgid "video.title"
 msgstr "急性癫痫发作处理动画"
 
@@ -229,7 +229,7 @@ msgid "actions.ariaLabel"
 msgstr "急救行动"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:152
+#: src/App.jsx:147
 msgid "guide.step3"
 msgstr "将患者轻轻翻侧，保持呼吸道畅通。切勿强行将任何物品塞入患者口中。"
 
@@ -285,7 +285,7 @@ msgid "whatIs.recognizeText"
 msgstr "记下发作开始时间；如超过五分钟，请呼叫紧急服务。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:151
+#: src/App.jsx:146
 msgid "guide.step2"
 msgstr "观察并保护患者。移开附近危险物品，用软物垫着患者头部。"
 
@@ -345,7 +345,7 @@ msgid "whatIs.secureLabel"
 msgstr "清理周边环境："
 
 #. js-lingui-explicit-id
-#: src/App.jsx:153
+#: src/App.jsx:148
 msgid "guide.step4"
 msgstr "寻求协助。陪伴患者直至清醒，若超过五分钟请召唤救护车。"
 
@@ -370,7 +370,7 @@ msgid "action.stay"
 msgstr "守"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:150
+#: src/App.jsx:145
 msgid "guide.step1"
 msgstr "保持镇定，记录抽搐开始及持续的时间。"
 

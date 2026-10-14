@@ -140,17 +140,17 @@ export default function App() {
 
       <p className="status" aria-live="polite">{status}</p>
 
-      <section className="youtube-container">
-        <div className="youtube-label">{t({ id: 'video.label', message: '▶️ Acute Seizure Management Animation' })}</div>
-        <iframe src="https://www.youtube.com/embed/g9909mQ2dRo?iv_load_policy=3&rel=0&modestbranding=1" title={t({ id: 'video.title', message: 'Acute Seizure Animation' })} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen />
-      </section>
-
       <section className="instruction-box">
         <h2>{labels.guideTitle}</h2>
         <p><strong>{labels.buttons[0]}:</strong> {t({ id: 'guide.step1', message: 'Stay calm and time the seizure.' })}</p>
         <p><strong>{labels.buttons[1]}:</strong> {t({ id: 'guide.step2', message: 'Observe and keep the person safe. Clear hard objects and cushion their head.' })}</p>
         <p><strong>{labels.buttons[2]}:</strong> {t({ id: 'guide.step3', message: 'Gently roll the person onto their side. Never put anything in their mouth.' })}</p>
         <p><strong>{labels.buttons[3]}:</strong> {t({ id: 'guide.step4', message: 'Seek help. Stay with them until fully conscious, and call an ambulance if over 5 minutes.' })}</p>
+      </section>
+
+      <section className="youtube-container">
+        <div className="youtube-label">{t({ id: 'video.label', message: '▶️ Acute Seizure Management Animation' })}</div>
+        <iframe src="https://www.youtube.com/embed/g9909mQ2dRo?iv_load_policy=3&rel=0&modestbranding=1" title={t({ id: 'video.title', message: 'Acute Seizure Animation' })} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen />
       </section>
 
       <div className="install-row">

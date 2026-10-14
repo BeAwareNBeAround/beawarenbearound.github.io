@@ -109,7 +109,7 @@ msgstr ""
 #~ msgstr "STAY. Stay calm and time the seizure."
 
 #. js-lingui-explicit-id
-#: src/App.jsx:144
+#: src/App.jsx:152
 msgid "video.label"
 msgstr "▶️ Acute Seizure Management Animation"
 
@@ -144,7 +144,7 @@ msgid "faq.answer1"
 msgstr "Action buttons play recorded audio. Check the media volume, disable silent mode, and refresh the page if the audio fails to load."
 
 #. js-lingui-explicit-id
-#: src/App.jsx:145
+#: src/App.jsx:153
 msgid "video.title"
 msgstr "Acute Seizure Animation"
 
@@ -229,7 +229,7 @@ msgid "actions.ariaLabel"
 msgstr "First aid actions"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:152
+#: src/App.jsx:147
 msgid "guide.step3"
 msgstr "Gently roll the person onto their side. Never put anything in their mouth."
 
@@ -285,7 +285,7 @@ msgid "whatIs.recognizeText"
 msgstr "Note when the seizure starts; call emergency services if it exceeds 5 minutes."
 
 #. js-lingui-explicit-id
-#: src/App.jsx:151
+#: src/App.jsx:146
 msgid "guide.step2"
 msgstr "Observe and keep the person safe. Clear hard objects and cushion their head."
 
@@ -345,7 +345,7 @@ msgid "whatIs.secureLabel"
 msgstr "Secure the Surroundings:"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:153
+#: src/App.jsx:148
 msgid "guide.step4"
 msgstr "Seek help. Stay with them until fully conscious, and call an ambulance if over 5 minutes."
 
@@ -370,7 +370,7 @@ msgid "action.stay"
 msgstr "STAY"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:150
+#: src/App.jsx:145
 msgid "guide.step1"
 msgstr "Stay calm and time the seizure."
 
