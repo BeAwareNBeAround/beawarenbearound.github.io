@@ -22,7 +22,7 @@
   padding: 10px var(--playlist-content-inset);
   border: 0;
   background: transparent;
-  border-radius: 12px;
+  border-radius: 0;
   cursor: pointer;
   text-align: left;
   font: inherit;
@@ -81,7 +81,7 @@
   gap: 4px;
   border-top: 1px solid #f2e8df;
   margin-top: 6px;
-  padding: 12px var(--playlist-content-inset) 0;
+  padding: 12px var(--playlist-content-inset) 10px;
 }
 
 .playlist-transport,

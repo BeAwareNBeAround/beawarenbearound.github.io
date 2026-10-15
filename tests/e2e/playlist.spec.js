@@ -218,6 +218,9 @@ test.describe('compact play-all-once contract', () => {
         const rowBounds = rowElement.getBoundingClientRect();
         const tileBounds = tile.getBoundingClientRect();
         const seekBounds = seek.getBoundingClientRect();
+        const title = surface.querySelector('h2.youtube-label');
+        const titleTextBounds = title.querySelector('.guide-title-text').getBoundingClientRect();
+        const titleBounds = title.getBoundingClientRect();
         return {
           rowLeft: rowBounds.left - surfaceBounds.left,
           rowRight: surfaceBounds.right - rowBounds.right,
@@ -225,16 +228,25 @@ test.describe('compact play-all-once contract', () => {
           seekLeft: seekBounds.left - surfaceBounds.left,
           seekRight: surfaceBounds.right - seekBounds.right,
           rowBorderTop: rowStyle.borderTopWidth,
+          rowBorderRadius: rowStyle.borderRadius,
           controlsPaddingLeft: controlsStyle.paddingLeft,
           controlsPaddingRight: controlsStyle.paddingRight,
+          controlsPaddingBottom: controlsStyle.paddingBottom,
+          titleCenter: titleTextBounds.left + (titleTextBounds.width / 2),
+          stripCenter: titleBounds.left + (titleBounds.width / 2),
+          spinnerRightInset: getComputedStyle(title.querySelector('.guide-title-loading')).right,
         };
       });
       expect(layout.rowLeft).toBe(0);
       expect(layout.rowRight).toBe(0);
       expect(layout.rowBorderTop).toBe('0px');
+      expect(layout.rowBorderRadius).toBe('0px');
       expect(layout.controlsPaddingLeft).toBe(layout.controlsPaddingRight);
+      expect(layout.controlsPaddingBottom).toBe('10px');
       expect(layout.seekLeft).toBe(layout.tileLeft);
       expect(layout.seekRight).toBe(layout.tileLeft);
+      expect(layout.titleCenter).toBeCloseTo(layout.stripCenter, 1);
+      expect(layout.spinnerRightInset).toBe('8px');
 
       await media.fire('error');
       await expect(page.locator('.guide-title-loading')).toHaveAttribute('aria-hidden', 'true');

@@ -175,7 +175,7 @@ export default function App() {
 
       <section className="instruction-box">
         <h2 className="youtube-label">
-          <span>{labels.guideTitle}</span>
+          <span className="guide-title-text">{labels.guideTitle}</span>
           <span
             className={`guide-title-loading${player.phase === 'loading' ? ' is-loading' : ''}`}
             role="img"
