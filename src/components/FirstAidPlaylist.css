@@ -1,12 +1,7 @@
-/* First-aid playlist card: white rows with subtle separators, colored 64px
-   tiles echoing the upper widget's raised squares, controls inside the card. */
+/* The embedding guide owns the single outer surface and attached title strip. */
 
 .playlist-card {
   width: 100%;
-  max-width: 400px;
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
   padding: 10px 12px 12px;
   box-sizing: border-box;
   text-align: left;
@@ -82,51 +77,11 @@
   line-height: 1.5;
 }
 
-.playlist-selected-mark {
-  flex: 0 0 auto;
-  color: var(--primary-brand);
-  font-weight: bold;
-}
-
-/* Animated "now playing" equalizer: a non-color indicator. */
-.playlist-playing-badge {
-  flex: 0 0 auto;
-  display: inline-flex;
-  align-items: flex-end;
-  gap: 2px;
-  height: 18px;
-}
-
-.playlist-playing-badge span {
-  width: 4px;
-  height: 100%;
-  background: var(--primary-brand);
-  border-radius: 2px;
-  transform-origin: bottom;
-  animation: playlist-equalizer 1s ease-in-out infinite;
-}
-
-.playlist-playing-badge span:nth-child(1) { animation-delay: 0s; }
-.playlist-playing-badge span:nth-child(2) { animation-delay: 0.2s; }
-.playlist-playing-badge span:nth-child(3) { animation-delay: 0.4s; }
-
-@keyframes playlist-equalizer {
-  0%, 100% { transform: scaleY(0.4); }
-  50% { transform: scaleY(1); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .playlist-playing-badge span {
-    animation: none;
-    transform: none;
-  }
-}
-
 .playlist-controls {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 44px auto minmax(56px, 1fr) 44px;
   align-items: center;
-  gap: 10px;
+  gap: 4px;
   border-top: 1px solid #f2e8df;
   margin-top: 6px;
   padding-top: 12px;
@@ -136,18 +91,26 @@
 .playlist-volume {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
+  min-width: 0;
 }
+
+.playlist-transport { grid-area: 2 / 1; }
+.playlist-volume { grid-area: 2 / 3; }
 
 .playlist-btn {
   border: 0;
-  background: #f5f5f5;
-  border-radius: 10px;
-  padding: 10px 14px;
+  background: transparent;
+  border-radius: 8px;
+  padding: 8px;
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-weight: bold;
   color: #444;
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .playlist-btn:disabled {
@@ -157,16 +120,25 @@
 }
 
 .playlist-btn-play {
-  background: var(--primary-brand);
-  color: #fff;
-  min-width: 84px;
+  color: var(--dark-orange);
 }
 
 .playlist-seek {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  display: contents;
+}
+
+.playlist-seek-range {
+  grid-area: 1 / 1 / 2 / -1;
   width: 100%;
+  margin: 0;
+  min-height: 24px;
+}
+
+.playlist-time-display {
+  grid-area: 2 / 2;
+  white-space: nowrap;
+  font-size: 13px;
+  color: #666;
 }
 
 .playlist-time {
@@ -179,15 +151,19 @@
 
 .playlist-card input[type='range'] {
   flex: 1;
+  min-width: 0;
   accent-color: var(--primary-brand);
 }
 
 .playlist-volume-range {
-  max-width: 120px;
+  width: 100%;
+  max-width: 64px;
+  margin: 0;
 }
 
 .playlist-settings {
   position: relative;
+  grid-area: 2 / 4;
   margin-left: auto;
 }
 
@@ -236,6 +212,7 @@
 }
 
 .playlist-device-volume {
+  grid-area: 3 / 1 / 4 / -1;
   margin: 0;
   font-size: 13px;
   color: #666;

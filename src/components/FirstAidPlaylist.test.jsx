@@ -97,53 +97,56 @@ test('marks only the selected row with a distinct selected marker', () => {
   }
 });
 
-test('exposes a non-color playing indicator on only the selected row while playing and keeps the selection when it stops', () => {
+test('selection uses background and semantics without adding checkmarks or playing badges in any phase', () => {
   const { rerenderWith } = renderPlaylist({ player: createStubPlayer({ selectedId: 2, phase: 'playing' }) });
 
-  expect(getRow('SAFE').querySelector('.playlist-playing-badge')).not.toBeNull();
-  for (const label of ['STAY', 'SIDE', 'HELP']) {
-    expect(getRow(label).querySelector('.playlist-playing-badge')).toBeNull();
-  }
-
-  for (const phase of ['paused', 'ended', 'error', 'idle']) {
+  for (const phase of ['playing', 'loading', 'paused', 'ended', 'error', 'idle']) {
     rerenderWith({ phase });
     for (const track of TRACKS) {
       expect(getRow(track.label).querySelector('.playlist-playing-badge')).toBeNull();
+      expect(getRow(track.label).querySelector('.playlist-selected-mark')).toBeNull();
     }
     expect(getRow('SAFE')).toHaveAttribute('aria-pressed', 'true');
+    expect(getRow('SAFE')).toHaveClass('selected');
   }
 });
 
 test('the play button reflects the phase and calls togglePlayback', () => {
   const { player, rerenderWith } = renderPlaylist();
 
+  expect(screen.getByRole('button', { name: 'Play' }).textContent).toBe('');
+  expect(screen.getByRole('button', { name: 'Play' }).querySelector('svg[aria-hidden="true"]')).not.toBeNull();
   fireEvent.click(screen.getByRole('button', { name: 'Play' }));
   expect(player.togglePlayback).toHaveBeenCalledTimes(1);
 
   rerenderWith({ phase: 'playing' });
+  expect(screen.getByRole('button', { name: 'Pause' }).textContent).toBe('');
   fireEvent.click(screen.getByRole('button', { name: 'Pause' }));
   expect(player.togglePlayback).toHaveBeenCalledTimes(2);
 });
 
-test('bounded navigation is disabled without a selection and at the track bounds', () => {
-  const { player, rerenderWith } = renderPlaylist();
+test('compact controls omit previous and next regardless of selection', () => {
+  const { rerenderWith } = renderPlaylist();
+  for (const selectedId of [null, 1, 2, 4]) {
+    rerenderWith({ selectedId });
+    expect(screen.queryByRole('button', { name: 'Previous' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Next' })).not.toBeInTheDocument();
+  }
+});
 
-  expect(screen.getByRole('button', { name: 'Previous' })).toBeDisabled();
-  expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled();
-
-  rerenderWith({ selectedId: 1 });
-  expect(screen.getByRole('button', { name: 'Previous' })).toBeDisabled();
-  expect(screen.getByRole('button', { name: 'Next' })).toBeEnabled();
-
-  rerenderWith({ selectedId: 4 });
-  expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled();
-  expect(screen.getByRole('button', { name: 'Previous' })).toBeEnabled();
-
-  rerenderWith({ selectedId: 2 });
-  fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-  expect(player.next).toHaveBeenCalledTimes(1);
-  fireEvent.click(screen.getByRole('button', { name: 'Previous' }));
-  expect(player.previous).toHaveBeenCalledTimes(1);
+test.each([
+  ['en', 'Settings', 'Play all once'],
+  ['zh-HK', '播放設定', '全部播放一次'],
+  ['zh-CN', '播放设置', '全部播放一次'],
+])('play all once is localized and selectable in %s', (locale, settings, label) => {
+  const { player, rerenderWith } = renderPlaylist({ locale });
+  fireEvent.click(screen.getByRole('button', { name: settings }));
+  const choice = screen.getByRole('button', { name: label });
+  expect(choice).toHaveAttribute('aria-pressed', 'false');
+  fireEvent.click(choice);
+  expect(player.setRepeatMode).toHaveBeenCalledWith('once');
+  rerenderWith({ repeatMode: 'once' });
+  expect(choice).toHaveAttribute('aria-pressed', 'true');
 });
 
 test('seeking is disabled while the duration is unknown and never renders NaN or Infinity', () => {

@@ -31,6 +31,7 @@ const LOCALES = [
     repeatOff: '不重複',
     repeatAll: '全部重複',
     repeatOne: '單曲重複',
+    repeatOnce: '全部播放一次',
     mute: '靜音',
     unmute: '取消靜音',
   },
@@ -51,6 +52,7 @@ const LOCALES = [
     repeatOff: '不重复',
     repeatAll: '全部重复',
     repeatOne: '单曲重复',
+    repeatOnce: '全部播放一次',
     mute: '静音',
     unmute: '取消静音',
   },
@@ -71,6 +73,7 @@ const LOCALES = [
     repeatOff: 'Repeat off',
     repeatAll: 'Repeat all',
     repeatOne: 'Repeat one',
+    repeatOnce: 'Play all once',
     mute: 'Mute',
     unmute: 'Unmute',
   },
@@ -106,7 +109,7 @@ async function openSettings(page, locale) {
 }
 
 async function setRepeat(page, locale, mode) {
-  const labels = { off: locale.repeatOff, all: locale.repeatAll, one: locale.repeatOne };
+  const labels = { off: locale.repeatOff, all: locale.repeatAll, one: locale.repeatOne, once: locale.repeatOnce };
   await openSettings(page, locale);
   await page.getByRole('button', { name: labels[mode], exact: true }).click();
   await expect(page.getByRole('button', { name: labels[mode], exact: true })).toHaveAttribute('aria-pressed', 'true');
@@ -118,6 +121,84 @@ const pauseButton = (page, locale) => page.getByRole('button', { name: locale.pa
 const row = (page, id) => page.locator(`.playlist-row-${id}`);
 const upperButton = (page, id) => page.locator(`.btn-toy.button-${id}`);
 
+test.describe('compact play-all-once contract', () => {
+  for (const locale of LOCALES) {
+    test(`plays forward from track 2 once and stops at HELP in ${locale.code}`, async ({ page }) => {
+      const { media, clickPosts } = await openApp(page);
+      await selectLocale(page, locale);
+      await row(page, 2).click();
+      await media.fire('playing');
+      await setRepeat(page, locale, 'once');
+      await page.keyboard.press('Escape');
+      for (const id of [3, 4]) {
+        await media.fire('ended');
+        await expect(row(page, id)).toHaveAttribute('aria-pressed', 'true');
+        await media.fire('playing');
+        await expect(status(page)).toHaveText(locale.playing(id));
+      }
+      await media.fire('ended');
+      await expect(status(page)).toHaveText(locale.ended);
+      await expect(row(page, 4)).toHaveAttribute('aria-pressed', 'true');
+      expect((await media.state()).playCount).toBe(3);
+      expect((await media.state()).src).toMatch(new RegExp(`/help-${locale.code}\\.mp3$`));
+      expect(clickPosts().map((request) => request.body.action_target)).toEqual(['2']);
+      // Starting directly at the terminal row must not replay or wrap either.
+      await row(page, 4).click();
+      await media.fire('playing');
+      await media.fire('ended');
+      await expect(status(page)).toHaveText(locale.ended);
+      expect((await media.state()).playCount).toBe(4);
+    });
+
+    test(`provides a single attached surface and compact localized controls in ${locale.code}`, async ({ page }) => {
+      const { media } = await openApp(page);
+      await selectLocale(page, locale);
+      await expect(page.getByRole('button', { name: locale.previous, exact: true })).toHaveCount(0);
+      await expect(page.getByRole('button', { name: locale.next, exact: true })).toHaveCount(0);
+      await expect(playButton(page, locale)).toHaveText('');
+      await expect(playButton(page, locale).locator('svg[aria-hidden="true"]')).toHaveCount(1);
+      const surface = await page.locator('.instruction-box').evaluate((outer) => {
+        const card = outer.querySelector('.playlist-card');
+        const label = outer.querySelector('h2');
+        const videoLabel = document.querySelector('.youtube-label:not(h2)');
+        return {
+          attached: outer.firstElementChild === label && label.classList.contains('youtube-label'),
+          shadow: getComputedStyle(card).boxShadow,
+          border: getComputedStyle(card).borderTopWidth,
+          radius: getComputedStyle(card).borderRadius,
+          titlePadding: getComputedStyle(label).padding,
+          videoPadding: getComputedStyle(videoLabel).padding,
+        };
+      });
+      expect(surface).toMatchObject({ attached: true, shadow: 'none', border: '0px', radius: '0px' });
+      expect(surface.titlePadding).toBe(surface.videoPadding);
+      await row(page, 2).click();
+      await media.fire('playing');
+      await expect(page.locator('.playlist-selected-mark, .playlist-playing-badge')).toHaveCount(0);
+      await expect(pauseButton(page, locale)).toHaveText('');
+      await media.setDuration(30);
+      await page.locator('.playlist-seek-range').fill('12');
+      expect((await media.state()).currentTime).toBe(12);
+      await page.getByRole('button', { name: locale.mute, exact: true }).click();
+      await page.locator('.playlist-volume-range').fill('0.5');
+      expect(await media.state()).toMatchObject({ muted: true, volume: 0.5 });
+      await page.getByRole('button', { name: locale.unmute, exact: true }).click();
+      await openSettings(page, locale);
+      const speed = page.locator('.playlist-setting').first().getByRole('button').last();
+      await speed.focus();
+      await page.keyboard.press('Enter');
+      expect((await media.state()).playbackRate).toBe(1.5);
+      await page.getByRole('button', { name: locale.repeatOnce, exact: true }).focus();
+      await page.keyboard.press('Space');
+      await expect(page.getByRole('button', { name: locale.repeatOnce, exact: true })).toHaveAttribute('aria-pressed', 'true');
+      await page.keyboard.press('Escape');
+      await expect(page.getByRole('button', { name: locale.settings, exact: true })).toBeFocused();
+      await pauseButton(page, locale).click();
+      await expect(status(page)).toHaveText(locale.paused);
+    });
+  }
+});
+
 test.describe('deterministic playback', () => {
   test('fresh load shows the idle defaults and creates no audio element', async ({ page }) => {
     const { media } = await openApp(page);
@@ -126,8 +207,8 @@ test.describe('deterministic playback', () => {
     await expect(row(page, 1)).toHaveAttribute('aria-pressed', 'false');
     await expect(row(page, 4)).toHaveAttribute('aria-pressed', 'false');
     await expect(playButton(page, HK)).toBeVisible();
-    await expect(page.getByRole('button', { name: HK.previous, exact: true })).toBeDisabled();
-    await expect(page.getByRole('button', { name: HK.next, exact: true })).toBeDisabled();
+    await expect(page.getByRole('button', { name: HK.previous, exact: true })).toHaveCount(0);
+    await expect(page.getByRole('button', { name: HK.next, exact: true })).toHaveCount(0);
     await expect(page.locator('.playlist-seek-range')).toBeDisabled();
     await expect(page.locator('.playlist-seek .playlist-time')).toHaveText(['0:00', '0:00']);
     await expect(page.locator('.playlist-playing-badge')).toHaveCount(0);
@@ -162,7 +243,7 @@ test.describe('deterministic playback', () => {
 
     await expect(status(page)).toHaveText(HK.playing(2));
     await expect(upperButton(page, 2)).toHaveClass(/playing/);
-    await expect(row(page, 2).locator('.playlist-playing-badge')).toHaveCount(1);
+    await expect(row(page, 2).locator('.playlist-playing-badge')).toHaveCount(0);
     await expect(row(page, 1)).toHaveAttribute('aria-pressed', 'false');
     expect(clickPosts().length).toBe(1);
   });
@@ -296,38 +377,20 @@ test.describe('deterministic playback', () => {
     expect((await media.state()).playCount).toBe(2);
   });
 
-  test('manual previous and next never wrap, in playing or paused state', async ({ page }) => {
+  test('row instruction geometry is unchanged by selection, playback, or pause', async ({ page }) => {
     const { media } = await openApp(page);
 
-    await row(page, 1).click();
-    await media.fire('playing');
-    await expect(page.getByRole('button', { name: HK.previous, exact: true })).toBeDisabled();
-
-    await page.getByRole('button', { name: HK.next, exact: true }).click();
-    await expect(status(page)).toHaveText(HK.loading);
-    expect((await media.state()).src).toBe(new URL('/resources/save-zh-HK.mp3', page.url()).href);
-    await media.fire('playing');
-    await expect(status(page)).toHaveText(HK.playing(2));
-
-    // Paused navigation loads the neighbour without starting playback.
-    await pauseButton(page, HK).click();
-    await expect(status(page)).toHaveText(HK.paused);
-    const playsBeforePausedNav = (await media.state()).playCount;
-    await page.getByRole('button', { name: HK.next, exact: true }).click();
-    await expect(status(page)).toHaveText(HK.paused);
-    const pausedState = await media.state();
-    expect(pausedState.src).toBe(new URL('/resources/side-zh-HK.mp3', page.url()).href);
-    expect(pausedState.paused).toBe(true);
-    expect(pausedState.playCount).toBe(playsBeforePausedNav);
-    await expect(row(page, 3)).toHaveAttribute('aria-pressed', 'true');
-
-    await playButton(page, HK).click();
-    await media.fire('playing');
-    await expect(status(page)).toHaveText(HK.playing(3));
-
-    await row(page, 4).click();
-    await media.fire('playing');
-    await expect(page.getByRole('button', { name: HK.next, exact: true })).toBeDisabled();
+    for (let id = 1; id <= 4; id++) {
+      const instruction = row(page, id).locator('.playlist-instruction');
+      const initialBox = await instruction.boundingBox();
+      await row(page, id).click();
+      expect(await instruction.boundingBox()).toEqual(initialBox);
+      await media.fire('playing');
+      expect(await instruction.boundingBox()).toEqual(initialBox);
+      await pauseButton(page, HK).click();
+      expect(await instruction.boundingBox()).toEqual(initialBox);
+      await expect(row(page, id)).toHaveAttribute('aria-pressed', 'true');
+    }
   });
 
   test('transport and settings commands never count a click', async ({ page }) => {
@@ -339,10 +402,6 @@ test.describe('deterministic playback', () => {
 
     await pauseButton(page, HK).click();
     await playButton(page, HK).click();
-    await media.fire('playing');
-    await page.getByRole('button', { name: HK.next, exact: true }).click();
-    await media.fire('playing');
-    await page.getByRole('button', { name: HK.previous, exact: true }).click();
     await media.fire('playing');
     await setRepeat(page, HK, 'all');
     await openSettings(page, HK);
@@ -543,6 +602,20 @@ test.describe('responsive and keyboard access', () => {
           await page.keyboard.press('Space');
           await expect(status(page)).toHaveText(locale.paused);
           expect(clickPosts()).toHaveLength(1);
+
+          // Tab order follows the visible compact row, not the old transport.
+          await page.keyboard.press('Tab');
+          await expect(page.getByRole('button', { name: locale.mute, exact: true })).toBeFocused();
+          await page.keyboard.press('Tab');
+          await expect(page.locator('.playlist-volume-range')).toBeFocused();
+          await page.keyboard.press('Tab');
+          await expect(page.getByRole('button', { name: locale.settings, exact: true })).toBeFocused();
+
+          const seekBox = await page.locator('.playlist-seek-range').boundingBox();
+          const playBox = await page.locator('.playlist-btn-play').boundingBox();
+          const settingsBox = await page.locator('.playlist-settings > .playlist-btn').boundingBox();
+          expect(seekBox.y + seekBox.height).toBeLessThanOrEqual(playBox.y);
+          expect(settingsBox.y).toBe(playBox.y);
         });
       }
     });
@@ -589,7 +662,7 @@ test.describe('real recordings in the browser', () => {
   test('switching tracks mid-playback restarts the single shared element', async ({ page }) => {
     await row(page, 1).click();
     await expect(status(page)).toHaveText(HK.playing(1));
-    await expect(row(page, 1).locator('.playlist-playing-badge')).toHaveCount(1);
+    await expect(row(page, 1)).toHaveAttribute('aria-pressed', 'true');
 
     await row(page, 3).click();
     await expect(status(page)).toHaveText(HK.playing(3));
@@ -603,7 +676,8 @@ test.describe('real recordings in the browser', () => {
     expect(elements[0].currentSrc).toMatch(/\/resources\/side-zh-HK\.mp3$/);
     expect(elements[0].paused).toBe(false);
     expect(elements[0].currentTime).toBeLessThan(1);
-    await expect(page.locator('.playlist-playing-badge')).toHaveCount(1);
+    await expect(page.locator('.playlist-playing-badge')).toHaveCount(0);
+    await expect(row(page, 3)).toHaveAttribute('aria-pressed', 'true');
     await expect(row(page, 1).locator('.playlist-playing-badge')).toHaveCount(0);
   });
 });

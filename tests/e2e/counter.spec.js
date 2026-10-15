@@ -56,23 +56,24 @@ test('playlist rows count once while transport, settings, and automatic advancem
 
   // Transport, settings, and seeking commands never count.
   await page.getByRole('button', { name: 'Pause', exact: true }).click();
-  await page.getByRole('button', { name: 'Next', exact: true }).click();
-  await page.getByRole('button', { name: 'Previous', exact: true }).click();
+  await page.getByRole('button', { name: 'Play', exact: true }).click();
   await page.getByRole('button', { name: 'Settings', exact: true }).click();
-  await page.getByRole('button', { name: 'Repeat all', exact: true }).click();
+  await page.getByRole('button', { name: 'Play all once', exact: true }).click();
   await page.keyboard.press('Escape');
   await media.setDuration(30);
   await page.locator('.playlist-seek-range').fill('10');
   await page.getByRole('button', { name: 'Mute', exact: true }).click();
 
-  // Automatic advancement (repeat all reaching the end) never counts either.
-  // Resume first: a real browser only ends a track that is actually playing, so
-  // firing ended while paused would simulate a sequence browsers never produce.
+  // Automatic forward advancement and the terminal stop never count either.
+  // Report the resumed playback before ending the track.
   await media.fire('playing');
   await media.fire('ended');
   await expect(page.locator('.status')).toHaveText('Loading…');
   await media.fire('playing');
   await expect(page.locator('.status')).toHaveText('Playing education step 4...');
+  await media.fire('ended');
+  await expect(page.locator('.status')).toHaveText('Education step finished.');
+  expect((await media.state()).playCount).toBe(3);
   await expect(counter).toContainText(FORMATTED_TOTALS[1]);
 
   const clickPosts = mock.requests.filter((request) => request.method === 'POST' && request.body?.action === 'click');

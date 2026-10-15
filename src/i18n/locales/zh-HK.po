@@ -109,6 +109,16 @@ msgstr ""
 #~ msgstr "守。保持鎮定，記錄抽搐開始及持續的時間。"
 
 #. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:112
+#~ msgid "playlist.next"
+#~ msgstr "下一段"
+
+#. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:100
+#~ msgid "playlist.previous"
+#~ msgstr "上一段"
+
+#. js-lingui-explicit-id
 #: src/App.jsx:181
 msgid "video.label"
 msgstr "▶️ 急性腦癇發作處理動畫"
@@ -239,7 +249,7 @@ msgid "actions.ariaLabel"
 msgstr "急救行動"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:69
+#: src/components/FirstAidPlaylist.jsx:67
 msgid "playlist.cardLabel"
 msgstr "急救語音指引"
 
@@ -291,12 +301,12 @@ msgstr "語言"
 
 #. js-lingui-explicit-id
 #: src/App.jsx:53
-#: src/components/FirstAidPlaylist.jsx:63
+#: src/components/FirstAidPlaylist.jsx:61
 msgid "playlist.loading"
 msgstr "載入中…"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:200
+#: src/components/FirstAidPlaylist.jsx:128
 msgid "playlist.mute"
 msgstr "靜音"
 
@@ -304,11 +314,6 @@ msgstr "靜音"
 #: src/App.jsx:200
 msgid "whatIs.dontsText"
 msgstr "切勿壓制患者的動作或把任何物品放入口中。"
-
-#. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:112
-msgid "playlist.next"
-msgstr "下一段"
 
 #. js-lingui-explicit-id
 #: src/App.jsx:200
@@ -331,23 +336,28 @@ msgid "setup.iosInstructions"
 msgstr "使用 Safari 瀏覽器開啟此網頁，點擊「分享」圖示，然後選擇「加入主畫面」。"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:107
+#: src/components/FirstAidPlaylist.jsx:112
 msgid "playlist.pause"
 msgstr "暫停"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:107
+#: src/components/FirstAidPlaylist.jsx:112
 msgid "playlist.play"
 msgstr "播放"
 
 #. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:187
+msgid "playlist.repeatOnce"
+msgstr "全部播放一次"
+
+#. js-lingui-explicit-id
 #: src/App.jsx:61
-#: src/components/FirstAidPlaylist.jsx:65
+#: src/components/FirstAidPlaylist.jsx:63
 msgid "playlist.error"
 msgstr "播放失敗，請按播放重試。"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:61
+#: src/components/FirstAidPlaylist.jsx:59
 msgid "playlist.seek"
 msgstr "播放位置"
 
@@ -360,11 +370,6 @@ msgstr "播放教育步驟 {id}..."
 #: src/App.jsx:202
 msgid "whatIs.positionLabel"
 msgstr "安全擺位："
-
-#. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:100
-msgid "playlist.previous"
-msgstr "上一段"
 
 #. js-lingui-explicit-id
 #: src/App.jsx:202
@@ -392,23 +397,23 @@ msgid "whatIs.recognizeLabel"
 msgstr "辨認與計時："
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:152
-#: src/components/FirstAidPlaylist.jsx:153
+#: src/components/FirstAidPlaylist.jsx:182
+#: src/components/FirstAidPlaylist.jsx:183
 msgid "playlist.repeat"
 msgstr "重複播放"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:157
+#: src/components/FirstAidPlaylist.jsx:188
 msgid "playlist.repeatAll"
 msgstr "全部重複"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:156
+#: src/components/FirstAidPlaylist.jsx:186
 msgid "playlist.repeatOff"
 msgstr "不重複"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:158
+#: src/components/FirstAidPlaylist.jsx:189
 msgid "playlist.repeatOne"
 msgstr "單曲重複"
 
@@ -433,8 +438,8 @@ msgid "guide.title"
 msgstr "守望相助 急救指南"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:131
-#: src/components/FirstAidPlaylist.jsx:134
+#: src/components/FirstAidPlaylist.jsx:156
+#: src/components/FirstAidPlaylist.jsx:164
 msgid "playlist.settings"
 msgstr "播放設定"
 
@@ -444,13 +449,13 @@ msgid "action.side"
 msgstr "相"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:135
-#: src/components/FirstAidPlaylist.jsx:136
+#: src/components/FirstAidPlaylist.jsx:165
+#: src/components/FirstAidPlaylist.jsx:166
 msgid "playlist.speed"
 msgstr "速度"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:144
+#: src/components/FirstAidPlaylist.jsx:174
 msgid "playlist.speedOption"
 msgstr "速度 {rate}×"
 
@@ -505,17 +510,17 @@ msgid "whatIs.positionText"
 msgstr "將患者輕輕翻側，保持呼吸道暢通。"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:199
+#: src/components/FirstAidPlaylist.jsx:127
 msgid "playlist.unmute"
 msgstr "取消靜音"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:219
+#: src/components/FirstAidPlaylist.jsx:147
 msgid "playlist.deviceVolume"
 msgstr "請使用裝置的音量按鍵調整音量。"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:213
+#: src/components/FirstAidPlaylist.jsx:141
 msgid "playlist.volume"
 msgstr "音量"
 

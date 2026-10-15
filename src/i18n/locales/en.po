@@ -109,6 +109,16 @@ msgstr ""
 #~ msgstr "STAY. Stay calm and time the seizure."
 
 #. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:112
+#~ msgid "playlist.next"
+#~ msgstr "Next"
+
+#. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:100
+#~ msgid "playlist.previous"
+#~ msgstr "Previous"
+
+#. js-lingui-explicit-id
 #: src/App.jsx:181
 msgid "video.label"
 msgstr "▶️ Acute Seizure Management Animation"
@@ -239,7 +249,7 @@ msgid "actions.ariaLabel"
 msgstr "First aid actions"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:69
+#: src/components/FirstAidPlaylist.jsx:67
 msgid "playlist.cardLabel"
 msgstr "First aid audio guide"
 
@@ -291,12 +301,12 @@ msgstr "Language"
 
 #. js-lingui-explicit-id
 #: src/App.jsx:53
-#: src/components/FirstAidPlaylist.jsx:63
+#: src/components/FirstAidPlaylist.jsx:61
 msgid "playlist.loading"
 msgstr "Loading…"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:200
+#: src/components/FirstAidPlaylist.jsx:128
 msgid "playlist.mute"
 msgstr "Mute"
 
@@ -304,11 +314,6 @@ msgstr "Mute"
 #: src/App.jsx:200
 msgid "whatIs.dontsText"
 msgstr "Never restrain movement or place anything in the person's mouth."
-
-#. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:112
-msgid "playlist.next"
-msgstr "Next"
 
 #. js-lingui-explicit-id
 #: src/App.jsx:200
@@ -331,23 +336,28 @@ msgid "setup.iosInstructions"
 msgstr "Open in Safari, tap Share, then select Add to Home Screen."
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:107
+#: src/components/FirstAidPlaylist.jsx:112
 msgid "playlist.pause"
 msgstr "Pause"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:107
+#: src/components/FirstAidPlaylist.jsx:112
 msgid "playlist.play"
 msgstr "Play"
 
 #. js-lingui-explicit-id
+#: src/components/FirstAidPlaylist.jsx:187
+msgid "playlist.repeatOnce"
+msgstr "Play all once"
+
+#. js-lingui-explicit-id
 #: src/App.jsx:61
-#: src/components/FirstAidPlaylist.jsx:65
+#: src/components/FirstAidPlaylist.jsx:63
 msgid "playlist.error"
 msgstr "Playback failed. Press play to try again."
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:61
+#: src/components/FirstAidPlaylist.jsx:59
 msgid "playlist.seek"
 msgstr "Playback position"
 
@@ -360,11 +370,6 @@ msgstr "Playing education step {id}..."
 #: src/App.jsx:202
 msgid "whatIs.positionLabel"
 msgstr "Position safely:"
-
-#. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:100
-msgid "playlist.previous"
-msgstr "Previous"
 
 #. js-lingui-explicit-id
 #: src/App.jsx:202
@@ -392,23 +397,23 @@ msgid "whatIs.recognizeLabel"
 msgstr "Recognize & Time:"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:152
-#: src/components/FirstAidPlaylist.jsx:153
+#: src/components/FirstAidPlaylist.jsx:182
+#: src/components/FirstAidPlaylist.jsx:183
 msgid "playlist.repeat"
 msgstr "Repeat"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:157
+#: src/components/FirstAidPlaylist.jsx:188
 msgid "playlist.repeatAll"
 msgstr "Repeat all"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:156
+#: src/components/FirstAidPlaylist.jsx:186
 msgid "playlist.repeatOff"
 msgstr "Repeat off"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:158
+#: src/components/FirstAidPlaylist.jsx:189
 msgid "playlist.repeatOne"
 msgstr "Repeat one"
 
@@ -433,8 +438,8 @@ msgid "guide.title"
 msgstr "Seizure First Aid Guide"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:131
-#: src/components/FirstAidPlaylist.jsx:134
+#: src/components/FirstAidPlaylist.jsx:156
+#: src/components/FirstAidPlaylist.jsx:164
 msgid "playlist.settings"
 msgstr "Settings"
 
@@ -444,13 +449,13 @@ msgid "action.side"
 msgstr "SIDE"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:135
-#: src/components/FirstAidPlaylist.jsx:136
+#: src/components/FirstAidPlaylist.jsx:165
+#: src/components/FirstAidPlaylist.jsx:166
 msgid "playlist.speed"
 msgstr "Speed"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:144
+#: src/components/FirstAidPlaylist.jsx:174
 msgid "playlist.speedOption"
 msgstr "Speed {rate}×"
 
@@ -505,17 +510,17 @@ msgid "whatIs.positionText"
 msgstr "Turn the person gently onto their side to keep their airway clear."
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:199
+#: src/components/FirstAidPlaylist.jsx:127
 msgid "playlist.unmute"
 msgstr "Unmute"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:219
+#: src/components/FirstAidPlaylist.jsx:147
 msgid "playlist.deviceVolume"
 msgstr "Use your device's volume buttons to adjust the volume."
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:213
+#: src/components/FirstAidPlaylist.jsx:141
 msgid "playlist.volume"
 msgstr "Volume"
 

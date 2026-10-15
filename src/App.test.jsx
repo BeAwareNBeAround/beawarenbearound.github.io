@@ -264,6 +264,8 @@ test('replaces the static guide paragraphs with the four-row playlist under the 
   renderApp();
 
   expect(screen.getByRole('heading', { name: '守望相助 急救指南' })).toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: '守望相助 急救指南' })).toHaveClass('youtube-label');
+  expect(document.querySelector('.instruction-box').firstElementChild).toBe(screen.getByRole('heading', { name: '守望相助 急救指南' }));
   expect(document.querySelectorAll('.instruction-box > p')).toHaveLength(0);
   for (let index = 0; index < 4; index += 1) {
     expect(playlistRow(index)).toBeInTheDocument();
@@ -284,7 +286,7 @@ test('an upper button click selects its recording, sends exactly one counter eve
   emit(audio(), 'playing');
 
   expect(upperButton('守')).toHaveClass('playing');
-  expect(rowBadge(0)).not.toBeNull();
+  expect(rowBadge(0)).toBeNull();
   expect(playlistRow(0)).toHaveAttribute('aria-pressed', 'true');
   expect(screen.getByText('播放教育步驟 1...')).toBeInTheDocument();
   expect(await screen.findByText('12,545')).toBeInTheDocument();
@@ -303,7 +305,7 @@ test('a playlist row click selects its recording, sends exactly one counter even
   emit(audio(), 'playing');
 
   expect(upperButton('相')).toHaveClass('playing');
-  expect(rowBadge(2)).not.toBeNull();
+  expect(rowBadge(2)).toBeNull();
   expect(screen.getByText('播放教育步驟 3...')).toBeInTheDocument();
   expect(await screen.findByText('12,545')).toBeInTheDocument();
   expect(clickPosts(counter)).toHaveLength(1);
@@ -331,7 +333,7 @@ test('selecting a second track pauses the first, keeps a single player, and move
   emit(firstAudio, 'playing');
 
   expect(upperButton('望')).toHaveClass('playing');
-  expect(rowBadge(1)).not.toBeNull();
+  expect(rowBadge(1)).toBeNull();
   expect(rowBadge(0)).toBeNull();
 });
 
@@ -493,11 +495,10 @@ test('transport controls, settings, seeking, and Play from initial idle send no 
   emit(audio(), 'playing');
   expect(audio().src).toBe('./resources/stay-zh-HK.mp3');
 
-  fireEvent.click(screen.getByRole('button', { name: '下一段' }));
+  fireEvent.click(screen.getByRole('button', { name: '暫停' }));
+  fireEvent.click(screen.getByRole('button', { name: '播放' }));
   emit(audio(), 'playing');
-  expect(audio().src).toBe('./resources/save-zh-HK.mp3');
-
-  fireEvent.click(screen.getByRole('button', { name: '上一段' }));
+  expect(audio().src).toBe('./resources/stay-zh-HK.mp3');
 
   act(() => { audio().duration = 30; audio().emit('durationchange'); });
   fireEvent.change(screen.getByRole('slider', { name: '播放位置' }), { target: { value: '5' } });

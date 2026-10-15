@@ -173,7 +173,7 @@ export default function App() {
       <p className="status" aria-live="polite">{statusText}</p>
 
       <section className="instruction-box">
-        <h2>{labels.guideTitle}</h2>
+        <h2 className="youtube-label">{labels.guideTitle}</h2>
         <FirstAidPlaylist tracks={tracks} player={player} onSelectTrack={selectInstruction} />
       </section>
 

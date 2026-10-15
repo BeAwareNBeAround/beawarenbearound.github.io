@@ -31,10 +31,8 @@ export function FirstAidPlaylist({ tracks, player, onSelectTrack, volumeSupporte
   const settingsRef = useRef(null);
   const settingsButtonRef = useRef(null);
 
-  const selectedIndex = tracks.findIndex((track) => track.id === player.selectedId);
   const hasDuration = Number.isFinite(player.duration) && player.duration > 0;
-  // While a track is loading or playing, the play button offers pause; the
-  // row-level "now playing" badge is only for the audible phase.
+  // While a track is loading or playing, the play button offers pause.
   const isBusy = player.phase === 'playing' || player.phase === 'loading';
 
   // Escape and outside pointer-down close the settings panel; Escape also
@@ -70,7 +68,6 @@ export function FirstAidPlaylist({ tracks, player, onSelectTrack, volumeSupporte
       <ul className="playlist-rows">
         {tracks.map((track, index) => {
           const isSelected = track.id === player.selectedId;
-          const isPlayingRow = isSelected && player.phase === 'playing';
           return (
             <li key={track.id}>
               <button
@@ -82,10 +79,6 @@ export function FirstAidPlaylist({ tracks, player, onSelectTrack, volumeSupporte
                 <span className="playlist-tile">{track.label}</span>
                 {' '}
                 <span className="playlist-instruction">{track.instruction}</span>
-                {isSelected && <span className="playlist-selected-mark" aria-hidden="true">✓</span>}
-                {isPlayingRow && (
-                  <span className="playlist-playing-badge" aria-hidden="true"><span /><span /><span /></span>
-                )}
               </button>
             </li>
           );
@@ -93,88 +86,7 @@ export function FirstAidPlaylist({ tracks, player, onSelectTrack, volumeSupporte
       </ul>
 
       <div className="playlist-controls">
-        <div className="playlist-transport">
-          <button
-            type="button"
-            className="playlist-btn"
-            aria-label={t({ id: 'playlist.previous', message: 'Previous' })}
-            disabled={selectedIndex <= 0}
-            onClick={() => player.previous()}
-          >
-            ⏮
-          </button>
-          <button type="button" className="playlist-btn playlist-btn-play" onClick={() => player.togglePlayback()}>
-            {isBusy ? t({ id: 'playlist.pause', message: 'Pause' }) : t({ id: 'playlist.play', message: 'Play' })}
-          </button>
-          <button
-            type="button"
-            className="playlist-btn"
-            aria-label={t({ id: 'playlist.next', message: 'Next' })}
-            disabled={selectedIndex === -1 || selectedIndex >= tracks.length - 1}
-            onClick={() => player.next()}
-          >
-            ⏭
-          </button>
-        </div>
-
-        <div className="playlist-settings" ref={settingsRef}>
-          <button
-            type="button"
-            ref={settingsButtonRef}
-            className="playlist-btn"
-            aria-expanded={settingsOpen}
-            aria-controls="playlist-settings-panel"
-            onClick={() => setSettingsOpen((open) => !open)}
-          >
-            <span aria-hidden="true">⚙</span>
-            {' '}
-            {t({ id: 'playlist.settings', message: 'Settings' })}
-          </button>
-          {settingsOpen && (
-            <div id="playlist-settings-panel" role="group" aria-label={t({ id: 'playlist.settings', message: 'Settings' })} className="playlist-settings-panel">
-              <div className="playlist-setting" role="group" aria-label={t({ id: 'playlist.speed', message: 'Speed' })}>
-                <div className="playlist-setting-name">{t({ id: 'playlist.speed', message: 'Speed' })}</div>
-                <div className="playlist-choices">
-                  {PLAYBACK_RATES.map((rate) => (
-                    <button
-                      key={rate}
-                      type="button"
-                      className="playlist-choice"
-                      aria-pressed={player.playbackRate === rate}
-                      aria-label={i18n._({ id: 'playlist.speedOption', message: 'Speed {rate}×' }, { rate })}
-                      onClick={() => player.setPlaybackRate(rate)}
-                    >
-                      {rate}×
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div className="playlist-setting" role="group" aria-label={t({ id: 'playlist.repeat', message: 'Repeat' })}>
-                <div className="playlist-setting-name">{t({ id: 'playlist.repeat', message: 'Repeat' })}</div>
-                <div className="playlist-choices">
-                  {[
-                    ['off', t({ id: 'playlist.repeatOff', message: 'Repeat off' })],
-                    ['all', t({ id: 'playlist.repeatAll', message: 'Repeat all' })],
-                    ['one', t({ id: 'playlist.repeatOne', message: 'Repeat one' })],
-                  ].map(([mode, label]) => (
-                    <button
-                      key={mode}
-                      type="button"
-                      className="playlist-choice"
-                      aria-pressed={player.repeatMode === mode}
-                      onClick={() => player.setRepeatMode(mode)}
-                    >
-                      {label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-
         <div className="playlist-seek">
-          <span className="playlist-time">{formatTime(player.currentTime)}</span>
           <input
             type="range"
             className="playlist-seek-range"
@@ -187,7 +99,23 @@ export function FirstAidPlaylist({ tracks, player, onSelectTrack, volumeSupporte
             aria-valuetext={hasDuration ? `${formatTime(player.currentTime)} / ${formatTime(player.duration)}` : undefined}
             onChange={(event) => player.seek(Number(event.target.value))}
           />
-          <span className="playlist-time">{formatTime(player.duration)}</span>
+          <span className="playlist-time-display">
+            <span className="playlist-time">{formatTime(player.currentTime)}</span>
+            {' / '}
+            <span className="playlist-time">{formatTime(player.duration)}</span>
+          </span>
+        </div>
+        <div className="playlist-transport">
+          <button
+            type="button"
+            className="playlist-btn playlist-btn-play"
+            aria-label={isBusy ? t({ id: 'playlist.pause', message: 'Pause' }) : t({ id: 'playlist.play', message: 'Play' })}
+            onClick={() => player.togglePlayback()}
+          >
+            <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" fill="currentColor">
+              {isBusy ? <path d="M6 4h4v16H6zm8 0h4v16h-4z" /> : <path d="M7 3v18l14-9z" />}
+            </svg>
+          </button>
         </div>
 
         {volumeSupported ? (
@@ -219,6 +147,63 @@ export function FirstAidPlaylist({ tracks, player, onSelectTrack, volumeSupporte
             {t({ id: 'playlist.deviceVolume', message: "Use your device's volume buttons to adjust the volume." })}
           </p>
         )}
+
+        <div className="playlist-settings" ref={settingsRef}>
+          <button
+            type="button"
+            ref={settingsButtonRef}
+            className="playlist-btn"
+            aria-label={t({ id: 'playlist.settings', message: 'Settings' })}
+            aria-expanded={settingsOpen}
+            aria-controls="playlist-settings-panel"
+            onClick={() => setSettingsOpen((open) => !open)}
+          >
+            <span aria-hidden="true">⚙</span>
+          </button>
+          {settingsOpen && (
+            <div id="playlist-settings-panel" role="group" aria-label={t({ id: 'playlist.settings', message: 'Settings' })} className="playlist-settings-panel">
+              <div className="playlist-setting" role="group" aria-label={t({ id: 'playlist.speed', message: 'Speed' })}>
+                <div className="playlist-setting-name">{t({ id: 'playlist.speed', message: 'Speed' })}</div>
+                <div className="playlist-choices">
+                  {PLAYBACK_RATES.map((rate) => (
+                    <button
+                      key={rate}
+                      type="button"
+                      className="playlist-choice"
+                      aria-pressed={player.playbackRate === rate}
+                      aria-label={i18n._({ id: 'playlist.speedOption', message: 'Speed {rate}×' }, { rate })}
+                      onClick={() => player.setPlaybackRate(rate)}
+                    >
+                      {rate}×
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="playlist-setting" role="group" aria-label={t({ id: 'playlist.repeat', message: 'Repeat' })}>
+                <div className="playlist-setting-name">{t({ id: 'playlist.repeat', message: 'Repeat' })}</div>
+                <div className="playlist-choices">
+                  {[
+                    ['off', t({ id: 'playlist.repeatOff', message: 'Repeat off' })],
+                    ['once', t({ id: 'playlist.repeatOnce', message: 'Play all once' })],
+                    ['all', t({ id: 'playlist.repeatAll', message: 'Repeat all' })],
+                    ['one', t({ id: 'playlist.repeatOne', message: 'Repeat one' })],
+                  ].map(([mode, label]) => (
+                    <button
+                      key={mode}
+                      type="button"
+                      className="playlist-choice"
+                      aria-pressed={player.repeatMode === mode}
+                      onClick={() => player.setRepeatMode(mode)}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
       </div>
 
       {/* Visual echo of the player state only: the embedding page's .status
