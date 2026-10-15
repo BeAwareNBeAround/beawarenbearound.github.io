@@ -166,6 +166,37 @@ test('repeat one restarts the same track', () => {
   expect(audio.play).toHaveBeenCalledTimes(playCallsBefore + 1);
 });
 
+test('play all once selected while playing advances 2→3→4 and stops without wrapping', () => {
+  const { result } = renderPlayer();
+  const audio = selectAndPlay(result, 2);
+  act(() => result.current.setRepeatMode('once'));
+  expect(result.current.repeatMode).toBe('once');
+
+  for (const id of [3, 4]) {
+    act(() => audio.emit('ended'));
+    expect(result.current.selectedId).toBe(id);
+    expect(result.current.phase).toBe('loading');
+    act(() => audio.emit('playing'));
+  }
+  act(() => audio.emit('ended'));
+  expect(result.current.selectedId).toBe(4);
+  expect(result.current.phase).toBe('ended');
+  expect(audio.play).toHaveBeenCalledTimes(3);
+  act(() => audio.emit('ended'));
+  expect(audio.play).toHaveBeenCalledTimes(3);
+});
+
+test('play all once starting at track 4 stops without replaying', () => {
+  const { result } = renderPlayer();
+  act(() => result.current.setRepeatMode('once'));
+  const audio = selectAndPlay(result, 4);
+  act(() => audio.emit('ended'));
+  expect(result.current.repeatMode).toBe('once');
+  expect(result.current.selectedId).toBe(4);
+  expect(result.current.phase).toBe('ended');
+  expect(audio.play).toHaveBeenCalledTimes(1);
+});
+
 test('previous and next are no-ops without a selection', () => {
   const { result } = renderPlayer();
 
@@ -588,7 +619,7 @@ test('playback rates accept only the advertised choices', () => {
   expect(result.current.playbackRate).toBe(0.75);
 });
 
-test('repeat modes accept only off, all, and one', () => {
+test('repeat modes reject unsupported choices', () => {
   const { result } = renderPlayer();
   act(() => { result.current.setRepeatMode('all'); });
   act(() => { result.current.setRepeatMode('shuffle'); });

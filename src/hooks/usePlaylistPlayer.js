@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { getActionAudioSource } from '../services/audio';
 
 const TRACK_IDS = [1, 2, 3, 4];
-const REPEAT_MODES = ['off', 'all', 'one'];
+const REPEAT_MODES = ['off', 'all', 'one', 'once'];
 const PLAYBACK_RATES = [0.75, 1, 1.25, 1.5];
 
 // HTMLMediaElement.src reflects the resolved absolute URL, while the hook
@@ -82,7 +82,9 @@ export function usePlaylistPlayer({ locale }) {
       ['ended', () => {
         if (!isCurrentSource()) return;
         if (phaseRef.current !== 'playing' && phaseRef.current !== 'paused') return;
-        if (repeatModeRef.current === 'off') {
+        const currentIndex = TRACK_IDS.indexOf(selectedIdRef.current);
+        if (repeatModeRef.current === 'off'
+          || (repeatModeRef.current === 'once' && currentIndex === TRACK_IDS.length - 1)) {
           applyPhase('ended');
           return;
         }
@@ -90,7 +92,7 @@ export function usePlaylistPlayer({ locale }) {
           playTrackRef.current(selectedIdRef.current);
           return;
         }
-        playTrackRef.current(TRACK_IDS[(TRACK_IDS.indexOf(selectedIdRef.current) + 1) % TRACK_IDS.length]);
+        playTrackRef.current(TRACK_IDS[(currentIndex + 1) % TRACK_IDS.length]);
       }],
       ['waiting', () => {
         if (!isCurrentSource()) return;
