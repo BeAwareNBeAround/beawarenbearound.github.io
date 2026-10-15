@@ -309,6 +309,23 @@ test('Escape dismisses the error overlay without changing playback state', () =>
   expect(player.selectTrack).not.toHaveBeenCalled();
 });
 
+test('an error makes player controls inert, moves focus to close, and restores controls after dismissal', () => {
+  const { container, onSelectTrack, rerenderWith } = renderPlaylist({ player: createStubPlayer({ phase: 'error' }) });
+
+  const close = screen.getByRole('button', { name: 'Close' });
+  expect(container.querySelector('.playlist-rows')).toHaveAttribute('inert');
+  expect(container.querySelector('.playlist-controls')).toHaveAttribute('inert');
+  expect(close).toHaveFocus();
+
+  fireEvent.click(close);
+  expect(container.querySelector('.playlist-rows')).not.toHaveAttribute('inert');
+  expect(container.querySelector('.playlist-controls')).not.toHaveAttribute('inert');
+
+  rerenderWith({ phase: 'idle' });
+  fireEvent.click(getRow('SAFE'));
+  expect(onSelectTrack).toHaveBeenCalledWith(2);
+});
+
 test('unsupported device volume falls back to guidance instead of pretending to adjust', () => {
   const originalUserAgent = window.navigator.userAgent;
   Object.defineProperty(window.navigator, 'userAgent', {

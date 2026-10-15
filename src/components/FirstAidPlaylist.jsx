@@ -31,6 +31,7 @@ export function FirstAidPlaylist({ tracks, player, onSelectTrack, volumeSupporte
   const [errorDismissed, setErrorDismissed] = useState(false);
   const settingsRef = useRef(null);
   const settingsButtonRef = useRef(null);
+  const errorCloseButtonRef = useRef(null);
   const previousPhaseRef = useRef(player.phase);
 
   const hasDuration = Number.isFinite(player.duration) && player.duration > 0;
@@ -74,6 +75,7 @@ export function FirstAidPlaylist({ tracks, player, onSelectTrack, volumeSupporte
 
   useEffect(() => {
     if (!errorVisible) return undefined;
+    errorCloseButtonRef.current?.focus();
     const handleKeyDown = (event) => {
       if (event.key === 'Escape') {
         event.preventDefault();
@@ -86,7 +88,7 @@ export function FirstAidPlaylist({ tracks, player, onSelectTrack, volumeSupporte
 
   return (
     <section className="playlist-card" aria-label={t({ id: 'playlist.cardLabel', message: 'First aid audio guide' })}>
-      <ul className="playlist-rows">
+      <ul className="playlist-rows" inert={errorVisible}>
         {tracks.map((track, index) => {
           const isSelected = track.id === player.selectedId;
           return (
@@ -106,7 +108,7 @@ export function FirstAidPlaylist({ tracks, player, onSelectTrack, volumeSupporte
         })}
       </ul>
 
-      <div className="playlist-controls">
+      <div className="playlist-controls" inert={errorVisible}>
         <div className="playlist-seek">
           <input
             type="range"
@@ -232,6 +234,7 @@ export function FirstAidPlaylist({ tracks, player, onSelectTrack, volumeSupporte
         <div className="playlist-error-overlay">
           <button
             type="button"
+            ref={errorCloseButtonRef}
             className="playlist-error-close"
             aria-label={t({ id: 'dialog.close', message: 'Close' })}
             onClick={() => setErrorDismissed(true)}

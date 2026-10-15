@@ -693,6 +693,42 @@ test.describe('deterministic playback', () => {
     await media.fire('error');
     await expect(overlay).toBeVisible();
   });
+
+  test('error overlay makes player controls inert until its close action restores them', async ({ page }) => {
+    const { media, clickPosts } = await openApp(page);
+
+    await row(page, 1).click();
+    await media.setDuration(30);
+    await pauseButton(page, HK).focus();
+    await media.fire('error');
+
+    const close = page.locator('.playlist-error-close');
+    await expect(close).toBeFocused();
+    await expect(page.locator('.playlist-rows')).toHaveAttribute('inert', '');
+    await expect(page.locator('.playlist-controls')).toHaveAttribute('inert', '');
+
+    const underlyingFocus = await page.evaluate(() => {
+      const rowElement = document.querySelector('.playlist-row-2');
+      const seek = document.querySelector('.playlist-seek-range');
+      rowElement.focus();
+      const rowFocused = document.activeElement === rowElement;
+      seek.focus();
+      return { rowFocused, seekFocused: document.activeElement === seek };
+    });
+    expect(underlyingFocus).toEqual({ rowFocused: false, seekFocused: false });
+    await page.keyboard.press('Tab');
+    expect(await page.evaluate(() => document.activeElement?.closest('.playlist-rows, .playlist-controls'))).toBeNull();
+    await page.keyboard.press('ArrowRight');
+    expect(clickPosts().map((request) => request.body.action_target)).toEqual(['1']);
+    expect((await media.state()).currentTime).toBe(0);
+
+    await close.click();
+    await expect(page.locator('.playlist-error-overlay')).toHaveCount(0);
+    await expect(page.locator('.playlist-rows')).not.toHaveAttribute('inert');
+    await expect(page.locator('.playlist-controls')).not.toHaveAttribute('inert');
+    await row(page, 2).click();
+    expect(clickPosts().map((request) => request.body.action_target)).toEqual(['1', '2']);
+  });
 });
 
 test.describe('responsive and keyboard access', () => {
