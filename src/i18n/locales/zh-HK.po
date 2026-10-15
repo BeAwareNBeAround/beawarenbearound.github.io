@@ -119,42 +119,42 @@ msgstr ""
 #~ msgstr "上一段"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:181
+#: src/App.jsx:194
 msgid "video.label"
 msgstr "▶️ 急性腦癇發作處理動畫"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:36
+#: src/App.jsx:37
 msgid "faq.summary"
 msgstr "❓ 常見問題 (FAQ)"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:35
+#: src/App.jsx:36
 msgid "whatIs.summary"
 msgstr "💡 什麼是 Be Aware n' Be Around?"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:34
+#: src/App.jsx:35
 msgid "install.button"
 msgstr "📥 安裝 App"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:33
+#: src/App.jsx:34
 msgid "setup.summary"
 msgstr "📲 安裝及使用指南"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:213
+#: src/App.jsx:226
 msgid "footer.linkLabel"
 msgstr "🔗 了解更多 Epilepsy Foundation HK"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:206
+#: src/App.jsx:219
 msgid "faq.answer1"
 msgstr "點擊按鍵會播放預錄的語音。請檢查媒體音量、關閉靜音模式；若音訊未能載入，請重新整理頁面。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:182
+#: src/App.jsx:195
 msgid "video.title"
 msgstr "急性腦癇發作處理動畫"
 
@@ -164,47 +164,47 @@ msgid "header.subtitle"
 msgstr "處理急性腦癇發作的口訣"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:188
+#: src/App.jsx:201
 msgid "setup.androidLabel"
 msgstr "Android："
 
 #. js-lingui-explicit-id
-#: src/App.jsx:200
+#: src/App.jsx:213
 msgid "whatIs.environmentLabel"
 msgstr "評估環境："
 
 #. js-lingui-explicit-id
-#: src/App.jsx:198
+#: src/App.jsx:211
 msgid "whatIs.tagline3"
 msgstr "知道該做什麼，在最需要時陪伴左右。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:201
+#: src/App.jsx:214
 msgid "whatIs.aroundHeading"
 msgstr "Be Around（實際保護與照顧）"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:199
+#: src/App.jsx:212
 msgid "whatIs.awareHeading"
 msgstr "Be Aware（保持警覺與急救知識）"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:155
+#: src/App.jsx:156
 msgid "app.title"
 msgstr "Be Aware n' Be Around"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:196
+#: src/App.jsx:209
 msgid "whatIs.tagline1"
 msgstr "留意發作時間，陪伴患者安全復原。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:197
+#: src/App.jsx:210
 msgid "whatIs.tagline2"
 msgstr "Be Aware：不要壓制。Be Around：保護並陪伴。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:202
+#: src/App.jsx:215
 msgid "whatIs.secureText"
 msgstr "移開硬物，並在患者頭下墊上軟物。"
 
@@ -219,42 +219,42 @@ msgid "mode.education"
 msgstr "教育模式"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:62
+#: src/App.jsx:63
 msgid "status.educationDefault"
 msgstr "教育模式：請點擊按鍵聆聽指示。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:57
+#: src/App.jsx:58
 msgid "status.paused"
 msgstr "教育播放已暫停。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:59
+#: src/App.jsx:60
 msgid "status.ended"
 msgstr "教育步驟已完成。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:129
+#: src/App.jsx:130
 msgid "organization.logoAlt"
 msgstr "香港腦癇基金會"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:133
+#: src/App.jsx:134
 msgid "organization.name"
 msgstr "Epilepsy Foundation of Hong Kong"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:169
+#: src/App.jsx:170
 msgid "actions.ariaLabel"
 msgstr "急救行動"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:67
+#: src/components/FirstAidPlaylist.jsx:65
 msgid "playlist.cardLabel"
 msgstr "急救語音指引"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:45
+#: src/App.jsx:46
 msgid "guide.step3"
 msgstr "將患者輕輕翻側，保持呼吸道暢通。切勿強行將任何物品塞入患者口中。"
 
@@ -269,90 +269,89 @@ msgid "action.help"
 msgstr "助"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:187
+#: src/App.jsx:200
 msgid "setup.installHeading"
 msgstr "如何安裝至手機"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:189
+#: src/App.jsx:202
 msgid "setup.operateHeading"
 msgstr "如何操作"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:208
+#: src/App.jsx:221
 msgid "faq.answer3"
 msgstr "首次成功載入後，安裝此 PWA 或加入主畫面即可離線使用。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:188
+#: src/App.jsx:201
 msgid "setup.iosLabel"
 msgstr "iPhone (iOS)："
 
 #. js-lingui-explicit-id
-#: src/App.jsx:200
+#: src/App.jsx:213
 msgid "whatIs.dontsLabel"
 msgstr "了解不要做什麼："
 
 #. js-lingui-explicit-id
-#: src/App.jsx:137
-#: src/App.jsx:141
+#: src/App.jsx:138
+#: src/App.jsx:142
 msgid "language.selectorLabel"
 msgstr "語言"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:53
-#: src/components/FirstAidPlaylist.jsx:61
+#: src/App.jsx:33
 msgid "playlist.loading"
 msgstr "載入中…"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:128
+#: src/components/FirstAidPlaylist.jsx:126
 msgid "playlist.mute"
 msgstr "靜音"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:200
+#: src/App.jsx:213
 msgid "whatIs.dontsText"
 msgstr "切勿壓制患者的動作或把任何物品放入口中。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:200
+#: src/App.jsx:213
 msgid "whatIs.recognizeText"
 msgstr "記下發作開始時間；如超過五分鐘，請召喚緊急服務。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:44
+#: src/App.jsx:45
 msgid "guide.step2"
 msgstr "觀察並保護患者。移開附近危險物品，用軟物墊著患者頭部。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:188
+#: src/App.jsx:201
 msgid "setup.androidInstructions"
 msgstr "使用 Chrome 瀏覽器開啟，點擊右上角選單，然後選擇「加到主畫面」。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:188
+#: src/App.jsx:201
 msgid "setup.iosInstructions"
 msgstr "使用 Safari 瀏覽器開啟此網頁，點擊「分享」圖示，然後選擇「加入主畫面」。"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:112
+#: src/components/FirstAidPlaylist.jsx:110
 msgid "playlist.pause"
 msgstr "暫停"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:112
+#: src/components/FirstAidPlaylist.jsx:110
 msgid "playlist.play"
 msgstr "播放"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:187
+#: src/components/FirstAidPlaylist.jsx:185
 msgid "playlist.repeatOnce"
 msgstr "全部播放一次"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:61
-#: src/components/FirstAidPlaylist.jsx:63
+#: src/App.jsx:62
+#: src/components/FirstAidPlaylist.jsx:61
 msgid "playlist.error"
 msgstr "播放失敗，請按播放重試。"
 
@@ -362,58 +361,58 @@ msgid "playlist.seek"
 msgstr "播放位置"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:55
+#: src/App.jsx:56
 msgid "status.playingEducation"
 msgstr "播放教育步驟 {id}..."
 
 #. js-lingui-explicit-id
-#: src/App.jsx:202
+#: src/App.jsx:215
 msgid "whatIs.positionLabel"
 msgstr "安全擺位："
 
 #. js-lingui-explicit-id
-#: src/App.jsx:202
+#: src/App.jsx:215
 msgid "whatIs.supportLabel"
 msgstr "提供支持："
 
 #. js-lingui-explicit-id
-#: src/App.jsx:205
+#: src/App.jsx:218
 msgid "faq.question1"
 msgstr "Q1: 為什麼教育模式沒有聲音？"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:207
+#: src/App.jsx:220
 msgid "faq.question3"
 msgstr "Q3: 如何確保離線時也能使用？"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:209
+#: src/App.jsx:222
 msgid "faq.question4"
 msgstr "Q4: 為什麼點擊次數沒有立即更新？"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:200
+#: src/App.jsx:213
 msgid "whatIs.recognizeLabel"
 msgstr "辨認與計時："
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:182
-#: src/components/FirstAidPlaylist.jsx:183
+#: src/components/FirstAidPlaylist.jsx:180
+#: src/components/FirstAidPlaylist.jsx:181
 msgid "playlist.repeat"
 msgstr "重複播放"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:188
+#: src/components/FirstAidPlaylist.jsx:186
 msgid "playlist.repeatAll"
 msgstr "全部重複"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:186
+#: src/components/FirstAidPlaylist.jsx:184
 msgid "playlist.repeatOff"
 msgstr "不重複"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:189
+#: src/components/FirstAidPlaylist.jsx:187
 msgid "playlist.repeatOne"
 msgstr "單曲重複"
 
@@ -423,12 +422,12 @@ msgid "action.safe"
 msgstr "望"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:202
+#: src/App.jsx:215
 msgid "whatIs.secureLabel"
 msgstr "清理周邊環境："
 
 #. js-lingui-explicit-id
-#: src/App.jsx:46
+#: src/App.jsx:47
 msgid "guide.step4"
 msgstr "尋求協助。陪伴患者直至清醒，若超過五分鐘請召喚救護車。"
 
@@ -438,8 +437,8 @@ msgid "guide.title"
 msgstr "守望相助 急救指南"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:156
-#: src/components/FirstAidPlaylist.jsx:164
+#: src/components/FirstAidPlaylist.jsx:154
+#: src/components/FirstAidPlaylist.jsx:162
 msgid "playlist.settings"
 msgstr "播放設定"
 
@@ -449,18 +448,18 @@ msgid "action.side"
 msgstr "相"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:165
-#: src/components/FirstAidPlaylist.jsx:166
+#: src/components/FirstAidPlaylist.jsx:163
+#: src/components/FirstAidPlaylist.jsx:164
 msgid "playlist.speed"
 msgstr "速度"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:174
+#: src/components/FirstAidPlaylist.jsx:172
 msgid "playlist.speedOption"
 msgstr "速度 {rate}×"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:200
+#: src/App.jsx:213
 msgid "whatIs.environmentText"
 msgstr "留意尖角、水域或樓梯等實際危險。"
 
@@ -470,12 +469,12 @@ msgid "action.stay"
 msgstr "守"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:43
+#: src/App.jsx:44
 msgid "guide.step1"
 msgstr "保持鎮定，記錄抽搐開始及持續的時間。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:202
+#: src/App.jsx:215
 msgid "whatIs.supportText"
 msgstr "陪伴患者直至完全清醒，並給予平靜的安慰。"
 
@@ -485,7 +484,7 @@ msgid "header.slogan"
 msgstr "守、望、相、助"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:190
+#: src/App.jsx:203
 msgid "setup.educationInstructions"
 msgstr "點擊顏色按鍵，手機會播放該步驟的急救指示。"
 
@@ -495,36 +494,36 @@ msgid "header.secondarySubtitle"
 msgstr "點按下面 4 個按鍵了解口訣"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:210
+#: src/App.jsx:223
 msgid "faq.answer4"
 msgstr "計數器顯示所有用戶按過應用程式動作按鍵的總次數。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:115
+#: src/App.jsx:116
 msgid "install.fallbackAlert"
 msgstr "請使用瀏覽器的「加入主畫面」選項安裝。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:202
+#: src/App.jsx:215
 msgid "whatIs.positionText"
 msgstr "將患者輕輕翻側，保持呼吸道暢通。"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:127
+#: src/components/FirstAidPlaylist.jsx:125
 msgid "playlist.unmute"
 msgstr "取消靜音"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:147
+#: src/components/FirstAidPlaylist.jsx:145
 msgid "playlist.deviceVolume"
 msgstr "請使用裝置的音量按鍵調整音量。"
 
 #. js-lingui-explicit-id
-#: src/components/FirstAidPlaylist.jsx:141
+#: src/components/FirstAidPlaylist.jsx:139
 msgid "playlist.volume"
 msgstr "音量"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:132
+#: src/App.jsx:133
 msgid "organization.nameChinese"
 msgstr "香港腦癇基金會"

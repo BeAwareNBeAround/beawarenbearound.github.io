@@ -263,23 +263,23 @@ test('a pointer down outside the settings panel closes it', () => {
   expect(screen.queryByRole('group', { name: 'Settings' })).not.toBeInTheDocument();
 });
 
-test('loading and error states surface an inline status and never a modal', () => {
+test('only persistent playback errors surface inline player text and never a modal', () => {
   const { container, rerenderWith } = renderPlaylist();
 
   rerenderWith({ phase: 'loading' });
-  const cardStatus = container.querySelector('.playlist-status');
-  expect(screen.getByText('Loading…')).toBeInTheDocument();
-  // The embedding page's .status live region is the single announcement
-  // path; the card line stays visually present but must not announce again.
-  expect(cardStatus).not.toHaveAttribute('role', 'status');
-  expect(cardStatus).not.toHaveAttribute('aria-live');
+  expect(container.querySelector('.playlist-status')).toBeNull();
+  expect(screen.queryByText('Loading…')).not.toBeInTheDocument();
 
   rerenderWith({ phase: 'error' });
-  expect(screen.getByText('Playback failed. Press play to try again.')).toBeInTheDocument();
+  const cardStatus = container.querySelector('.playlist-status');
+  expect(cardStatus).toHaveTextContent('Playback failed. Press play to try again.');
+  // The embedding page's .status live region is the single announcement
+  // path; the player error remains text but must not announce a second time.
+  expect(cardStatus).not.toHaveAttribute('role', 'status');
+  expect(cardStatus).not.toHaveAttribute('aria-live');
   expect(container.querySelector('dialog')).toBeNull();
 
   rerenderWith({ phase: 'idle' });
-  expect(screen.queryByText('Loading…')).not.toBeInTheDocument();
   expect(screen.queryByText('Playback failed. Press play to try again.')).not.toBeInTheDocument();
 });
 
@@ -331,14 +331,14 @@ test('an explicit volumeSupported=true overrides the restricted-platform heurist
   }
 });
 
-test('control labels, loading, and repeat choices are translated in zh-HK', () => {
+test('control labels and repeat choices are translated in zh-HK', () => {
   renderPlaylist({ locale: 'zh-HK', player: createStubPlayer({ phase: 'loading' }) });
 
   // While loading, the play button offers pause.
   expect(screen.getByRole('button', { name: '暫停' })).toBeInTheDocument();
   expect(screen.getByRole('slider', { name: '播放位置' })).toBeInTheDocument();
   expect(screen.getByRole('slider', { name: '音量' })).toBeInTheDocument();
-  expect(screen.getByText('載入中…')).toBeInTheDocument();
+  expect(screen.queryByText('載入中…')).not.toBeInTheDocument();
 
   fireEvent.click(screen.getByRole('button', { name: '播放設定' }));
   const speedGroup = screen.getByRole('group', { name: '速度' });

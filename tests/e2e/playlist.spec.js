@@ -196,6 +196,50 @@ test.describe('compact play-all-once contract', () => {
       await pauseButton(page, locale).click();
       await expect(status(page)).toHaveText(locale.paused);
     });
+
+    test(`moves loading feedback to the localized title spinner and keeps rows and controls inset-aligned in ${locale.code}`, async ({ page }) => {
+      const { media } = await openApp(page);
+      await selectLocale(page, locale);
+
+      await row(page, 2).click();
+      const spinner = page.getByRole('img', { name: locale.loading, exact: true });
+      await expect(spinner).toHaveClass(/is-loading/);
+      await expect(spinner).not.toHaveAttribute('role', 'status');
+      await expect(page.locator('.playlist-status')).toHaveCount(0);
+
+      const layout = await page.locator('.instruction-box').evaluate((surface) => {
+        const rowElement = surface.querySelector('.playlist-row');
+        const controls = surface.querySelector('.playlist-controls');
+        const seek = surface.querySelector('.playlist-seek-range');
+        const tile = surface.querySelector('.playlist-tile');
+        const rowStyle = getComputedStyle(rowElement);
+        const controlsStyle = getComputedStyle(controls);
+        const surfaceBounds = surface.getBoundingClientRect();
+        const rowBounds = rowElement.getBoundingClientRect();
+        const tileBounds = tile.getBoundingClientRect();
+        const seekBounds = seek.getBoundingClientRect();
+        return {
+          rowLeft: rowBounds.left - surfaceBounds.left,
+          rowRight: surfaceBounds.right - rowBounds.right,
+          tileLeft: tileBounds.left - surfaceBounds.left,
+          seekLeft: seekBounds.left - surfaceBounds.left,
+          seekRight: surfaceBounds.right - seekBounds.right,
+          rowBorderTop: rowStyle.borderTopWidth,
+          controlsPaddingLeft: controlsStyle.paddingLeft,
+          controlsPaddingRight: controlsStyle.paddingRight,
+        };
+      });
+      expect(layout.rowLeft).toBe(0);
+      expect(layout.rowRight).toBe(0);
+      expect(layout.rowBorderTop).toBe('0px');
+      expect(layout.controlsPaddingLeft).toBe(layout.controlsPaddingRight);
+      expect(layout.seekLeft).toBe(layout.tileLeft);
+      expect(layout.seekRight).toBe(layout.tileLeft);
+
+      await media.fire('error');
+      await expect(page.locator('.guide-title-loading')).toHaveAttribute('aria-hidden', 'true');
+      await expect(page.locator('.playlist-status')).toHaveText(locale.error);
+    });
   }
 });
 
@@ -525,16 +569,17 @@ test.describe('deterministic playback', () => {
     await expect(page.locator('.playlist-seek .playlist-time').first()).toHaveText('0:30');
   });
 
-  test('the card status line is a visual echo, never a second live region', async ({ page }) => {
+  test('only persistent errors remain as non-live player text', async ({ page }) => {
     const { media } = await openApp(page);
 
     await row(page, 1).click();
-    await expect(page.locator('.playlist-status')).toHaveText(HK.loading);
+    await expect(page.getByRole('img', { name: HK.loading, exact: true })).toBeVisible();
+    await expect(page.locator('.playlist-status')).toHaveCount(0);
+    await expect(status(page)).toHaveAttribute('aria-live', 'polite');
+    await media.fire('error');
+    await expect(page.locator('.playlist-status')).toHaveText(HK.error);
     await expect(page.locator('.playlist-status')).not.toHaveAttribute('role');
     await expect(page.locator('.playlist-status')).not.toHaveAttribute('aria-live');
-    await expect(status(page)).toHaveAttribute('aria-live', 'polite');
-    await media.fire('playing');
-    await expect(status(page)).toHaveText(HK.playing(1));
   });
 });
 

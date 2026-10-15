@@ -30,6 +30,7 @@ export default function App() {
       t({ id: 'action.help', message: 'HELP' }),
     ],
     guideTitle: t({ id: 'guide.title', message: 'Seizure First Aid Guide' }),
+    loading: t({ id: 'playlist.loading', message: 'Loading…' }),
     setup: t({ id: 'setup.summary', message: '📲 Setup & Guide' }),
     install: t({ id: 'install.button', message: '📥 Install App' }),
     whatIs: t({ id: 'whatIs.summary', message: "💡 What is Be Aware n' Be Around?" }),
@@ -50,7 +51,7 @@ export default function App() {
   // The status line reports the player's actual phase; loading and error copy
   // reuse the playlist's translated keys so both surfaces agree.
   const statusText = player.phase === 'loading'
-    ? t({ id: 'playlist.loading', message: 'Loading…' })
+    ? labels.loading
     : player.phase === 'playing'
       ? i18n._({ id: 'status.playingEducation', message: 'Playing education step {id}...' }, { id: player.selectedId })
       : player.phase === 'paused'
@@ -173,7 +174,19 @@ export default function App() {
       <p className="status" aria-live="polite">{statusText}</p>
 
       <section className="instruction-box">
-        <h2 className="youtube-label">{labels.guideTitle}</h2>
+        <h2 className="youtube-label">
+          <span>{labels.guideTitle}</span>
+          <span
+            className={`guide-title-loading${player.phase === 'loading' ? ' is-loading' : ''}`}
+            role="img"
+            aria-label={player.phase === 'loading' ? labels.loading : undefined}
+            aria-hidden={player.phase !== 'loading'}
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <circle cx="12" cy="12" r="8" />
+            </svg>
+          </span>
+        </h2>
         <FirstAidPlaylist tracks={tracks} player={player} onSelectTrack={selectInstruction} />
       </section>
 

@@ -57,11 +57,9 @@ export function FirstAidPlaylist({ tracks, player, onSelectTrack, volumeSupporte
   }, [settingsOpen]);
 
   const seekLabel = t({ id: 'playlist.seek', message: 'Playback position' });
-  const statusText = player.phase === 'loading'
-    ? t({ id: 'playlist.loading', message: 'Loading…' })
-    : player.phase === 'error'
-      ? t({ id: 'playlist.error', message: 'Playback failed. Press play to try again.' })
-      : '';
+  const errorText = player.phase === 'error'
+    ? t({ id: 'playlist.error', message: 'Playback failed. Press play to try again.' })
+    : null;
 
   return (
     <section className="playlist-card" aria-label={t({ id: 'playlist.cardLabel', message: 'First aid audio guide' })}>
@@ -206,10 +204,10 @@ export function FirstAidPlaylist({ tracks, player, onSelectTrack, volumeSupporte
 
       </div>
 
-      {/* Visual echo of the player state only: the embedding page's .status
-          live region is the single announcement path, so this line carries
-          no live role and never announces the same text a second time. */}
-      <p className="playlist-status">{statusText}</p>
+      {/* The page-level status is the sole live region. Persistent playback
+          errors remain visible here, while title-strip loading feedback has no
+          duplicate in-player text or reserved blank space. */}
+      {errorText && <p className="playlist-status">{errorText}</p>}
     </section>
   );
 }

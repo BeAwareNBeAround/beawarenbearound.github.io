@@ -272,6 +272,21 @@ test('replaces the static guide paragraphs with the four-row playlist under the 
   }
 });
 
+test('shows a localized, non-live loading spinner in the attached guide title instead of player loading text', () => {
+  renderApp('en');
+
+  fireEvent.click(upperButton('STAY'));
+
+  const spinner = screen.getByRole('img', { name: 'Loading…' });
+  expect(spinner).toHaveClass('guide-title-loading', 'is-loading');
+  expect(spinner).not.toHaveAttribute('role', 'status');
+  expect(document.querySelector('.playlist-status')).toBeNull();
+
+  emit(audio(), 'error');
+  expect(spinner).toHaveAttribute('aria-hidden', 'true');
+  expect(document.querySelector('.playlist-status')).toHaveTextContent('Playback failed. Press play to try again.');
+});
+
 test('an upper button click selects its recording, sends exactly one counter event, and highlights only after playback actually starts', async () => {
   const { counter } = renderApp();
 
