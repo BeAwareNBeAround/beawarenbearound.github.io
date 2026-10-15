@@ -252,7 +252,7 @@ test.describe('compact play-all-once contract', () => {
 
       await media.fire('error');
       await expect(page.locator('.guide-title-loading')).toHaveAttribute('aria-hidden', 'true');
-      await expect(page.locator('.playlist-status')).toHaveText(locale.error);
+      await expect(page.locator('.playlist-error-message')).toHaveText(locale.error);
     });
   }
 });
@@ -567,11 +567,13 @@ test.describe('deterministic playback', () => {
     await media.fire('error');
 
     await expect(status(page)).toHaveText(HK.error);
-    await expect(page.locator('.playlist-status')).toHaveText(HK.error);
+    await expect(page.locator('.playlist-error-message')).toHaveText(HK.error);
     await expect(upperButton(page, 1)).not.toHaveClass(/playing/);
     await expect(row(page, 1).locator('.playlist-playing-badge')).toHaveCount(0);
     await expect(playButton(page, HK)).toBeVisible();
 
+    await page.locator('.playlist-error-close').click();
+    await expect(page.locator('.playlist-error-overlay')).toHaveCount(0);
     await playButton(page, HK).click();
     await expect(status(page)).toHaveText(HK.loading);
     await media.fire('playing');
@@ -586,6 +588,8 @@ test.describe('deterministic playback', () => {
     await media.rejectPlay();
     await expect(status(page)).toHaveText(HK.error);
 
+    await page.locator('.playlist-error-close').click();
+    await expect(page.locator('.playlist-error-overlay')).toHaveCount(0);
     await playButton(page, HK).click();
     await expect(status(page)).toHaveText(HK.loading);
     await media.fire('playing');
@@ -624,7 +628,7 @@ test.describe('deterministic playback', () => {
     await expect(page.locator('.playlist-seek .playlist-time').first()).toHaveText('0:30');
   });
 
-  test('only persistent errors remain as non-live player text', async ({ page }) => {
+  test('only persistent errors appear in a non-live player overlay', async ({ page }) => {
     const { media } = await openApp(page);
 
     await row(page, 1).click();
@@ -632,9 +636,62 @@ test.describe('deterministic playback', () => {
     await expect(page.locator('.playlist-status')).toHaveCount(0);
     await expect(status(page)).toHaveAttribute('aria-live', 'polite');
     await media.fire('error');
-    await expect(page.locator('.playlist-status')).toHaveText(HK.error);
-    await expect(page.locator('.playlist-status')).not.toHaveAttribute('role');
-    await expect(page.locator('.playlist-status')).not.toHaveAttribute('aria-live');
+    await expect(page.locator('.playlist-error-message')).toHaveText(HK.error);
+    await expect(page.locator('.playlist-error-overlay')).not.toHaveAttribute('role');
+    await expect(page.locator('.playlist-error-overlay')).not.toHaveAttribute('aria-live');
+  });
+
+  test('error overlay centers over the card, blocks player controls, and reopens after a failed retry', async ({ page }) => {
+    const { media, clickPosts } = await openApp(page);
+
+    await row(page, 1).click();
+    await media.fire('error');
+
+    const overlay = page.locator('.playlist-error-overlay');
+    await expect(overlay).toBeVisible();
+    await expect(overlay.getByRole('button', { name: '關閉', exact: true })).toHaveText('×');
+    await expect(page.locator('.playlist-status')).toHaveCount(0);
+    const layout = await page.locator('.playlist-card').evaluate((card) => {
+       const overlayElement = card.querySelector('.playlist-error-overlay');
+       const messageElement = card.querySelector('.playlist-error-message');
+       const cardBounds = card.getBoundingClientRect();
+       const messageBounds = messageElement.getBoundingClientRect();
+       const style = getComputedStyle(overlayElement);
+       return {
+         display: style.display,
+         justifyContent: style.justifyContent,
+         alignItems: style.alignItems,
+         top: overlayElement.getBoundingClientRect().top - cardBounds.top,
+         left: overlayElement.getBoundingClientRect().left - cardBounds.left,
+         right: cardBounds.right - overlayElement.getBoundingClientRect().right,
+         bottom: cardBounds.bottom - overlayElement.getBoundingClientRect().bottom,
+         messageCenterX: messageBounds.left + messageBounds.width / 2,
+         messageCenterY: messageBounds.top + messageBounds.height / 2,
+         cardCenterX: cardBounds.left + cardBounds.width / 2,
+         cardCenterY: cardBounds.top + cardBounds.height / 2,
+       };
+    });
+    expect(layout.display).toBe('flex');
+    expect(layout.justifyContent).toBe('center');
+    expect(layout.alignItems).toBe('center');
+    expect(layout.top).toBeCloseTo(0, 1);
+    expect(layout.left).toBeCloseTo(0, 1);
+    expect(layout.right).toBeCloseTo(0, 1);
+    expect(layout.bottom).toBeCloseTo(0, 1);
+    expect(layout.messageCenterX).toBeCloseTo(layout.cardCenterX, 1);
+    expect(layout.messageCenterY).toBeCloseTo(layout.cardCenterY, 1);
+
+    await expect(row(page, 2).click({ trial: true, timeout: 500 })).rejects.toThrow();
+    expect(clickPosts().map((request) => request.body.action_target)).toEqual(['1']);
+
+    await page.keyboard.press('Escape');
+    await expect(overlay).toHaveCount(0);
+    expect((await media.state()).playCount).toBe(1);
+
+    await playButton(page, HK).click();
+    await expect(status(page)).toHaveText(HK.loading);
+    await media.fire('error');
+    await expect(overlay).toBeVisible();
   });
 });
 

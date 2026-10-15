@@ -50,8 +50,7 @@ const emit = (instance, type) => act(() => { instance.emit(type); });
 const settle = (thunk) => act(async () => { thunk(); });
 
 const upperButton = (name) => screen.getByRole('button', { name, exact: true });
-// The page-level status line; the card's own .playlist-status mirrors
-// loading/error copy, so phase assertions target the page line explicitly.
+// The page-level status line is the only live announcement path.
 const statusLine = () => document.querySelector('.status');
 const playlistRow = (index) => screen.getByRole('button', { name: `${['守', '望', '相', '助'][index]} ${INSTRUCTIONS_ZH_HK[index]}` });
 // Locale-independent row access for after-locale-switch checks.
@@ -280,11 +279,11 @@ test('shows a localized, non-live loading spinner in the attached guide title in
   const spinner = screen.getByRole('img', { name: 'Loading…' });
   expect(spinner).toHaveClass('guide-title-loading', 'is-loading');
   expect(spinner).not.toHaveAttribute('role', 'status');
-  expect(document.querySelector('.playlist-status')).toBeNull();
+  expect(document.querySelector('.playlist-error-overlay')).toBeNull();
 
   emit(audio(), 'error');
   expect(spinner).toHaveAttribute('aria-hidden', 'true');
-  expect(document.querySelector('.playlist-status')).toHaveTextContent('Playback failed. Press play to try again.');
+  expect(document.querySelector('.playlist-error-overlay')).toHaveTextContent('Playback failed. Press play to try again.');
 });
 
 test('an upper button click selects its recording, sends exactly one counter event, and highlights only after playback actually starts', async () => {

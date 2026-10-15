@@ -28,8 +28,10 @@ function formatTime(seconds) {
 // the player) can override the heuristic without hard-coding OS identity.
 export function FirstAidPlaylist({ tracks, player, onSelectTrack, volumeSupported = !isIOS() }) {
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [errorDismissed, setErrorDismissed] = useState(false);
   const settingsRef = useRef(null);
   const settingsButtonRef = useRef(null);
+  const previousPhaseRef = useRef(player.phase);
 
   const hasDuration = Number.isFinite(player.duration) && player.duration > 0;
   // While a track is loading or playing, the play button offers pause.
@@ -60,6 +62,27 @@ export function FirstAidPlaylist({ tracks, player, onSelectTrack, volumeSupporte
   const errorText = player.phase === 'error'
     ? t({ id: 'playlist.error', message: 'Playback failed. Press play to try again.' })
     : null;
+  const errorVisible = Boolean(errorText) && !errorDismissed;
+
+  // A dismissal only applies to the current error occurrence. Leaving error
+  // and entering it again (for example, after a failed retry) restores the
+  // overlay without mutating the shared player's playback state.
+  useEffect(() => {
+    if (player.phase === 'error' && previousPhaseRef.current !== 'error') setErrorDismissed(false);
+    previousPhaseRef.current = player.phase;
+  }, [player.phase]);
+
+  useEffect(() => {
+    if (!errorVisible) return undefined;
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setErrorDismissed(true);
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [errorVisible]);
 
   return (
     <section className="playlist-card" aria-label={t({ id: 'playlist.cardLabel', message: 'First aid audio guide' })}>
@@ -204,10 +227,20 @@ export function FirstAidPlaylist({ tracks, player, onSelectTrack, volumeSupporte
 
       </div>
 
-      {/* The page-level status is the sole live region. Persistent playback
-          errors remain visible here, while title-strip loading feedback has no
-          duplicate in-player text or reserved blank space. */}
-      {errorText && <p className="playlist-status">{errorText}</p>}
+      {/* The page-level status remains the sole live announcement path. */}
+      {errorVisible && (
+        <div className="playlist-error-overlay">
+          <button
+            type="button"
+            className="playlist-error-close"
+            aria-label={t({ id: 'dialog.close', message: 'Close' })}
+            onClick={() => setErrorDismissed(true)}
+          >
+            <span aria-hidden="true">×</span>
+          </button>
+          <p className="playlist-error-message">{errorText}</p>
+        </div>
+      )}
     </section>
   );
 }

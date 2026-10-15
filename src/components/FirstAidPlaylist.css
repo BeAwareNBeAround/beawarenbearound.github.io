@@ -1,6 +1,7 @@
 /* The embedding guide owns the single outer surface and attached title strip. */
 
 .playlist-card {
+  position: relative;
   width: 100%;
   --playlist-content-inset: 12px;
   padding: 0;
@@ -232,9 +233,41 @@
   color: #666;
 }
 
-.playlist-status {
-  margin: 8px var(--playlist-content-inset) 0;
-  font-size: 13px;
-  font-weight: bold;
+.playlist-error-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 48px var(--playlist-content-inset);
+  background: rgba(255, 255, 255, 0.94);
   color: var(--dark-orange);
+  text-align: center;
+}
+
+.playlist-error-message {
+  max-width: 28rem;
+  margin: 0;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 1.5;
+}
+
+.playlist-error-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  font-size: 28px;
+  line-height: 1;
 }

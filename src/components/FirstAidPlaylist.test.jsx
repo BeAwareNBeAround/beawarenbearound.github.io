@@ -263,7 +263,7 @@ test('a pointer down outside the settings panel closes it', () => {
   expect(screen.queryByRole('group', { name: 'Settings' })).not.toBeInTheDocument();
 });
 
-test('only persistent playback errors surface inline player text and never a modal', () => {
+test('an error covers the card with a non-live, centered overlay instead of inline text', () => {
   const { container, rerenderWith } = renderPlaylist();
 
   rerenderWith({ phase: 'loading' });
@@ -271,16 +271,42 @@ test('only persistent playback errors surface inline player text and never a mod
   expect(screen.queryByText('Loading…')).not.toBeInTheDocument();
 
   rerenderWith({ phase: 'error' });
-  const cardStatus = container.querySelector('.playlist-status');
-  expect(cardStatus).toHaveTextContent('Playback failed. Press play to try again.');
+  const overlay = container.querySelector('.playlist-error-overlay');
+  expect(overlay).toHaveTextContent('Playback failed. Press play to try again.');
+  expect(overlay.querySelector('.playlist-error-message')).toHaveTextContent('Playback failed. Press play to try again.');
+  expect(within(overlay).getByRole('button', { name: 'Close' })).toHaveTextContent('×');
   // The embedding page's .status live region is the single announcement
-  // path; the player error remains text but must not announce a second time.
-  expect(cardStatus).not.toHaveAttribute('role', 'status');
-  expect(cardStatus).not.toHaveAttribute('aria-live');
-  expect(container.querySelector('dialog')).toBeNull();
+  // path; the player error overlay must not announce a second time.
+  expect(overlay).not.toHaveAttribute('role');
+  expect(overlay).not.toHaveAttribute('aria-live');
+  expect(container.querySelector('.playlist-status')).toBeNull();
 
   rerenderWith({ phase: 'idle' });
   expect(screen.queryByText('Playback failed. Press play to try again.')).not.toBeInTheDocument();
+});
+
+test('closing an error overlay locally leaves playback commands untouched and a later error transition reopens it', () => {
+  const { player, rerenderWith } = renderPlaylist({ player: createStubPlayer({ phase: 'error' }) });
+
+  const close = screen.getByRole('button', { name: 'Close' });
+  fireEvent.click(close);
+  expect(screen.queryByText('Playback failed. Press play to try again.')).not.toBeInTheDocument();
+  expect(player.togglePlayback).not.toHaveBeenCalled();
+  expect(player.selectTrack).not.toHaveBeenCalled();
+
+  rerenderWith({ phase: 'loading' });
+  rerenderWith({ phase: 'error' });
+  expect(screen.getByText('Playback failed. Press play to try again.')).toBeInTheDocument();
+});
+
+test('Escape dismisses the error overlay without changing playback state', () => {
+  const { player } = renderPlaylist({ player: createStubPlayer({ phase: 'error' }) });
+
+  fireEvent.keyDown(document, { key: 'Escape' });
+
+  expect(screen.queryByText('Playback failed. Press play to try again.')).not.toBeInTheDocument();
+  expect(player.togglePlayback).not.toHaveBeenCalled();
+  expect(player.selectTrack).not.toHaveBeenCalled();
 });
 
 test('unsupported device volume falls back to guidance instead of pretending to adjust', () => {
