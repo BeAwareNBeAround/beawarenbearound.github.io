@@ -80,8 +80,25 @@
   align-items: center;
   gap: 4px;
   border-top: 1px solid #f2e8df;
-  margin-top: 6px;
   padding: 12px var(--playlist-content-inset) 10px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .playlist-row {
+    transition: background-color 150ms ease-out;
+  }
+
+  .playlist-row:not(.selected):hover {
+    background: #fff8f0;
+  }
+
+  .playlist-controls {
+    transition: background-color 150ms ease-out;
+  }
+
+  .playlist-controls:hover {
+    background: #fff8f0;
+  }
 }
 
 .playlist-transport,

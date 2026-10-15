@@ -232,6 +232,7 @@ test.describe('compact play-all-once contract', () => {
           controlsPaddingLeft: controlsStyle.paddingLeft,
           controlsPaddingRight: controlsStyle.paddingRight,
           controlsPaddingBottom: controlsStyle.paddingBottom,
+          controlsMarginTop: controlsStyle.marginTop,
           titleCenter: titleTextBounds.left + (titleTextBounds.width / 2),
           stripCenter: titleBounds.left + (titleBounds.width / 2),
           spinnerRightInset: getComputedStyle(title.querySelector('.guide-title-loading')).right,
@@ -243,6 +244,7 @@ test.describe('compact play-all-once contract', () => {
       expect(layout.rowBorderRadius).toBe('0px');
       expect(layout.controlsPaddingLeft).toBe(layout.controlsPaddingRight);
       expect(layout.controlsPaddingBottom).toBe('10px');
+      expect(layout.controlsMarginTop).toBe('0px');
       expect(layout.seekLeft).toBe(layout.tileLeft);
       expect(layout.seekRight).toBe(layout.tileLeft);
       expect(layout.titleCenter).toBeCloseTo(layout.stripCenter, 1);
@@ -253,6 +255,47 @@ test.describe('compact play-all-once contract', () => {
       await expect(page.locator('.playlist-status')).toHaveText(locale.error);
     });
   }
+});
+
+test.describe('desktop playlist interaction affordances', () => {
+  test.use({ viewport: { width: 1280, height: 900 } });
+
+  test('limits playlist hover transitions to hover-capable desktop pointers', async ({ page }) => {
+    await openApp(page);
+
+    const hoverAffordance = await page.evaluate(() => {
+      const mediaQuery = '(hover: hover) and (pointer: fine)';
+      const rules = [];
+      const collectRules = (cssRules, media = null) => {
+        for (const rule of cssRules) {
+          if (rule instanceof CSSMediaRule) {
+            collectRules(rule.cssRules, rule.conditionText);
+          } else if (rule instanceof CSSStyleRule && media === mediaQuery) {
+            rules.push({ selector: rule.selectorText, transition: rule.style.transition });
+          }
+        }
+      };
+
+      for (const stylesheet of document.styleSheets) {
+        collectRules(stylesheet.cssRules);
+      }
+
+      return {
+        matchesDesktopHover: matchMedia(mediaQuery).matches,
+        rowTransition: getComputedStyle(document.querySelector('.playlist-row')).transition,
+        controlsTransition: getComputedStyle(document.querySelector('.playlist-controls')).transition,
+        rules,
+      };
+    });
+
+    expect(hoverAffordance.matchesDesktopHover).toBe(true);
+    expect(hoverAffordance.rowTransition).not.toBe('all 0s ease 0s');
+    expect(hoverAffordance.controlsTransition).not.toBe('all 0s ease 0s');
+    expect(hoverAffordance.rules).toEqual(expect.arrayContaining([
+      expect.objectContaining({ selector: '.playlist-row', transition: expect.stringContaining('background-color') }),
+      expect.objectContaining({ selector: '.playlist-controls', transition: expect.stringContaining('background-color') }),
+    ]));
+  });
 });
 
 test.describe('deterministic playback', () => {
