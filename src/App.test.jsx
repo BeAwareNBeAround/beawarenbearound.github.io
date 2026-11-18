@@ -248,7 +248,7 @@ test('switches the setup, guidance, FAQ, and footer content between languages', 
   fireEvent.click(screen.getByRole('button', { name: '語言' }));
   fireEvent.click(screen.getByRole('menuitem', { name: 'EN' }));
 
-  expect(document.querySelector('.subtitle-primary')).toHaveTextContent('EFHK Epilepsy Toolkit');
+  expect(document.querySelector('.subtitle-primary')).toHaveTextContent('Acute Seizure Management Slogan');
   expect(document.querySelector('.slogan-chars')).toHaveTextContent('C A R E');
 
   const englishSetupPanel = openInfoPanel('📲 Setup & Guide');

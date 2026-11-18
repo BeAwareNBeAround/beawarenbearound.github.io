@@ -17,7 +17,7 @@ export default function App() {
   const { count, loading, error, trackClick } = useClickCounter({ endpointUrl: import.meta.env.VITE_VISIT_COUNTER_URL, targetUrl: window.location.href, installId: getInstallId() });
   const labels = {
     slogan: t({ id: 'header.slogan', message: 'C A R E' }),
-    subtitle: t({ id: 'header.subtitle', message: 'EFHK Epilepsy Toolkit' }),
+    subtitle: t({ id: 'header.subtitle', message: 'Acute Seizure Management Slogan' }),
     secondarySubtitle: t({ id: 'header.secondarySubtitle', message: 'Tap the 4 buttons below to learn the steps' }),
     clicks: t({ id: 'counter.label', message: 'Clicks' }),
     education: t({ id: 'mode.education', message: 'Education Mode' }),

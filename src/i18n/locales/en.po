@@ -194,6 +194,11 @@ msgid "video.title"
 msgstr "Acute Seizure Animation"
 
 #. js-lingui-explicit-id
+#: src/App.jsx:20
+msgid "header.subtitle"
+msgstr "Acute Seizure Management Slogan"
+
+#. js-lingui-explicit-id
 #: src/App.jsx:160
 msgid "setup.androidLabel"
 msgstr "Android:"
@@ -283,11 +288,6 @@ msgstr "Education playback paused."
 #: src/App.jsx:60
 msgid "status.ended"
 msgstr "Education step finished."
-
-#. js-lingui-explicit-id
-#: src/App.jsx:20
-msgid "header.subtitle"
-msgstr "EFHK Epilepsy Toolkit"
 
 #. js-lingui-explicit-id
 #: src/components/AppHeader.jsx:63

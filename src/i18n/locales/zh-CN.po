@@ -194,6 +194,11 @@ msgid "video.title"
 msgstr "急性癫痫发作处理动画"
 
 #. js-lingui-explicit-id
+#: src/App.jsx:20
+msgid "header.subtitle"
+msgstr "处理急性癫痫发作的口诀"
+
+#. js-lingui-explicit-id
 #: src/App.jsx:160
 msgid "setup.androidLabel"
 msgstr "Android："
@@ -283,11 +288,6 @@ msgstr "教育播放已暂停。"
 #: src/App.jsx:60
 msgid "status.ended"
 msgstr "教育步骤已完成。"
-
-#. js-lingui-explicit-id
-#: src/App.jsx:20
-msgid "header.subtitle"
-msgstr "处理急性癫痫发作的口诀"
 
 #. js-lingui-explicit-id
 #: src/components/AppHeader.jsx:63
