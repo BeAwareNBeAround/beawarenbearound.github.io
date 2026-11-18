@@ -9,7 +9,7 @@ const SILENT_MP3_FRAME = Buffer.from(
 
 /**
  * Registers a Playwright route that serves a silent MP3 frame for every
- * action recording request (public/resources/<function>-<locale>.mp3).
+ * action recording request (public/resources/track<id>-<locale>.mp3).
  *
  * This applies only to suites that load the app WITHOUT the service worker.
  * Every suite under tests/ runs against the built PWA (playwright.config.js

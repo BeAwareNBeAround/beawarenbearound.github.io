@@ -80,7 +80,7 @@ test('first play with no selection starts track 1', () => {
 
   expect(result.current.selectedId).toBe(1);
   expect(result.current.phase).toBe('loading');
-  expect(latestAudio().src).toBe('./resources/stay-zh-HK.mp3');
+  expect(latestAudio().src).toBe('./resources/track1-zh-HK.mp3');
 });
 
 test('selecting a track pauses the old playback and restarts from zero', () => {
@@ -96,7 +96,7 @@ test('selecting a track pauses the old playback and restarts from zero', () => {
   expect(result.current.selectedId).toBe(2);
   expect(result.current.currentTime).toBe(0);
   expect(audio.currentTime).toBe(0);
-  expect(audio.src).toBe('./resources/save-zh-HK.mp3');
+  expect(audio.src).toBe('./resources/track2-zh-HK.mp3');
   expect(result.current.phase).toBe('loading');
 });
 
@@ -139,7 +139,7 @@ test('pause and resume preserve the playback position without reloading the sour
   expect(result.current.phase).toBe('loading');
   expect(result.current.currentTime).toBe(7);
   expect(audio.currentTime).toBe(7);
-  expect(audio.src).toBe('./resources/stay-zh-HK.mp3');
+  expect(audio.src).toBe('./resources/track1-zh-HK.mp3');
 
   act(() => { audio.emit('playing'); });
   expect(result.current.phase).toBe('playing');
@@ -271,7 +271,7 @@ test('next while playing continues playing the neighboring track from zero', () 
   expect(result.current.selectedId).toBe(3);
   expect(result.current.phase).toBe('loading');
   expect(result.current.currentTime).toBe(0);
-  expect(audio.src).toBe('./resources/side-zh-HK.mp3');
+  expect(audio.src).toBe('./resources/track3-zh-HK.mp3');
 
   act(() => { audio.emit('playing'); });
   expect(result.current.phase).toBe('playing');
@@ -287,7 +287,7 @@ test('previous while playing continues playing the neighboring track from zero',
   expect(result.current.selectedId).toBe(2);
   expect(result.current.phase).toBe('loading');
   expect(result.current.currentTime).toBe(0);
-  expect(audio.src).toBe('./resources/save-zh-HK.mp3');
+  expect(audio.src).toBe('./resources/track2-zh-HK.mp3');
 
   act(() => { audio.emit('playing'); });
   expect(result.current.phase).toBe('playing');
@@ -305,7 +305,7 @@ test('next while paused leaves the neighboring track paused', () => {
   expect(result.current.phase).toBe('paused');
   expect(result.current.currentTime).toBe(0);
   expect(audio.play).toHaveBeenCalledTimes(playCallsBefore);
-  expect(audio.src).toBe('./resources/side-zh-HK.mp3');
+  expect(audio.src).toBe('./resources/track3-zh-HK.mp3');
 });
 
 test('previous while paused moves to the neighboring track paused', () => {
@@ -511,7 +511,7 @@ test('source events survive the browser reflecting src as an absolute URL', () =
   const audio = latestAudio();
   // Real HTMLMediaElement.src getters return the resolved absolute URL;
   // emulate that so the relative-vs-absolute comparison is locked in.
-  audio.src = new URL('./resources/stay-zh-HK.mp3', document.baseURI).href;
+  audio.src = new URL('./resources/track1-zh-HK.mp3', document.baseURI).href;
 
   act(() => { audio.emit('playing'); });
   expect(result.current.phase).toBe('playing');
@@ -550,7 +550,7 @@ test('play after a locale change loads the new locale recording from zero', () =
 
   expect(result.current.phase).toBe('loading');
   expect(result.current.currentTime).toBe(0);
-  expect(latestAudio().src).toBe('./resources/save-en.mp3');
+  expect(latestAudio().src).toBe('./resources/track2-en.mp3');
 });
 
 test('a stale pending play resolved after a locale change cannot resurrect playback', async () => {
@@ -584,7 +584,7 @@ test('a stale pending play rejected after a locale change cannot resurrect playb
   expect(result.current.selectedId).toBe(1);
   expect(result.current.currentTime).toBe(0);
   expect(audio.play).toHaveBeenCalledTimes(playCallsBefore);
-  expect(audio.src).toBe('./resources/stay-zh-HK.mp3');
+  expect(audio.src).toBe('./resources/track1-zh-HK.mp3');
 });
 
 test('unmount pauses playback and detaches the media listeners', () => {

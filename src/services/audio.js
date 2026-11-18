@@ -1,7 +1,7 @@
-const ACTION_AUDIO = { 1: 'stay', 2: 'save', 3: 'side', 4: 'help' };
+const ACTION_AUDIO = { 1: 'track1', 2: 'track2', 3: 'track3', 4: 'track4' };
 
-// Single source of truth for action-recording paths (relative URLs, reused
-// recordings; the SAFE/Save mismatch is intentional existing asset naming).
+// Single source of truth for action-recording paths (relative URLs; assets
+// are named track<id>-<locale>.mp3 so filenames carry no slogan wording).
 // Playback itself is owned by the page-level usePlaylistPlayer hook, which
 // resolves sources through this resolver.
 export function getActionAudioSource(id, locale) {

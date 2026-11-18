@@ -2,7 +2,7 @@ import { expect, test } from 'vitest';
 import { getActionAudioSource } from './audio';
 
 test('getActionAudioSource resolves the exact recording path for every action and locale', () => {
-  const expectedNames = { 1: 'stay', 2: 'save', 3: 'side', 4: 'help' };
+  const expectedNames = { 1: 'track1', 2: 'track2', 3: 'track3', 4: 'track4' };
 
   for (const [id, name] of Object.entries(expectedNames)) {
     for (const locale of ['zh-HK', 'zh-CN', 'en']) {
@@ -10,8 +10,8 @@ test('getActionAudioSource resolves the exact recording path for every action an
     }
   }
 
-  // The SAFE/Save asset-name mismatch is intentional existing asset naming.
-  expect(getActionAudioSource(2, 'en')).toBe('./resources/save-en.mp3');
+  // Asset names are generic track ids, independent of any slogan wording.
+  expect(getActionAudioSource(2, 'en')).toBe('./resources/track2-en.mp3');
 });
 
 test('getActionAudioSource returns null for unknown ids without creating media', () => {

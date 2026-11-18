@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-const RECORDING_NAMES = ['stay', 'save', 'side', 'help'];
+const RECORDING_NAMES = ['track1', 'track2', 'track3', 'track4'];
 const RECORDING_LOCALES = ['zh-HK', 'zh-CN', 'en'];
 
 test('serves the generated manifest and service worker', async ({ page, request }) => {

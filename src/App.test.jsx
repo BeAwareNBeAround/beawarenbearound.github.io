@@ -355,7 +355,7 @@ test('an upper button click selects its recording, sends exactly one counter eve
   fireEvent.click(upperButton('守'));
 
   // The request is loading: no playing highlight or success announcement yet.
-  expect(audio().src).toBe('./resources/stay-zh-HK.mp3');
+  expect(audio().src).toBe('./resources/track1-zh-HK.mp3');
   expect(upperButton('守')).not.toHaveClass('playing');
   expect(rowBadge(0)).toBeNull();
   expect(screen.queryByText('播放教育步驟 1...')).not.toBeInTheDocument();
@@ -376,7 +376,7 @@ test('a playlist row click selects its recording, sends exactly one counter even
 
   fireEvent.click(playlistRow(2));
 
-  expect(audio().src).toBe('./resources/side-zh-HK.mp3');
+  expect(audio().src).toBe('./resources/track3-zh-HK.mp3');
   expect(upperButton('相')).not.toHaveClass('playing');
 
   emit(audio(), 'playing');
@@ -402,7 +402,7 @@ test('selecting a second track pauses the first, keeps a single player, and move
 
   expect(firstAudio.pause).toHaveBeenCalledTimes(pauseCallsBefore + 1);
   expect(window.MockAudioInstances).toHaveLength(1);
-  expect(firstAudio.src).toBe('./resources/save-zh-HK.mp3');
+  expect(firstAudio.src).toBe('./resources/track2-zh-HK.mp3');
   expect(upperButton('守')).not.toHaveClass('playing');
   expect(rowBadge(0)).toBeNull();
   expect(upperButton('望')).not.toHaveClass('playing');
@@ -507,7 +507,7 @@ test('repeat all advances from an upper-button selection and repeat one restarts
 
   emit(audio(), 'ended');
 
-  expect(audio().src).toBe('./resources/stay-zh-HK.mp3');
+  expect(audio().src).toBe('./resources/track1-zh-HK.mp3');
   expect(upperButton('助')).not.toHaveClass('playing');
   emit(audio(), 'playing');
   expect(upperButton('守')).toHaveClass('playing');
@@ -521,7 +521,7 @@ test('repeat all advances from an upper-button selection and repeat one restarts
 
   emit(audio(), 'ended');
 
-  expect(audio().src).toBe('./resources/save-zh-HK.mp3');
+  expect(audio().src).toBe('./resources/track2-zh-HK.mp3');
   expect(playlistRow(1)).toHaveAttribute('aria-pressed', 'true');
   emit(audio(), 'playing');
   expect(upperButton('望')).toHaveClass('playing');
@@ -549,7 +549,7 @@ test('switching language stops playback, keeps the selection, and the next play 
 
   fireEvent.click(screen.getByRole('button', { name: 'Play' }));
 
-  expect(audio().src).toBe('./resources/save-en.mp3');
+  expect(audio().src).toBe('./resources/track2-en.mp3');
 });
 
 test('StrictMode does not duplicate click requests or media elements', async () => {
@@ -570,12 +570,12 @@ test('transport controls, settings, seeking, and Play from initial idle send no 
   // Play with no selection starts track 1 without a click event.
   fireEvent.click(screen.getByRole('button', { name: '播放' }));
   emit(audio(), 'playing');
-  expect(audio().src).toBe('./resources/stay-zh-HK.mp3');
+  expect(audio().src).toBe('./resources/track1-zh-HK.mp3');
 
   fireEvent.click(screen.getByRole('button', { name: '暫停' }));
   fireEvent.click(screen.getByRole('button', { name: '播放' }));
   emit(audio(), 'playing');
-  expect(audio().src).toBe('./resources/stay-zh-HK.mp3');
+  expect(audio().src).toBe('./resources/track1-zh-HK.mp3');
 
   act(() => { audio().duration = 30; audio().emit('durationchange'); });
   fireEvent.change(screen.getByRole('slider', { name: '播放位置' }), { target: { value: '5' } });
@@ -598,7 +598,7 @@ test('renders the English education status with its action identifier', () => {
 
   emit(audio(), 'playing');
 
-  expect(audio().src).toBe('./resources/stay-en.mp3');
+  expect(audio().src).toBe('./resources/track1-en.mp3');
   expect(screen.getByText('Playing education step 1...')).toBeInTheDocument();
   expect(screen.getByRole('button', { name: 'C', exact: true })).toHaveClass('playing');
 });

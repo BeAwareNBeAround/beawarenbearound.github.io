@@ -140,7 +140,7 @@ test.describe('compact play-all-once contract', () => {
       await expect(status(page)).toHaveText(locale.ended);
       await expect(row(page, 4)).toHaveAttribute('aria-pressed', 'true');
       expect((await media.state()).playCount).toBe(3);
-      expect((await media.state()).src).toMatch(new RegExp(`/help-${locale.code}\\.mp3$`));
+      expect((await media.state()).src).toMatch(new RegExp(`/track4-${locale.code}\\.mp3$`));
       expect(clickPosts().map((request) => request.body.action_target)).toEqual(['2']);
       // Starting directly at the terminal row must not replay or wrap either.
       await row(page, 4).click();
@@ -353,7 +353,7 @@ test.describe('deterministic playback', () => {
     expect(clickPosts().map((request) => request.body.action_target)).toEqual(['2']);
 
     const loadingState = await media.state();
-    expect(loadingState.src).toBe(new URL('/resources/save-zh-HK.mp3', page.url()).href);
+    expect(loadingState.src).toBe(new URL('/resources/track2-zh-HK.mp3', page.url()).href);
     expect(loadingState.playCount).toBe(1);
 
     await media.fire('playing');
@@ -370,7 +370,7 @@ test.describe('deterministic playback', () => {
 
     await upperButton(page, 4).click();
     await expect(status(page)).toHaveText(HK.loading);
-    expect((await media.state()).src).toBe(new URL('/resources/help-zh-HK.mp3', page.url()).href);
+    expect((await media.state()).src).toBe(new URL('/resources/track4-zh-HK.mp3', page.url()).href);
 
     await media.fire('playing');
     await expect(status(page)).toHaveText(HK.playing(4));
@@ -384,7 +384,7 @@ test.describe('deterministic playback', () => {
     await playButton(page, HK).click();
     await expect(status(page)).toHaveText(HK.loading);
     const state = await media.state();
-    expect(state.src).toBe(new URL('/resources/stay-zh-HK.mp3', page.url()).href);
+    expect(state.src).toBe(new URL('/resources/track1-zh-HK.mp3', page.url()).href);
     expect(state.playCount).toBe(1);
     expect(clickPosts()).toHaveLength(0);
 
@@ -440,7 +440,7 @@ test.describe('deterministic playback', () => {
     await media.fire('ended');
     await expect(status(page)).toHaveText(HK.loading);
     const advanced = await media.state();
-    expect(advanced.src).toBe(new URL('/resources/stay-zh-HK.mp3', page.url()).href);
+    expect(advanced.src).toBe(new URL('/resources/track1-zh-HK.mp3', page.url()).href);
     expect(advanced.playCount).toBe(2);
 
     await media.fire('playing');
@@ -462,7 +462,7 @@ test.describe('deterministic playback', () => {
     await media.fire('ended');
     await expect(status(page)).toHaveText(HK.loading);
     const replayed = await media.state();
-    expect(replayed.src).toBe(new URL('/resources/save-zh-HK.mp3', page.url()).href);
+    expect(replayed.src).toBe(new URL('/resources/track2-zh-HK.mp3', page.url()).href);
     expect(replayed.currentTime).toBe(0);
     expect(replayed.playCount).toBe(2);
 
@@ -483,7 +483,7 @@ test.describe('deterministic playback', () => {
     await expect(status(page)).toHaveText(HK.ended);
     await expect(playButton(page, HK)).toBeVisible();
     const ended = await media.state();
-    expect(ended.src).toBe(new URL('/resources/side-zh-HK.mp3', page.url()).href);
+    expect(ended.src).toBe(new URL('/resources/track3-zh-HK.mp3', page.url()).href);
     expect(ended.playCount).toBe(1);
     expect(await media.elementCount()).toBe(1);
     await expect(row(page, 3).locator('.playlist-playing-badge')).toHaveCount(0);
@@ -568,13 +568,13 @@ test.describe('deterministic playback', () => {
 
     await playButton(page, zhCN).click();
     await expect(status(page)).toHaveText(zhCN.loading);
-    expect((await media.state()).src).toBe(new URL('/resources/save-zh-CN.mp3', page.url()).href);
+    expect((await media.state()).src).toBe(new URL('/resources/track2-zh-CN.mp3', page.url()).href);
 
     // The retained mode also still behaves: the end of the track advances.
     await media.fire('playing');
     await media.fire('ended');
     await expect(status(page)).toHaveText(zhCN.loading);
-    expect((await media.state()).src).toBe(new URL('/resources/side-zh-CN.mp3', page.url()).href);
+    expect((await media.state()).src).toBe(new URL('/resources/track3-zh-CN.mp3', page.url()).href);
   });
 
   test('a media error shows the translated failure and a retry recovers', async ({ page }) => {
@@ -886,7 +886,7 @@ test.describe('real recordings in the browser', () => {
       currentTime: element.currentTime,
     })));
     expect(elements).toHaveLength(1);
-    expect(elements[0].currentSrc).toMatch(/\/resources\/side-zh-HK\.mp3$/);
+    expect(elements[0].currentSrc).toMatch(/\/resources\/track3-zh-HK\.mp3$/);
     expect(elements[0].paused).toBe(false);
     expect(elements[0].currentTime).toBeLessThan(1);
     await expect(page.locator('.playlist-playing-badge')).toHaveCount(0);
