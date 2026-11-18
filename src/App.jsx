@@ -44,7 +44,7 @@ export default function App() {
     <Trans id="guide.step1"><strong>Calmly Stay</strong>: Keep calm, stay close by, and time the seizure.</Trans>,
     <Trans id="guide.step2"><strong>Area Clear</strong>: Move away dangerous objects and put something soft under their head.</Trans>,
     <Trans id="guide.step3"><strong>Roll to Side</strong>: Gently roll them onto their side. Never put anything in their mouth.</Trans>,
-    <Trans id="guide.step4"><strong>Emergency Help</strong>: Seek Help and Call 999 if it lasts over 3 to 5 minutes or if they are injured.</Trans>,
+    <Trans id="guide.step4"><strong>Emergency Help</strong>: Seek help and call 999 if it lasts over 3 to 5 minutes or if they are injured.</Trans>,
   ];
   const tracks = labels.buttons.map((label, index) => ({ id: index + 1, label, instruction: guideSteps[index] }));
 

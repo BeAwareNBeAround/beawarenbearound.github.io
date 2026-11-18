@@ -327,6 +327,18 @@ test('renders each English guide row step name in bold', () => {
       expect.stringContaining(`${['C', 'A', 'R', 'E'][index]} ${stepNames[index]}: `),
     );
   }
+  // Pin the exact sentence copy (casing included): jest-dom string
+  // matching is case-insensitive, so use textContent toContain. M20-008
+  // lowercases "help"/"call" in the step-4 sentence.
+  const stepSentences = [
+    'Calmly Stay: Keep calm, stay close by, and time the seizure.',
+    'Area Clear: Move away dangerous objects and put something soft under their head.',
+    'Roll to Side: Gently roll them onto their side. Never put anything in their mouth.',
+    'Emergency Help: Seek help and call 999 if it lasts over 3 to 5 minutes or if they are injured.',
+  ];
+  for (let index = 0; index < 4; index += 1) {
+    expect(playlistRowEl(index).textContent).toContain(stepSentences[index]);
+  }
 });
 
 test('shows a localized, non-live loading spinner in the attached guide title instead of player loading text', () => {

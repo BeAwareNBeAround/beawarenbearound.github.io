@@ -141,7 +141,7 @@ msgstr "<0>Calmly Stay</0>: Keep calm, stay close by, and time the seizure."
 #. js-lingui-explicit-id
 #: src/App.jsx:47
 msgid "guide.step4"
-msgstr "<0>Emergency Help</0>: Seek Help and Call 999 if it lasts over 3 to 5 minutes or if they are injured."
+msgstr "<0>Emergency Help</0>: Seek help and call 999 if it lasts over 3 to 5 minutes or if they are injured."
 
 #. js-lingui-explicit-id
 #: src/App.jsx:46
