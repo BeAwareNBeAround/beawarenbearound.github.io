@@ -17,7 +17,7 @@ const LOCALES = [
   {
     selector: '繁體',
     code: 'zh-HK',
-    default: '教育模式：請點擊按鍵聆聽指示。',
+    default: '請點擊按鍵聆聽指示。',
     loading: '載入中…',
     paused: '教育播放已暫停。',
     ended: '教育步驟已完成。',
@@ -38,7 +38,7 @@ const LOCALES = [
   {
     selector: '简体',
     code: 'zh-CN',
-    default: '教育模式：请点击按键聆听指示。',
+    default: '请点击按键聆听指示。',
     loading: '加载中…',
     paused: '教育播放已暂停。',
     ended: '教育步骤已完成。',
@@ -59,7 +59,7 @@ const LOCALES = [
   {
     selector: 'EN',
     code: 'en',
-    default: 'Education Mode: Click buttons for instructions.',
+    default: 'Click buttons for instructions.',
     loading: 'Loading…',
     paused: 'Education playback paused.',
     ended: 'Education step finished.',

@@ -249,6 +249,11 @@ msgid "whatIs.secureText"
 msgstr "移开硬物，并在患者头下垫上软物。"
 
 #. js-lingui-explicit-id
+#: src/App.jsx:63
+msgid "status.educationDefault"
+msgstr "请点击按键聆听指示。"
+
+#. js-lingui-explicit-id
 #: src/App.jsx:22
 msgid "counter.label"
 msgstr "点击次数"
@@ -268,11 +273,6 @@ msgstr "助"
 #: src/App.jsx:23
 msgid "mode.education"
 msgstr "教育模式"
-
-#. js-lingui-explicit-id
-#: src/App.jsx:63
-msgid "status.educationDefault"
-msgstr "教育模式：请点击按键聆听指示。"
 
 #. js-lingui-explicit-id
 #: src/App.jsx:58

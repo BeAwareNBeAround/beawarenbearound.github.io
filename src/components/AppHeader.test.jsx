@@ -48,7 +48,7 @@ test('renders the localized brand title in Simplified Chinese and English', () =
   unmount();
 
   renderHeader('en');
-  expect(screen.getByText('EFHK Seizure Help')).toBeInTheDocument();
+  expect(screen.getByText('EFHK Epilepsy Toolkit')).toBeInTheDocument();
   expect(screen.getByRole('img', { name: 'Epilepsy Foundation of Hong Kong' })).toBeInTheDocument();
 });
 
@@ -104,7 +104,7 @@ test('switches locale, updates the brand title, and closes the menu when a langu
 
   expect(onLanguageChange).toHaveBeenCalledWith('en');
   expect(screen.queryByRole('menuitem')).not.toBeInTheDocument();
-  expect(screen.getByText('EFHK Seizure Help')).toBeInTheDocument();
+  expect(screen.getByText('EFHK Epilepsy Toolkit')).toBeInTheDocument();
   expect(screen.getByRole('button', { name: 'Language' })).toHaveAttribute('aria-expanded', 'false');
 });
 

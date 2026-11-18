@@ -84,7 +84,7 @@ test('renders the AppHeader brand title in each locale and navigates Home withou
 
   fireEvent.click(screen.getByRole('button', { name: '语言' }));
   fireEvent.click(screen.getByRole('menuitem', { name: 'EN' }));
-  expect(screen.getByRole('link', { name: /EFHK Seizure Help/ })).toHaveAttribute('href', './');
+  expect(screen.getByRole('link', { name: /EFHK Epilepsy Toolkit/ })).toHaveAttribute('href', './');
 });
 
 test('places the playlist guide before the video container', () => {
@@ -249,6 +249,7 @@ test('switches the setup, guidance, FAQ, and footer content between languages', 
   fireEvent.click(screen.getByRole('menuitem', { name: 'EN' }));
 
   expect(document.querySelector('.subtitle-primary')).toHaveTextContent('EFHK Epilepsy Toolkit');
+  expect(document.querySelector('.slogan-chars')).toHaveTextContent('C A R E');
 
   const englishSetupPanel = openInfoPanel('📲 Setup & Guide');
   expect(screen.getByRole('heading', { name: 'How to Install' })).toBeInTheDocument();
@@ -545,7 +546,7 @@ test('switching language stops playback, keeps the selection, and the next play 
   expect(upperButton('A')).not.toHaveClass('playing');
   expect(rowBadge(1)).toBeNull();
   expect(playlistRowEl(1)).toHaveAttribute('aria-pressed', 'true');
-  expect(screen.getByText('Education Mode: Click buttons for instructions.')).toBeInTheDocument();
+  expect(screen.getByText('Click buttons for instructions.')).toBeInTheDocument();
 
   fireEvent.click(screen.getByRole('button', { name: 'Play' }));
 

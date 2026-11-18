@@ -22,7 +22,7 @@ const languageStates = [
   },
   {
     selector: 'EN',
-    brandTitle: 'EFHK Seizure Help',
+    brandTitle: 'EFHK Epilepsy Toolkit',
     action: 'C',
     panelHeading: 'How to Install',
     loadingStatus: 'Loading…',

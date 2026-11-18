@@ -241,12 +241,17 @@ msgstr "C"
 #. js-lingui-explicit-id
 #: src/App.jsx:19
 msgid "header.slogan"
-msgstr "C, A, R, E"
+msgstr "C A R E"
 
 #. js-lingui-explicit-id
 #: src/App.jsx:174
 msgid "whatIs.secureText"
 msgstr "Clear hard objects and cushion their head."
+
+#. js-lingui-explicit-id
+#: src/App.jsx:63
+msgid "status.educationDefault"
+msgstr "Click buttons for instructions."
 
 #. js-lingui-explicit-id
 #: src/App.jsx:22
@@ -270,11 +275,6 @@ msgid "mode.education"
 msgstr "Education Mode"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:63
-msgid "status.educationDefault"
-msgstr "Education Mode: Click buttons for instructions."
-
-#. js-lingui-explicit-id
 #: src/App.jsx:58
 msgid "status.paused"
 msgstr "Education playback paused."
@@ -292,7 +292,7 @@ msgstr "EFHK Epilepsy Toolkit"
 #. js-lingui-explicit-id
 #: src/components/AppHeader.jsx:63
 msgid "header.brandTitle"
-msgstr "EFHK Seizure Help"
+msgstr "EFHK Epilepsy Toolkit"
 
 #. js-lingui-explicit-id
 #: src/components/AppHeader.jsx:59

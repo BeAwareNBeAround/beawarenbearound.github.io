@@ -60,7 +60,7 @@ export function AppHeader({ language, onLanguageChange, onNavigateHome }) {
           className="app-header-logo"
         />
         <span className="app-header-title">
-          {t({ id: 'header.brandTitle', message: 'EFHK Seizure Help' })}
+          {t({ id: 'header.brandTitle', message: 'EFHK Epilepsy Toolkit' })}
         </span>
       </a>
 

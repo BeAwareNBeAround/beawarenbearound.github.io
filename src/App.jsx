@@ -16,7 +16,7 @@ export default function App() {
   const [installPrompt, setInstallPrompt] = useState(null);
   const { count, loading, error, trackClick } = useClickCounter({ endpointUrl: import.meta.env.VITE_VISIT_COUNTER_URL, targetUrl: window.location.href, installId: getInstallId() });
   const labels = {
-    slogan: t({ id: 'header.slogan', message: 'C, A, R, E' }),
+    slogan: t({ id: 'header.slogan', message: 'C A R E' }),
     subtitle: t({ id: 'header.subtitle', message: 'EFHK Epilepsy Toolkit' }),
     secondarySubtitle: t({ id: 'header.secondarySubtitle', message: 'Tap the 4 buttons below to learn the steps' }),
     clicks: t({ id: 'counter.label', message: 'Clicks' }),
@@ -60,7 +60,7 @@ export default function App() {
           ? t({ id: 'status.ended', message: 'Education step finished.' })
           : player.phase === 'error'
             ? t({ id: 'playlist.error', message: 'Playback failed. Press play to try again.' })
-            : t({ id: 'status.educationDefault', message: 'Education Mode: Click buttons for instructions.' });
+            : t({ id: 'status.educationDefault', message: 'Click buttons for instructions.' });
 
   useEffect(() => {
     const handlePrompt = (event) => {
