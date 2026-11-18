@@ -184,6 +184,11 @@ msgid "setup.androidLabel"
 msgstr "Android："
 
 #. js-lingui-explicit-id
+#: src/App.jsx:42
+msgid "guide.step2"
+msgstr "觀察並保護患者。移開附近危險物品，用軟物墊著患者頭部。"
+
+#. js-lingui-explicit-id
 #: src/App.jsx:169
 msgid "whatIs.environmentLabel"
 msgstr "評估環境："
@@ -227,6 +232,11 @@ msgstr "守"
 #: src/App.jsx:18
 msgid "header.slogan"
 msgstr "守、望、相、助"
+
+#. js-lingui-explicit-id
+#: src/App.jsx:41
+msgid "guide.step1"
+msgstr "保持鎮定，記錄抽搐開始及持續的時間。"
 
 #. js-lingui-explicit-id
 #: src/App.jsx:171
@@ -275,6 +285,11 @@ msgid "header.brandTitle"
 msgstr "腦癎錦囊"
 
 #. js-lingui-explicit-id
+#: src/App.jsx:44
+msgid "guide.step4"
+msgstr "尋求協助。陪伴患者直至清醒，若發作超過五分鐘請召喚救護車。"
+
+#. js-lingui-explicit-id
 #: src/components/AppHeader.jsx:59
 msgid "organization.logoAlt"
 msgstr "香港腦癇基金會"
@@ -288,11 +303,6 @@ msgstr "急救行動"
 #: src/components/FirstAidPlaylist.jsx:90
 msgid "playlist.cardLabel"
 msgstr "急救語音指引"
-
-#. js-lingui-explicit-id
-#: src/App.jsx:43
-msgid "guide.step3"
-msgstr "將患者輕輕翻側，保持呼吸道暢通。切勿強行將任何物品塞入患者口中。"
 
 #. js-lingui-explicit-id
 #: src/App.jsx:156
@@ -315,11 +325,6 @@ msgid "setup.iosLabel"
 msgstr "iPhone (iOS)："
 
 #. js-lingui-explicit-id
-#: src/App.jsx:41
-msgid "guide.step1"
-msgstr "保持鎮定，記錄抽搐開始及持續的時間。"
-
-#. js-lingui-explicit-id
 #: src/App.jsx:169
 msgid "whatIs.dontsLabel"
 msgstr "了解不要做什麼："
@@ -334,11 +339,6 @@ msgstr "語言"
 #: src/App.jsx:30
 msgid "playlist.loading"
 msgstr "載入中…"
-
-#. js-lingui-explicit-id
-#: src/App.jsx:42
-msgid "guide.step2"
-msgstr "觀察並保護患者。移開附近危險物品，用軟物墊著患者頭部。"
 
 #. js-lingui-explicit-id
 #: src/components/FirstAidPlaylist.jsx:151
@@ -453,14 +453,14 @@ msgid "playlist.repeatOne"
 msgstr "循環播放單段"
 
 #. js-lingui-explicit-id
+#: src/App.jsx:43
+msgid "guide.step3"
+msgstr "將患者輕輕翻側，保持呼吸道暢通。切勿強行將任何物品塞入患者口中。"
+
+#. js-lingui-explicit-id
 #: src/App.jsx:171
 msgid "whatIs.secureLabel"
 msgstr "清理周邊環境："
-
-#. js-lingui-explicit-id
-#: src/App.jsx:44
-msgid "guide.step4"
-msgstr "尋求協助。陪伴患者直至清醒，若發作超過五分鐘請召喚救護車。"
 
 #. js-lingui-explicit-id
 #: src/App.jsx:29

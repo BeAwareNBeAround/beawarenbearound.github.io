@@ -38,10 +38,10 @@ export default function App() {
   // translated labels appear on the upper buttons, so both entry points
   // address identical tracks.
   const guideSteps = [
-    t({ id: 'guide.step1', message: 'Keep calm, stay close by, and time the seizure.' }),
-    t({ id: 'guide.step2', message: 'Move away dangerous objects and put something soft under their head.' }),
-    t({ id: 'guide.step3', message: 'Gently roll them onto their side. Never put anything in their mouth.' }),
-    t({ id: 'guide.step4', message: 'Seek Help and Call 999 if it lasts over 3 to 5 minutes or if they are injured.' }),
+    t({ id: 'guide.step1', message: 'Calmly Stay: Keep calm, stay close by, and time the seizure.' }),
+    t({ id: 'guide.step2', message: 'Area Clear: Move away dangerous objects and put something soft under their head.' }),
+    t({ id: 'guide.step3', message: 'Roll to Side: Gently roll them onto their side. Never put anything in their mouth.' }),
+    t({ id: 'guide.step4', message: 'Emergency Help: Seek Help and Call 999 if it lasts over 3 to 5 minutes or if they are injured.' }),
   ];
   const tracks = labels.buttons.map((label, index) => ({ id: index + 1, label, instruction: guideSteps[index] }));
 

@@ -250,7 +250,7 @@ test('switches the setup, guidance, FAQ, and footer content between languages', 
 
   const englishSetupPanel = openInfoPanel('📲 Setup & Guide');
   expect(screen.getByRole('heading', { name: 'How to Install' })).toBeInTheDocument();
-  expect(screen.getByText('Keep calm, stay close by, and time the seizure.')).toBeInTheDocument();
+  expect(screen.getByText('Calmly Stay: Keep calm, stay close by, and time the seizure.')).toBeInTheDocument();
   closeInfoPanel(englishSetupPanel, 'Close');
   const englishWhatIsPanel = openInfoPanel("💡 What is Be Aware n' Be Around?");
   expect(screen.getByText('Be Aware of the time. Be Around for the safe recovery.')).toBeInTheDocument();

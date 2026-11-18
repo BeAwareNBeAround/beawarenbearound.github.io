@@ -5,10 +5,10 @@ import { FirstAidPlaylist } from './FirstAidPlaylist';
 import { activateLocale, i18n } from '../i18n/setup';
 
 const TRACKS = [
-  { id: 1, label: 'C', instruction: 'Keep calm, stay close by, and time the seizure.' },
-  { id: 2, label: 'A', instruction: 'Move away dangerous objects and put something soft under their head.' },
-  { id: 3, label: 'R', instruction: 'Gently roll them onto their side. Never put anything in their mouth.' },
-  { id: 4, label: 'E', instruction: 'Seek Help and Call 999 if it lasts over 3 to 5 minutes or if they are injured.' },
+  { id: 1, label: 'C', instruction: 'Calmly Stay: Keep calm, stay close by, and time the seizure.' },
+  { id: 2, label: 'A', instruction: 'Area Clear: Move away dangerous objects and put something soft under their head.' },
+  { id: 3, label: 'R', instruction: 'Roll to Side: Gently roll them onto their side. Never put anything in their mouth.' },
+  { id: 4, label: 'E', instruction: 'Emergency Help: Seek Help and Call 999 if it lasts over 3 to 5 minutes or if they are injured.' },
 ];
 
 // Plain stub of the usePlaylistPlayer contract. Tests mutate fields through

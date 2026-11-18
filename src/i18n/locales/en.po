@@ -184,6 +184,11 @@ msgid "setup.androidLabel"
 msgstr "Android:"
 
 #. js-lingui-explicit-id
+#: src/App.jsx:42
+msgid "guide.step2"
+msgstr "Area Clear: Move away dangerous objects and put something soft under their head."
+
+#. js-lingui-explicit-id
 #: src/App.jsx:169
 msgid "whatIs.environmentLabel"
 msgstr "Assess Environment:"
@@ -227,6 +232,11 @@ msgstr "C"
 #: src/App.jsx:18
 msgid "header.slogan"
 msgstr "C, A, R, E"
+
+#. js-lingui-explicit-id
+#: src/App.jsx:41
+msgid "guide.step1"
+msgstr "Calmly Stay: Keep calm, stay close by, and time the seizure."
 
 #. js-lingui-explicit-id
 #: src/App.jsx:171
@@ -275,6 +285,11 @@ msgid "header.brandTitle"
 msgstr "EFHK Seizure Help"
 
 #. js-lingui-explicit-id
+#: src/App.jsx:44
+msgid "guide.step4"
+msgstr "Emergency Help: Seek Help and Call 999 if it lasts over 3 to 5 minutes or if they are injured."
+
+#. js-lingui-explicit-id
 #: src/components/AppHeader.jsx:59
 msgid "organization.logoAlt"
 msgstr "Epilepsy Foundation of Hong Kong"
@@ -288,11 +303,6 @@ msgstr "First aid actions"
 #: src/components/FirstAidPlaylist.jsx:90
 msgid "playlist.cardLabel"
 msgstr "First aid audio guide"
-
-#. js-lingui-explicit-id
-#: src/App.jsx:43
-msgid "guide.step3"
-msgstr "Gently roll them onto their side. Never put anything in their mouth."
 
 #. js-lingui-explicit-id
 #: src/App.jsx:156
@@ -315,11 +325,6 @@ msgid "setup.iosLabel"
 msgstr "iPhone (iOS):"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:41
-msgid "guide.step1"
-msgstr "Keep calm, stay close by, and time the seizure."
-
-#. js-lingui-explicit-id
 #: src/App.jsx:169
 msgid "whatIs.dontsLabel"
 msgstr "Know the Don'ts:"
@@ -334,11 +339,6 @@ msgstr "Language"
 #: src/App.jsx:30
 msgid "playlist.loading"
 msgstr "Loading…"
-
-#. js-lingui-explicit-id
-#: src/App.jsx:42
-msgid "guide.step2"
-msgstr "Move away dangerous objects and put something soft under their head."
 
 #. js-lingui-explicit-id
 #: src/components/FirstAidPlaylist.jsx:151
@@ -453,14 +453,14 @@ msgid "playlist.repeatOne"
 msgstr "Repeat one"
 
 #. js-lingui-explicit-id
+#: src/App.jsx:43
+msgid "guide.step3"
+msgstr "Roll to Side: Gently roll them onto their side. Never put anything in their mouth."
+
+#. js-lingui-explicit-id
 #: src/App.jsx:171
 msgid "whatIs.secureLabel"
 msgstr "Secure the Surroundings:"
-
-#. js-lingui-explicit-id
-#: src/App.jsx:44
-msgid "guide.step4"
-msgstr "Seek Help and Call 999 if it lasts over 3 to 5 minutes or if they are injured."
 
 #. js-lingui-explicit-id
 #: src/App.jsx:29
