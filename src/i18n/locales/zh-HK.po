@@ -194,11 +194,6 @@ msgid "video.title"
 msgstr "急性腦癇發作處理動畫"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:20
-msgid "header.subtitle"
-msgstr "處理急性腦癇發作的口訣"
-
-#. js-lingui-explicit-id
 #: src/App.jsx:160
 msgid "setup.androidLabel"
 msgstr "Android："
@@ -466,6 +461,11 @@ msgstr "清理周邊環境："
 #: src/App.jsx:30
 msgid "guide.title"
 msgstr "守望相助 急救指南"
+
+#. js-lingui-explicit-id
+#: src/App.jsx:20
+msgid "header.subtitle"
+msgstr "處理急性腦癇發作的口訣"
 
 #. js-lingui-explicit-id
 #: src/components/FirstAidPlaylist.jsx:179

@@ -248,7 +248,11 @@ test('switches the setup, guidance, FAQ, and footer content between languages', 
   fireEvent.click(screen.getByRole('button', { name: '語言' }));
   fireEvent.click(screen.getByRole('menuitem', { name: 'EN' }));
 
-  expect(document.querySelector('.subtitle-primary')).toHaveTextContent('Acute Seizure Management Slogan');
+  const subtitleEl = document.querySelector('.subtitle-primary');
+  // textContent concatenates across <br>, so this pins wording, casing and
+  // order; the br check pins that the line break actually renders.
+  expect(subtitleEl.textContent).toBe('Seizure First Aid GuideHow to C. A. R. E. during a seizure');
+  expect(subtitleEl.querySelector('br')).not.toBeNull();
   expect(document.querySelector('.slogan-chars')).toHaveTextContent('C A R E');
 
   const englishSetupPanel = openInfoPanel('📲 Setup & Guide');
