@@ -31,10 +31,10 @@ test('reads the initial count and increments it on each action click', async ({ 
   await page.getByRole('button', { name: '語言' }).click();
   await page.getByRole('menuitem', { name: 'EN' }).click();
   await expect(counter.locator('.counter-label')).toHaveText('Clicks');
-  await page.getByRole('button', { name: 'STAY', exact: true }).click();
+  await page.getByRole('button', { name: 'C', exact: true }).click();
   await expect(counter.locator('.counter-value')).toHaveText(FORMATTED_TOTALS[1]);
 
-  await page.getByRole('button', { name: 'STAY', exact: true }).click();
+  await page.getByRole('button', { name: 'C', exact: true }).click();
   await expect(counter).toContainText(FORMATTED_TOTALS[2]);
 
   // Wire contract, mirroring the unit stub semantics.

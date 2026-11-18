@@ -123,7 +123,7 @@ const upperButton = (page, id) => page.locator(`.btn-toy.button-${id}`);
 
 test.describe('compact play-all-once contract', () => {
   for (const locale of LOCALES) {
-    test(`plays forward from track 2 once and stops at HELP in ${locale.code}`, async ({ page }) => {
+    test(`plays forward from track 2 once and stops at track 4 in ${locale.code}`, async ({ page }) => {
       const { media, clickPosts } = await openApp(page);
       await selectLocale(page, locale);
       await row(page, 2).click();

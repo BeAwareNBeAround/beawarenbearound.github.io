@@ -23,7 +23,7 @@ const languageStates = [
   {
     selector: 'EN',
     brandTitle: 'EFHK Seizure Help',
-    action: 'STAY',
+    action: 'C',
     panelHeading: 'How to Install',
     loadingStatus: 'Loading…',
     educationStatus: 'Playing education step 1...',
@@ -63,7 +63,7 @@ for (const language of languageStates) {
     await page.locator('.setup-guide').click();
     await expect(page.locator('dialog[open]')).toHaveCount(1);
     await expect(page.getByRole('heading', { name: language.panelHeading })).toBeVisible();
-    await page.getByRole('button', { name: language.closeButtonName }).click();
+    await page.getByRole('button', { name: language.closeButtonName, exact: true }).click();
     await expect(page.locator('dialog[open]')).toHaveCount(0);
     await page.getByRole('button', { name: language.action, exact: true }).click();
     await expect(page.locator('.status')).toHaveText(language.loadingStatus);
