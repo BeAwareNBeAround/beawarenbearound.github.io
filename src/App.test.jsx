@@ -250,7 +250,7 @@ test('switches the setup, guidance, FAQ, and footer content between languages', 
 
   const englishSetupPanel = openInfoPanel('📲 Setup & Guide');
   expect(screen.getByRole('heading', { name: 'How to Install' })).toBeInTheDocument();
-  expect(screen.getByText('Stay calm and time the seizure.')).toBeInTheDocument();
+  expect(screen.getByText('Keep calm, stay close by, and time the seizure.')).toBeInTheDocument();
   closeInfoPanel(englishSetupPanel, 'Close');
   const englishWhatIsPanel = openInfoPanel("💡 What is Be Aware n' Be Around?");
   expect(screen.getByText('Be Aware of the time. Be Around for the safe recovery.')).toBeInTheDocument();
@@ -307,7 +307,7 @@ test('replaces the static guide paragraphs with the four-row playlist under the 
 test('shows a localized, non-live loading spinner in the attached guide title instead of player loading text', () => {
   renderApp('en');
 
-  fireEvent.click(upperButton('STAY'));
+  fireEvent.click(upperButton('C'));
 
   const spinner = screen.getByRole('img', { name: 'Loading…' });
   expect(spinner).toHaveClass('guide-title-loading', 'is-loading');
@@ -461,7 +461,7 @@ test('loading and error statuses are localized in English', async () => {
   fireEvent.click(screen.getByRole('button', { name: '語言' }));
   fireEvent.click(screen.getByRole('menuitem', { name: 'EN' }));
 
-  fireEvent.click(screen.getByRole('button', { name: 'SIDE', exact: true }));
+  fireEvent.click(screen.getByRole('button', { name: 'R', exact: true }));
 
   expect(statusLine()).toHaveTextContent('Loading…');
 
@@ -518,7 +518,7 @@ test('switching language stops playback, keeps the selection, and the next play 
   fireEvent.click(screen.getByRole('menuitem', { name: 'EN' }));
 
   expect(audio().pause).toHaveBeenCalled();
-  expect(upperButton('SAFE')).not.toHaveClass('playing');
+  expect(upperButton('A')).not.toHaveClass('playing');
   expect(rowBadge(1)).toBeNull();
   expect(playlistRowEl(1)).toHaveAttribute('aria-pressed', 'true');
   expect(screen.getByText('Education Mode: Click buttons for instructions.')).toBeInTheDocument();
@@ -570,11 +570,11 @@ test('renders the English education status with its action identifier', () => {
   fireEvent.click(screen.getByRole('button', { name: '語言' }));
   fireEvent.click(screen.getByRole('menuitem', { name: 'EN' }));
 
-  fireEvent.click(screen.getByRole('button', { name: 'STAY', exact: true }));
+  fireEvent.click(screen.getByRole('button', { name: 'C', exact: true }));
 
   emit(audio(), 'playing');
 
   expect(audio().src).toBe('./resources/stay-en.mp3');
   expect(screen.getByText('Playing education step 1...')).toBeInTheDocument();
-  expect(screen.getByRole('button', { name: 'STAY', exact: true })).toHaveClass('playing');
+  expect(screen.getByRole('button', { name: 'C', exact: true })).toHaveClass('playing');
 });

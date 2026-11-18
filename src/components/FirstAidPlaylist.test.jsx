@@ -5,10 +5,10 @@ import { FirstAidPlaylist } from './FirstAidPlaylist';
 import { activateLocale, i18n } from '../i18n/setup';
 
 const TRACKS = [
-  { id: 1, label: 'STAY', instruction: 'Stay calm and time the seizure.' },
-  { id: 2, label: 'SAFE', instruction: 'Observe and keep the person safe. Clear hard objects and cushion their head.' },
-  { id: 3, label: 'SIDE', instruction: 'Gently roll the person onto their side. Never put anything in their mouth.' },
-  { id: 4, label: 'HELP', instruction: 'Seek help. Stay with them until fully conscious, and call an ambulance if over 5 minutes.' },
+  { id: 1, label: 'C', instruction: 'Keep calm, stay close by, and time the seizure.' },
+  { id: 2, label: 'A', instruction: 'Move away dangerous objects and put something soft under their head.' },
+  { id: 3, label: 'R', instruction: 'Gently roll them onto their side. Never put anything in their mouth.' },
+  { id: 4, label: 'E', instruction: 'Seek Help and Call 999 if it lasts over 3 to 5 minutes or if they are injured.' },
 ];
 
 // Plain stub of the usePlaylistPlayer contract. Tests mutate fields through
@@ -91,8 +91,8 @@ test('activating each row calls onSelectTrack exactly once with that id and neve
 test('marks only the selected row with a distinct selected marker', () => {
   renderPlaylist({ player: createStubPlayer({ selectedId: 2 }) });
 
-  expect(getRow('SAFE')).toHaveAttribute('aria-pressed', 'true');
-  for (const label of ['STAY', 'SIDE', 'HELP']) {
+  expect(getRow('A')).toHaveAttribute('aria-pressed', 'true');
+  for (const label of ['C', 'R', 'E']) {
     expect(getRow(label)).toHaveAttribute('aria-pressed', 'false');
   }
 });
@@ -106,8 +106,8 @@ test('selection uses background and semantics without adding checkmarks or playi
       expect(getRow(track.label).querySelector('.playlist-playing-badge')).toBeNull();
       expect(getRow(track.label).querySelector('.playlist-selected-mark')).toBeNull();
     }
-    expect(getRow('SAFE')).toHaveAttribute('aria-pressed', 'true');
-    expect(getRow('SAFE')).toHaveClass('selected');
+    expect(getRow('A')).toHaveAttribute('aria-pressed', 'true');
+    expect(getRow('A')).toHaveClass('selected');
   }
 });
 
@@ -333,7 +333,7 @@ test('an error makes player controls inert, moves focus to close, and restores c
   expect(container.querySelector('.playlist-controls')).not.toHaveAttribute('inert');
 
   rerenderWith({ phase: 'idle' });
-  fireEvent.click(getRow('SAFE'));
+  fireEvent.click(getRow('A'));
   expect(onSelectTrack).toHaveBeenCalledWith(2);
 });
 

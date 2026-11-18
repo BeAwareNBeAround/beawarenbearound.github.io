@@ -15,16 +15,16 @@ export default function App() {
   const [installPrompt, setInstallPrompt] = useState(null);
   const { count, loading, error, trackClick } = useClickCounter({ endpointUrl: import.meta.env.VITE_VISIT_COUNTER_URL, targetUrl: window.location.href, installId: getInstallId() });
   const labels = {
-    slogan: t({ id: 'header.slogan', message: 'STAY, SAFE, SIDE, HELP' }),
+    slogan: t({ id: 'header.slogan', message: 'C, A, R, E' }),
     subtitle: t({ id: 'header.subtitle', message: 'Acute Seizure Management Slogan' }),
     secondarySubtitle: t({ id: 'header.secondarySubtitle', message: 'Tap the 4 buttons below to learn the steps' }),
     clicks: t({ id: 'counter.label', message: 'Clicks' }),
     education: t({ id: 'mode.education', message: 'Education Mode' }),
     buttons: [
-      t({ id: 'action.stay', message: 'STAY' }),
-      t({ id: 'action.safe', message: 'SAFE' }),
-      t({ id: 'action.side', message: 'SIDE' }),
-      t({ id: 'action.help', message: 'HELP' }),
+      t({ id: 'action.stay', message: 'C' }),
+      t({ id: 'action.safe', message: 'A' }),
+      t({ id: 'action.side', message: 'R' }),
+      t({ id: 'action.help', message: 'E' }),
     ],
     guideTitle: t({ id: 'guide.title', message: 'Seizure First Aid Guide' }),
     loading: t({ id: 'playlist.loading', message: 'Loading…' }),
@@ -38,10 +38,10 @@ export default function App() {
   // translated labels appear on the upper buttons, so both entry points
   // address identical tracks.
   const guideSteps = [
-    t({ id: 'guide.step1', message: 'Stay calm and time the seizure.' }),
-    t({ id: 'guide.step2', message: 'Observe and keep the person safe. Clear hard objects and cushion their head.' }),
-    t({ id: 'guide.step3', message: 'Gently roll the person onto their side. Never put anything in their mouth.' }),
-    t({ id: 'guide.step4', message: 'Seek help. Stay with them until fully conscious, and call an ambulance if over 5 minutes.' }),
+    t({ id: 'guide.step1', message: 'Keep calm, stay close by, and time the seizure.' }),
+    t({ id: 'guide.step2', message: 'Move away dangerous objects and put something soft under their head.' }),
+    t({ id: 'guide.step3', message: 'Gently roll them onto their side. Never put anything in their mouth.' }),
+    t({ id: 'guide.step4', message: 'Seek Help and Call 999 if it lasts over 3 to 5 minutes or if they are injured.' }),
   ];
   const tracks = labels.buttons.map((label, index) => ({ id: index + 1, label, instruction: guideSteps[index] }));
 

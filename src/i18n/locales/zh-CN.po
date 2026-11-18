@@ -159,6 +159,11 @@ msgid "footer.linkLabel"
 msgstr "🔗 了解更多 Epilepsy Foundation HK"
 
 #. js-lingui-explicit-id
+#: src/App.jsx:25
+msgid "action.safe"
+msgstr "望"
+
+#. js-lingui-explicit-id
 #: src/App.jsx:175
 msgid "faq.answer1"
 msgstr "点击按键会播放预录的语音。请检查媒体音量、关闭静音模式；若音频未能加载，请刷新页面。"
@@ -214,6 +219,16 @@ msgid "whatIs.tagline2"
 msgstr "Be Aware：不要压制。Be Around：保护并陪伴。"
 
 #. js-lingui-explicit-id
+#: src/App.jsx:24
+msgid "action.stay"
+msgstr "守"
+
+#. js-lingui-explicit-id
+#: src/App.jsx:18
+msgid "header.slogan"
+msgstr "守、望、相、助"
+
+#. js-lingui-explicit-id
 #: src/App.jsx:171
 msgid "whatIs.secureText"
 msgstr "移开硬物，并在患者头下垫上软物。"
@@ -228,6 +243,11 @@ msgstr "点击次数"
 #: src/components/InfoPanel.jsx:38
 msgid "dialog.close"
 msgstr "关闭"
+
+#. js-lingui-explicit-id
+#: src/App.jsx:27
+msgid "action.help"
+msgstr "助"
 
 #. js-lingui-explicit-id
 #: src/App.jsx:22
@@ -275,11 +295,6 @@ msgid "guide.step3"
 msgstr "将患者轻轻翻侧，保持呼吸道畅通。切勿强行将任何物品塞入患者口中。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:27
-msgid "action.help"
-msgstr "助"
-
-#. js-lingui-explicit-id
 #: src/App.jsx:156
 msgid "setup.installHeading"
 msgstr "如何安装至手机"
@@ -300,6 +315,11 @@ msgid "setup.iosLabel"
 msgstr "iPhone (iOS)："
 
 #. js-lingui-explicit-id
+#: src/App.jsx:41
+msgid "guide.step1"
+msgstr "保持镇定，记录抽搐开始及持续的时间。"
+
+#. js-lingui-explicit-id
 #: src/App.jsx:169
 msgid "whatIs.dontsLabel"
 msgstr "了解不要做什么："
@@ -316,6 +336,11 @@ msgid "playlist.loading"
 msgstr "加载中…"
 
 #. js-lingui-explicit-id
+#: src/App.jsx:42
+msgid "guide.step2"
+msgstr "观察并保护患者。移开附近危险物品，用软物垫着患者头部。"
+
+#. js-lingui-explicit-id
 #: src/components/FirstAidPlaylist.jsx:151
 msgid "playlist.mute"
 msgstr "静音"
@@ -329,11 +354,6 @@ msgstr "切勿压制患者的动作或把任何物品放入口中。"
 #: src/App.jsx:169
 msgid "whatIs.recognizeText"
 msgstr "记下发作开始时间；如超过五分钟，请呼叫紧急服务。"
-
-#. js-lingui-explicit-id
-#: src/App.jsx:42
-msgid "guide.step2"
-msgstr "观察并保护患者。移开附近危险物品，用软物垫着患者头部。"
 
 #. js-lingui-explicit-id
 #: src/App.jsx:157
@@ -402,6 +422,11 @@ msgid "faq.question4"
 msgstr "Q3: 为什么点击次数没有立即更新？"
 
 #. js-lingui-explicit-id
+#: src/App.jsx:26
+msgid "action.side"
+msgstr "相"
+
+#. js-lingui-explicit-id
 #: src/App.jsx:169
 msgid "whatIs.recognizeLabel"
 msgstr "识别与计时："
@@ -428,11 +453,6 @@ msgid "playlist.repeatOne"
 msgstr "单曲重复"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:25
-msgid "action.safe"
-msgstr "望"
-
-#. js-lingui-explicit-id
 #: src/App.jsx:171
 msgid "whatIs.secureLabel"
 msgstr "清理周边环境："
@@ -454,11 +474,6 @@ msgid "playlist.settings"
 msgstr "播放设置"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:26
-msgid "action.side"
-msgstr "相"
-
-#. js-lingui-explicit-id
 #: src/components/FirstAidPlaylist.jsx:188
 #: src/components/FirstAidPlaylist.jsx:189
 msgid "playlist.speed"
@@ -475,24 +490,9 @@ msgid "whatIs.environmentText"
 msgstr "留意尖角、水域或楼梯等实际危险。"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:24
-msgid "action.stay"
-msgstr "守"
-
-#. js-lingui-explicit-id
-#: src/App.jsx:41
-msgid "guide.step1"
-msgstr "保持镇定，记录抽搐开始及持续的时间。"
-
-#. js-lingui-explicit-id
 #: src/App.jsx:171
 msgid "whatIs.supportText"
 msgstr "陪伴患者直至完全清醒，并给予平静的安慰。"
-
-#. js-lingui-explicit-id
-#: src/App.jsx:18
-msgid "header.slogan"
-msgstr "守、望、相、助"
 
 #. js-lingui-explicit-id
 #: src/App.jsx:159

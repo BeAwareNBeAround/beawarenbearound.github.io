@@ -159,6 +159,11 @@ msgid "footer.linkLabel"
 msgstr "🔗 Learn more about Epilepsy Foundation HK"
 
 #. js-lingui-explicit-id
+#: src/App.jsx:25
+msgid "action.safe"
+msgstr "A"
+
+#. js-lingui-explicit-id
 #: src/App.jsx:175
 msgid "faq.answer1"
 msgstr "Action buttons play recorded audio. Check the media volume, disable silent mode, and refresh the page if the audio fails to load."
@@ -214,6 +219,16 @@ msgid "whatIs.tagline2"
 msgstr "Be Aware: Don't restrain. Be Around: Protect and remain."
 
 #. js-lingui-explicit-id
+#: src/App.jsx:24
+msgid "action.stay"
+msgstr "C"
+
+#. js-lingui-explicit-id
+#: src/App.jsx:18
+msgid "header.slogan"
+msgstr "C, A, R, E"
+
+#. js-lingui-explicit-id
 #: src/App.jsx:171
 msgid "whatIs.secureText"
 msgstr "Clear hard objects and cushion their head."
@@ -228,6 +243,11 @@ msgstr "Clicks"
 #: src/components/InfoPanel.jsx:38
 msgid "dialog.close"
 msgstr "Close"
+
+#. js-lingui-explicit-id
+#: src/App.jsx:27
+msgid "action.help"
+msgstr "E"
 
 #. js-lingui-explicit-id
 #: src/App.jsx:22
@@ -272,12 +292,7 @@ msgstr "First aid audio guide"
 #. js-lingui-explicit-id
 #: src/App.jsx:43
 msgid "guide.step3"
-msgstr "Gently roll the person onto their side. Never put anything in their mouth."
-
-#. js-lingui-explicit-id
-#: src/App.jsx:27
-msgid "action.help"
-msgstr "HELP"
+msgstr "Gently roll them onto their side. Never put anything in their mouth."
 
 #. js-lingui-explicit-id
 #: src/App.jsx:156
@@ -300,6 +315,11 @@ msgid "setup.iosLabel"
 msgstr "iPhone (iOS):"
 
 #. js-lingui-explicit-id
+#: src/App.jsx:41
+msgid "guide.step1"
+msgstr "Keep calm, stay close by, and time the seizure."
+
+#. js-lingui-explicit-id
 #: src/App.jsx:169
 msgid "whatIs.dontsLabel"
 msgstr "Know the Don'ts:"
@@ -316,6 +336,11 @@ msgid "playlist.loading"
 msgstr "Loading…"
 
 #. js-lingui-explicit-id
+#: src/App.jsx:42
+msgid "guide.step2"
+msgstr "Move away dangerous objects and put something soft under their head."
+
+#. js-lingui-explicit-id
 #: src/components/FirstAidPlaylist.jsx:151
 msgid "playlist.mute"
 msgstr "Mute"
@@ -329,11 +354,6 @@ msgstr "Never restrain movement or place anything in the person's mouth."
 #: src/App.jsx:169
 msgid "whatIs.recognizeText"
 msgstr "Note when the seizure starts; call emergency services if it exceeds 5 minutes."
-
-#. js-lingui-explicit-id
-#: src/App.jsx:42
-msgid "guide.step2"
-msgstr "Observe and keep the person safe. Clear hard objects and cushion their head."
 
 #. js-lingui-explicit-id
 #: src/App.jsx:157
@@ -402,6 +422,11 @@ msgid "faq.question4"
 msgstr "Q3: How does the global click counter work?"
 
 #. js-lingui-explicit-id
+#: src/App.jsx:26
+msgid "action.side"
+msgstr "R"
+
+#. js-lingui-explicit-id
 #: src/App.jsx:169
 msgid "whatIs.recognizeLabel"
 msgstr "Recognize & Time:"
@@ -428,11 +453,6 @@ msgid "playlist.repeatOne"
 msgstr "Repeat one"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:25
-msgid "action.safe"
-msgstr "SAFE"
-
-#. js-lingui-explicit-id
 #: src/App.jsx:171
 msgid "whatIs.secureLabel"
 msgstr "Secure the Surroundings:"
@@ -440,7 +460,7 @@ msgstr "Secure the Surroundings:"
 #. js-lingui-explicit-id
 #: src/App.jsx:44
 msgid "guide.step4"
-msgstr "Seek help. Stay with them until fully conscious, and call an ambulance if over 5 minutes."
+msgstr "Seek Help and Call 999 if it lasts over 3 to 5 minutes or if they are injured."
 
 #. js-lingui-explicit-id
 #: src/App.jsx:29
@@ -452,11 +472,6 @@ msgstr "Seizure First Aid Guide"
 #: src/components/FirstAidPlaylist.jsx:187
 msgid "playlist.settings"
 msgstr "Settings"
-
-#. js-lingui-explicit-id
-#: src/App.jsx:26
-msgid "action.side"
-msgstr "SIDE"
 
 #. js-lingui-explicit-id
 #: src/components/FirstAidPlaylist.jsx:188
@@ -475,24 +490,9 @@ msgid "whatIs.environmentText"
 msgstr "Spot physical hazards such as sharp corners, water, or stairs."
 
 #. js-lingui-explicit-id
-#: src/App.jsx:24
-msgid "action.stay"
-msgstr "STAY"
-
-#. js-lingui-explicit-id
-#: src/App.jsx:41
-msgid "guide.step1"
-msgstr "Stay calm and time the seizure."
-
-#. js-lingui-explicit-id
 #: src/App.jsx:171
 msgid "whatIs.supportText"
 msgstr "Stay until the person is fully alert and offer calm reassurance."
-
-#. js-lingui-explicit-id
-#: src/App.jsx:18
-msgid "header.slogan"
-msgstr "STAY, SAFE, SIDE, HELP"
 
 #. js-lingui-explicit-id
 #: src/App.jsx:159
