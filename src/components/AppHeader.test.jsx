@@ -43,7 +43,7 @@ test('renders the sticky app-header banner with the EFHK logo and localized bran
 
 test('renders the localized brand title in Simplified Chinese and English', () => {
   const { unmount } = renderHeader('zh-CN');
-  expect(screen.getByText('脑痫锦囊')).toBeInTheDocument();
+  expect(screen.getByText('癫痫锦囊')).toBeInTheDocument();
   expect(screen.getByRole('img', { name: '香港脑痫基金会' })).toBeInTheDocument();
   unmount();
 

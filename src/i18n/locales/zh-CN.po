@@ -287,7 +287,7 @@ msgstr "教育步骤已完成。"
 #. js-lingui-explicit-id
 #: src/components/AppHeader.jsx:63
 msgid "header.brandTitle"
-msgstr "脑痫锦囊"
+msgstr "癫痫锦囊"
 
 #. js-lingui-explicit-id
 #: src/components/AppHeader.jsx:59

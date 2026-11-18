@@ -80,7 +80,7 @@ test('renders the AppHeader brand title in each locale and navigates Home withou
 
   fireEvent.click(screen.getByRole('button', { name: '語言' }));
   fireEvent.click(screen.getByRole('menuitem', { name: '简体' }));
-  expect(screen.getByRole('link', { name: /脑痫锦囊/ })).toHaveAttribute('href', './');
+  expect(screen.getByRole('link', { name: /癫痫锦囊/ })).toHaveAttribute('href', './');
 
   fireEvent.click(screen.getByRole('button', { name: '语言' }));
   fireEvent.click(screen.getByRole('menuitem', { name: 'EN' }));
@@ -267,7 +267,7 @@ test('switches the setup, guidance, FAQ, and footer content between languages', 
   const englishFaqPanel = openInfoPanel('❓ Frequently Asked Questions (FAQ)');
   expect(screen.getByRole('heading', { name: 'Q1: Why is there no sound in Education Mode?' })).toBeInTheDocument();
   expect(screen.getByRole('heading', { name: 'Q2: Can I use the app offline?' })).toBeInTheDocument();
-  expect(screen.getByRole('heading', { name: 'Q3: How does the global click counter work?' })).toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: 'Q3: How does the counter work?' })).toBeInTheDocument();
   expect(screen.getByText("The counter shows the total number of times the app's action buttons have been clicked, across all users.")).toBeInTheDocument();
   closeInfoPanel(englishFaqPanel, 'Close');
   expect(screen.getByRole('link', { name: '🔗 Learn more about Epilepsy Foundation HK' })).toBeInTheDocument();
@@ -338,7 +338,7 @@ test('renders each English guide row step name in bold', () => {
     'Calmly Stay: Keep calm, stay close by, and time the seizure.',
     'Area Clear: Move away dangerous objects and put something soft under their head.',
     'Roll to Side: Gently roll them onto their side. Never put anything in their mouth.',
-    'Emergency Help: Seek help and call 999 if it lasts over 3 to 5 minutes or if they are injured.',
+    'Emergency Help: Seek help and call 999 if it lasts over 5 minutes or if they are injured.',
   ];
   for (let index = 0; index < 4; index += 1) {
     expect(playlistRowEl(index).textContent).toContain(stepSentences[index]);

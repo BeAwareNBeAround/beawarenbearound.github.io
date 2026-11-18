@@ -44,7 +44,7 @@ export default function App() {
     <Trans id="guide.step1"><strong>Calmly Stay</strong>: Keep calm, stay close by, and time the seizure.</Trans>,
     <Trans id="guide.step2"><strong>Area Clear</strong>: Move away dangerous objects and put something soft under their head.</Trans>,
     <Trans id="guide.step3"><strong>Roll to Side</strong>: Gently roll them onto their side. Never put anything in their mouth.</Trans>,
-    <Trans id="guide.step4"><strong>Emergency Help</strong>: Seek help and call 999 if it lasts over 3 to 5 minutes or if they are injured.</Trans>,
+    <Trans id="guide.step4"><strong>Emergency Help</strong>: Seek help and call 999 if it lasts over 5 minutes or if they are injured.</Trans>,
   ];
   const tracks = labels.buttons.map((label, index) => ({ id: index + 1, label, instruction: guideSteps[index] }));
 
@@ -178,7 +178,7 @@ export default function App() {
         <p>{t({ id: 'faq.answer1', message: 'Action buttons play recorded audio. Check the media volume, disable silent mode, and refresh the page if the audio fails to load.' })}</p>
         <h3>{t({ id: 'faq.question3', message: 'Q2: Can I use the app offline?' })}</h3>
         <p>{t({ id: 'faq.answer3', message: 'Install this PWA or add it to your home screen after a successful first load.' })}</p>
-        <h3>{t({ id: 'faq.question4', message: 'Q3: How does the global click counter work?' })}</h3>
+        <h3>{t({ id: 'faq.question4', message: 'Q3: How does the counter work?' })}</h3>
         <p>{t({ id: 'faq.answer4', message: "The counter shows the total number of times the app's action buttons have been clicked, across all users." })}</p>
       </InfoPanel>
 

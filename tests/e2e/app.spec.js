@@ -13,7 +13,7 @@ const languageStates = [
   },
   {
     selector: '简体',
-    brandTitle: '脑痫锦囊',
+    brandTitle: '癫痫锦囊',
     action: '守',
     panelHeading: '如何安装至手机',
     loadingStatus: '加载中…',
