@@ -865,7 +865,9 @@ test.describe('real recordings in the browser', () => {
     expect(await page.evaluate(() => window.__createdAudio[0].currentTime)).toBeGreaterThan(0);
 
     // Seek close to the end so the natural end event arrives quickly.
-    await page.locator('.playlist-seek-range').fill((max - 0.2).toFixed(2));
+    // String(Number(...)) avoids trailing zeros: range fill rejects values
+    // the browser normalizes (23.70 -> 23.7), and recording durations vary.
+    await page.locator('.playlist-seek-range').fill(String(Number((max - 0.2).toFixed(2))));
     await expect(status(page)).toHaveText(HK.ended, { timeout: 15000 });
     await expect(page.locator('.playlist-playing-badge')).toHaveCount(0);
   });
