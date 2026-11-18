@@ -250,7 +250,9 @@ test('switches the setup, guidance, FAQ, and footer content between languages', 
 
   const englishSetupPanel = openInfoPanel('📲 Setup & Guide');
   expect(screen.getByRole('heading', { name: 'How to Install' })).toBeInTheDocument();
-  expect(screen.getByText('Calmly Stay: Keep calm, stay close by, and time the seizure.')).toBeInTheDocument();
+  // The EN row instruction is now rich text (<strong> + text), so assert the
+  // row subtree text instead of a single getByText text node.
+  expect(document.querySelector('.playlist-row-1')).toHaveTextContent('Calmly Stay: Keep calm, stay close by, and time the seizure.');
   closeInfoPanel(englishSetupPanel, 'Close');
   const englishWhatIsPanel = openInfoPanel("💡 What is Be Aware n' Be Around?");
   expect(screen.getByText('Be Aware of the time. Be Around for the safe recovery.')).toBeInTheDocument();
@@ -301,6 +303,26 @@ test('replaces the static guide paragraphs with the four-row playlist under the 
   expect(document.querySelectorAll('.instruction-box > p')).toHaveLength(0);
   for (let index = 0; index < 4; index += 1) {
     expect(playlistRow(index)).toBeInTheDocument();
+  }
+});
+
+test('renders each English guide row step name in bold', () => {
+  renderApp();
+
+  fireEvent.click(screen.getByRole('button', { name: '語言' }));
+  fireEvent.click(screen.getByRole('menuitem', { name: 'EN' }));
+
+  const stepNames = ['Calmly Stay', 'Area Clear', 'Roll to Side', 'Emergency Help'];
+  for (let index = 0; index < 4; index += 1) {
+    const strong = document.querySelector(`.playlist-row-${index + 1} strong`);
+    expect(strong).not.toBeNull();
+    expect(strong).toHaveTextContent(stepNames[index]);
+  }
+  // The row accessible name is still label + full instruction text.
+  for (let index = 0; index < 4; index += 1) {
+    expect(playlistRowEl(index)).toHaveAccessibleName(
+      expect.stringContaining(`${['C', 'A', 'R', 'E'][index]} ${stepNames[index]}: `),
+    );
   }
 });
 

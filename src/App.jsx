@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { t } from '@lingui/core/macro';
+import { Trans } from '@lingui/react/macro';
 import { activateLocale, i18n } from './i18n/setup';
 import { getInstallId, getInstallAction, isIOS } from './services/install';
 import { useClickCounter } from './hooks/useClickCounter';
@@ -36,12 +37,14 @@ export default function App() {
 
   // The four playlist records reuse the unchanged guide copy; the same
   // translated labels appear on the upper buttons, so both entry points
-  // address identical tracks.
+  // address identical tracks. The English messages bold the step-name
+  // prefix via Lingui rich text (<0> renders as <strong>); zh catalogs
+  // carry no markup tokens and stay plain.
   const guideSteps = [
-    t({ id: 'guide.step1', message: 'Calmly Stay: Keep calm, stay close by, and time the seizure.' }),
-    t({ id: 'guide.step2', message: 'Area Clear: Move away dangerous objects and put something soft under their head.' }),
-    t({ id: 'guide.step3', message: 'Roll to Side: Gently roll them onto their side. Never put anything in their mouth.' }),
-    t({ id: 'guide.step4', message: 'Emergency Help: Seek Help and Call 999 if it lasts over 3 to 5 minutes or if they are injured.' }),
+    <Trans id="guide.step1"><strong>Calmly Stay</strong>: Keep calm, stay close by, and time the seizure.</Trans>,
+    <Trans id="guide.step2"><strong>Area Clear</strong>: Move away dangerous objects and put something soft under their head.</Trans>,
+    <Trans id="guide.step3"><strong>Roll to Side</strong>: Gently roll them onto their side. Never put anything in their mouth.</Trans>,
+    <Trans id="guide.step4"><strong>Emergency Help</strong>: Seek Help and Call 999 if it lasts over 3 to 5 minutes or if they are injured.</Trans>,
   ];
   const tracks = labels.buttons.map((label, index) => ({ id: index + 1, label, instruction: guideSteps[index] }));
 
