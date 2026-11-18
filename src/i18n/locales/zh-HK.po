@@ -194,11 +194,6 @@ msgid "video.title"
 msgstr "急性腦癇發作處理動畫"
 
 #. js-lingui-explicit-id
-#: src/App.jsx:20
-msgid "header.subtitle"
-msgstr "處理急性腦癇發作的口訣"
-
-#. js-lingui-explicit-id
 #: src/App.jsx:160
 msgid "setup.androidLabel"
 msgstr "Android："
@@ -288,6 +283,11 @@ msgstr "教育播放已暫停。"
 #: src/App.jsx:60
 msgid "status.ended"
 msgstr "教育步驟已完成。"
+
+#. js-lingui-explicit-id
+#: src/App.jsx:20
+msgid "header.subtitle"
+msgstr "處理急性腦癇發作的口訣"
 
 #. js-lingui-explicit-id
 #: src/components/AppHeader.jsx:63

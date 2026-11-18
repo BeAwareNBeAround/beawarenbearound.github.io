@@ -248,6 +248,8 @@ test('switches the setup, guidance, FAQ, and footer content between languages', 
   fireEvent.click(screen.getByRole('button', { name: '語言' }));
   fireEvent.click(screen.getByRole('menuitem', { name: 'EN' }));
 
+  expect(document.querySelector('.subtitle-primary')).toHaveTextContent('EFHK Epilepsy Toolkit');
+
   const englishSetupPanel = openInfoPanel('📲 Setup & Guide');
   expect(screen.getByRole('heading', { name: 'How to Install' })).toBeInTheDocument();
   // The EN row instruction is now rich text (<strong> + text), so assert the
