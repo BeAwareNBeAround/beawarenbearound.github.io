@@ -11,6 +11,35 @@ function renderPlayer(locale = 'zh-HK', options = {}) {
 }
 
 const latestAudio = () => window.MockAudioInstances.at(-1);
+const analysisAudio = () =>
+  window.MockAudioInstances.find((element) => element.dataset.playerRole === 'analysis');
+
+// Scriptable Web Audio stand-in. `routed` records every element passed to
+// createMediaElementSource so tests can pin which element enters the graph.
+function stubAudioContext() {
+  const analyser = {
+    fftSize: 32,
+    frequencyBinCount: 16,
+    smoothingTimeConstant: 0,
+    connect: vi.fn(),
+    getByteFrequencyData: vi.fn((data) => data.set([255, 128, 128, 64, 64, 64])),
+  };
+  const routed = [];
+  class MockAudioContext {
+    sampleRate = 48000;
+    destination = {};
+    state = 'running';
+    createMediaElementSource = vi.fn((element) => {
+      routed.push(element);
+      return { connect: vi.fn() };
+    });
+    createAnalyser = vi.fn(() => analyser);
+    resume = vi.fn(() => Promise.resolve());
+    close = vi.fn(() => Promise.resolve());
+  }
+  vi.stubGlobal('AudioContext', MockAudioContext);
+  return { analyser, routed };
+}
 
 // Selects a track and runs the media lifecycle far enough to report playing.
 function selectAndPlay(result, id) {
@@ -35,22 +64,7 @@ test('starts idle with no selection, no audio element, and default settings', ()
 });
 
 test('maps analyser low, mid, and high frequency energy to title-bar levels only while playing', () => {
-  const analyser = {
-    fftSize: 32,
-    frequencyBinCount: 16,
-    smoothingTimeConstant: 0,
-    connect: vi.fn(),
-    getByteFrequencyData: vi.fn((data) => data.set([255, 128, 128, 64, 64, 64])),
-  };
-  vi.stubGlobal('AudioContext', class {
-    sampleRate = 48000;
-    destination = {};
-    state = 'running';
-    createMediaElementSource = vi.fn(() => ({ connect: vi.fn() }));
-    createAnalyser = vi.fn(() => analyser);
-    resume = vi.fn(() => Promise.resolve());
-    close = vi.fn(() => Promise.resolve());
-  });
+  stubAudioContext();
   vi.stubGlobal('requestAnimationFrame', vi.fn(() => 1));
   vi.stubGlobal('cancelAnimationFrame', vi.fn());
 
@@ -60,6 +74,54 @@ test('maps analyser low, mid, and high frequency energy to title-bar levels only
   expect(result.current.audioLevels.every((level) => level > 0)).toBe(true);
   act(() => { audio.paused = true; audio.emit('pause'); });
   expect(result.current.audioLevels).toEqual([0, 0, 0]);
+});
+
+// WebKit (Safari) honors playbackRate on an HTMLMediaElement only while it is
+// not captured by createMediaElementSource (open WebKit bug 283034), so the
+// audible element must stay out of the Web Audio graph and a silent analysis
+// twin must carry the analyser routing instead. These contracts pin that split.
+
+test('the audible element stays out of the Web Audio graph; the analysis twin is routed', () => {
+  const { routed } = stubAudioContext();
+  const { result } = renderPlayer();
+  const audible = selectAndPlay(result, 1);
+
+  expect(audible.dataset.playerRole).toBe('audible');
+  const twin = analysisAudio();
+  expect(twin).toBeTruthy();
+  expect(twin.dataset.playerRole).toBe('analysis');
+  expect(routed).toEqual([twin]);
+});
+
+test('the analyser dead-ends: it is never connected to the context destination', () => {
+  const { analyser } = stubAudioContext();
+  const { result } = renderPlayer();
+  selectAndPlay(result, 1);
+
+  expect(analyser.connect).not.toHaveBeenCalled();
+});
+
+test('the analysis twin mirrors the recording, rate, and pause of the audible element', () => {
+  stubAudioContext();
+  vi.stubGlobal('requestAnimationFrame', vi.fn(() => 1));
+  vi.stubGlobal('cancelAnimationFrame', vi.fn());
+
+  const { result } = renderPlayer();
+  const audible = selectAndPlay(result, 1);
+  const twin = analysisAudio();
+  expect(twin).toBeTruthy();
+  expect(twin.src).toBe('./resources/track1-zh-HK.mp3');
+  expect(twin.playbackRate).toBe(1);
+
+  act(() => { result.current.setPlaybackRate(2); });
+  expect(audible.playbackRate).toBe(2);
+  expect(twin.playbackRate).toBe(2);
+
+  act(() => { result.current.next(); });
+  expect(twin.src).toBe('./resources/track2-zh-HK.mp3');
+
+  act(() => { audible.paused = true; audible.emit('pause'); });
+  expect(twin.paused).toBe(true);
 });
 
 test('creates one audio element lazily and reuses it for every command', () => {

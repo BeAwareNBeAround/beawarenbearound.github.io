@@ -43,6 +43,9 @@ export async function mockPlaylistPlayer(page) {
         this.volume = 1;
         this.muted = false;
         this.paused = true;
+        // HTMLMediaElement carries a dataset; the player tags element roles
+        // on it (dataset.playerRole), so the stand-in mirrors that field.
+        this.dataset = {};
         this.playCount = 0;
         this.pauseCount = 0;
         this.eventLog = [];
@@ -143,6 +146,14 @@ export async function mockPlaylistPlayer(page) {
 
     window.__playlistMedia = api;
     Object.defineProperty(window, 'Audio', { value: ScriptableAudio, configurable: true, writable: true });
+    // The player's analyser bars route a silent twin element through Web
+    // Audio, but this stand-in is not a real HTMLMediaElement and cannot be
+    // routed. Disabling Web Audio here makes the player skip its analysis
+    // path entirely, so no twin element is ever created and every
+    // element-count expectation stays pinned to the single scripted element.
+    // Analyser-bar behavior is covered by the hook unit tests instead.
+    window.AudioContext = undefined;
+    window.webkitAudioContext = undefined;
   });
 
   return {

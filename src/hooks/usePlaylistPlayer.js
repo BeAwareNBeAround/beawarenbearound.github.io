@@ -11,9 +11,12 @@ const PLAYBACK_RATES = [0.75, 1, 1.25, 1.5, 2];
 const resolveSource = (source) => new URL(source, document.baseURI).href;
 
 // Page-owned player state for the four first-aid recordings. The hook owns
-// one lazily created Audio element and never calls the click counter; the
-// App routes counted clicks through selectTrack and calls transport
-// commands directly.
+// one lazily created Audio element (dataset.playerRole 'audible') that is
+// never routed through createMediaElementSource — Apple WebKit only applies
+// playbackRate changes to unrouted elements (open bug 283034) — plus a
+// silent lazily created 'analysis' twin that carries the analyser routing.
+// The hook never calls the click counter; the App routes counted clicks
+// through selectTrack and calls transport commands directly.
 //
 // Phase transitions are event-driven: media events (playing, pause, ended,
 // waiting, error, timeupdate, durationchange) and the play promise outcome
@@ -33,6 +36,9 @@ export function usePlaylistPlayer({ locale }) {
   const [audioLevels, setAudioLevels] = useState([0, 0, 0]);
 
   const audioRef = useRef(null);
+  // Silent twin of the audible element, routed through the analyser instead
+  // of the audible one (see header comment); created on first analysis.
+  const analysisAudioRef = useRef(null);
   const listenersRef = useRef([]);
   const loadTokenRef = useRef(0);
   // Source the hook last commanded the element to load; null once that
@@ -62,15 +68,53 @@ export function usePlaylistPlayer({ locale }) {
   const stopAnalysis = () => {
     if (analysisFrameRef.current !== null) cancelAnimationFrame(analysisFrameRef.current);
     analysisFrameRef.current = null;
+    analysisAudioRef.current?.pause();
     setAudioLevels([0, 0, 0]);
+  };
+
+  // The twin is created lazily with the first analysis so media stand-ins
+  // that cannot be routed (mocked test runs, engines without Web Audio)
+  // never spawn a second element: without an analyser this path is not taken.
+  const ensureAnalysisElement = () => {
+    if (analysisAudioRef.current) return analysisAudioRef.current;
+    const context = audioContextRef.current;
+    const analyser = analyserRef.current;
+    if (!context || !analyser) return null;
+    try {
+      const twin = new window.Audio();
+      twin.dataset.playerRole = 'analysis';
+      twin.src = expectedSrcRef.current;
+      twin.currentTime = audioRef.current?.currentTime ?? 0;
+      twin.playbackRate = playbackRateRef.current;
+      // source -> analyser is a dead end: the routed twin is structurally
+      // silent because its output never reaches context.destination.
+      context.createMediaElementSource(twin).connect(analyser);
+      analysisAudioRef.current = twin;
+      return twin;
+    } catch {
+      // An element or engine that cannot be routed: analysis is abandoned,
+      // playback is untouched.
+      return null;
+    }
   };
 
   const startAnalysis = () => {
     const analyser = analyserRef.current;
     if (!analyser) return;
+    const audio = audioRef.current;
+    if (!audio) return;
     audioContextRef.current?.resume?.().catch(() => {});
+    const twin = ensureAnalysisElement();
+    if (!twin) return;
     const sample = () => {
       if (phaseRef.current !== 'playing') return;
+      // The twin follows the audible element: the rate is mirrored every
+      // frame, and the position is re-seeked whenever it drifts.
+      twin.playbackRate = playbackRateRef.current;
+      if (twin.ended || Math.abs(twin.currentTime - audio.currentTime) > 0.35) {
+        twin.currentTime = audio.currentTime;
+      }
+      if (twin.paused) twin.play()?.catch?.(() => {});
       const data = analysisDataRef.current;
       analyser.getByteFrequencyData(data);
       const average = (start, end) => data.slice(start, end).reduce((sum, value) => sum + value, 0) / ((end - start) * 255);
@@ -80,6 +124,16 @@ export function usePlaylistPlayer({ locale }) {
       analysisFrameRef.current = requestAnimationFrame(sample);
     };
     sample();
+  };
+
+  // The twin follows the audible element's commanded source so the bars keep
+  // matching the selected recording while it plays.
+  const mirrorSourceOnAnalysisTwin = (source) => {
+    const twin = analysisAudioRef.current;
+    if (!twin) return;
+    twin.src = source;
+    twin.currentTime = 0;
+    twin.playbackRate = playbackRateRef.current;
   };
 
   const getAudio = () => {
@@ -149,6 +203,7 @@ export function usePlaylistPlayer({ locale }) {
     audio.playbackRate = playbackRateRef.current;
     audio.volume = volumeRef.current;
     audio.muted = mutedRef.current;
+    audio.dataset.playerRole = 'audible';
     audioRef.current = audio;
     const AudioContextConstructor = window.AudioContext || window.webkitAudioContext;
     if (AudioContextConstructor) {
@@ -157,9 +212,10 @@ export function usePlaylistPlayer({ locale }) {
         const analyser = context.createAnalyser();
         analyser.fftSize = 32;
         analyser.smoothingTimeConstant = 0.7;
-        const source = context.createMediaElementSource(audio);
-        source.connect(analyser);
-        analyser.connect(context.destination);
+        // Deliberately no createMediaElementSource(audio) here: Apple
+        // WebKit only applies playbackRate to elements unrouted from the
+        // Web Audio graph (open bug 283034). The audible element stays
+        // native; the analysis twin is routed in ensureAnalysisElement().
         analyserRef.current = analyser;
         audioContextRef.current = context;
         analysisDataRef.current = new Uint8Array(analyser.frequencyBinCount);
@@ -198,6 +254,7 @@ export function usePlaylistPlayer({ locale }) {
     // Browsers reset the effective playback rate when the source changes, so
     // restore the page-owned setting before requesting the next track.
     audio.playbackRate = playbackRateRef.current;
+    mirrorSourceOnAnalysisTwin(source);
     requestPlay(audio);
   };
 
@@ -216,6 +273,7 @@ export function usePlaylistPlayer({ locale }) {
     audio.currentTime = 0;
     audio.src = source;
     audio.playbackRate = playbackRateRef.current;
+    mirrorSourceOnAnalysisTwin(source);
     applyPhase('paused');
   };
 
@@ -281,6 +339,8 @@ export function usePlaylistPlayer({ locale }) {
     playbackRateRef.current = rate;
     const audio = audioRef.current;
     if (audio) audio.playbackRate = rate;
+    // The twin re-samples in lockstep so the bars reflect the new rate too.
+    if (analysisAudioRef.current) analysisAudioRef.current.playbackRate = rate;
     setPlaybackRateState(rate);
   };
 
@@ -321,6 +381,7 @@ export function usePlaylistPlayer({ locale }) {
     expectedSrcRef.current = null;
     const audio = audioRef.current;
     if (audio) audio.pause();
+    analysisAudioRef.current?.pause();
   }, [locale]);
 
   // Detach the page's audio on unmount so route changes cannot leave
@@ -335,6 +396,8 @@ export function usePlaylistPlayer({ locale }) {
       for (const [eventType, handler] of listenersRef.current) audio.removeEventListener(eventType, handler);
       listenersRef.current = [];
       audio.pause();
+      analysisAudioRef.current?.pause();
+      analysisAudioRef.current = null;
       audioRef.current = null;
       audioContextRef.current?.close?.();
       audioContextRef.current = null;

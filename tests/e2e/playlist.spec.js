@@ -872,7 +872,7 @@ test.describe('real recordings in the browser', () => {
     await expect(page.locator('.playlist-playing-badge')).toHaveCount(0);
   });
 
-  test('switching tracks mid-playback restarts the single shared element', async ({ page }) => {
+  test('switching tracks mid-playback restarts the audible element and its analysis twin', async ({ page }) => {
     await row(page, 1).click();
     await expect(status(page)).toHaveText(HK.playing(1));
     await expect(row(page, 1)).toHaveAttribute('aria-pressed', 'true');
@@ -881,17 +881,48 @@ test.describe('real recordings in the browser', () => {
     await expect(status(page)).toHaveText(HK.playing(3));
 
     const elements = await page.evaluate(() => window.__createdAudio.map((element) => ({
+      role: element.dataset.playerRole,
       currentSrc: element.currentSrc,
       paused: element.paused,
       currentTime: element.currentTime,
     })));
-    expect(elements).toHaveLength(1);
-    expect(elements[0].currentSrc).toMatch(/\/resources\/track3-zh-HK\.mp3$/);
+    // Exactly one audible element plus its silent analysis twin, both on the
+    // newly selected recording; the audible one owns the restarted playback.
+    expect(elements.map((element) => element.role)).toEqual(['audible', 'analysis']);
+    for (const element of elements) {
+      expect(element.currentSrc).toMatch(/\/resources\/track3-zh-HK\.mp3$/);
+    }
     expect(elements[0].paused).toBe(false);
     expect(elements[0].currentTime).toBeLessThan(1);
     await expect(page.locator('.playlist-playing-badge')).toHaveCount(0);
     await expect(row(page, 3)).toHaveAttribute('aria-pressed', 'true');
     await expect(row(page, 1).locator('.playlist-playing-badge')).toHaveCount(0);
+  });
+
+  test('a mid-playback speed change re-samples the audible recording immediately', async ({ page }) => {
+    await row(page, 1).click();
+    await expect(status(page)).toHaveText(HK.playing(1));
+
+    // Observe the audible element only: media time advanced per wall second
+    // is what the listener actually hears. The analysis twin is silent.
+    const progressionRate = () => page.evaluate(async () => {
+      const audible = window.__createdAudio.find((element) => element.dataset.playerRole === 'audible');
+      const startWall = performance.now();
+      const startMedia = audible.currentTime;
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      return (audible.currentTime - startMedia) / ((performance.now() - startWall) / 1000);
+    });
+
+    expect(await progressionRate()).toBeGreaterThanOrEqual(0.9);
+
+    await openSettings(page, HK);
+    await page.getByRole('button', { name: '速度 2×', exact: true }).click();
+
+    // WebKit bug 283034 regression guard: with the audible element routed
+    // through createMediaElementSource, Apple WebKit kept playing at the old
+    // rate until the next track reloaded the media pipeline. The audible
+    // path is unrouted now, so the sampled rate must jump without a reload.
+    expect(await progressionRate()).toBeGreaterThanOrEqual(1.6);
   });
 
   test('keeps the selected 2x rate when repeat-all advances to the next real recording', async ({ page }) => {

@@ -38,6 +38,8 @@ class MockAudio {
     this.volume = 1;
     this.muted = false;
     this.paused = true;
+    // HTMLMediaElement carries a dataset; the player tags element roles on it.
+    this.dataset = {};
     this._listeners = new Map();
     this.playDeferreds = [];
     this.play = vi.fn(() => {
